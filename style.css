@@ -26,7 +26,18 @@ nav {
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space out items evenly */
-    padding: 30px 100px; /* Padding around the nav */
+    padding: 20px 50px; /* Padding around the nav */
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for elevation */
+    position: fixed; /* Fix the nav to the top */
+    width: 100%; /* Full width */
+    top: 0; /* Align to top */
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+nav ul {
+    display: flex; /* Use flexbox for layout */
+    gap: 20px; /* Gap between items */
 }
 
 nav ul li {
@@ -36,11 +47,12 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #3a3a3a; /* Text color for links */
+    color: #3a3a3a; /* Dark readable grey for links */
     position: relative; /* Position for pseudo-element */
     padding: 5px 0; /* Padding around text */
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Center items vertically */
+    transition: color 0.3s; /* Smooth color transition */
 }
 
 nav ul li a i {
@@ -51,18 +63,18 @@ nav ul li a:hover {
     color: #1a1a1a; /* Darker color on hover */
 }
 
-nav ul li a:after {
+nav ul li a::after {
     content: ""; /* Empty content for pseudo-element */
     position: absolute; /* Position relative to parent */
     left: 0; /* Align to the left */
     width: 0; /* Initial width */
     height: 3px; /* Height of underline */
-    background: #1a1a1a; /* Background color of underline */
+    background: #1a1a1a; /* Darker underline color */
     transition: 0.3s; /* Transition effect */
     bottom: 0; /* Position at the bottom */
 }
 
-nav ul li a:hover:after {
+nav ul li a:hover::after {
     width: 100%; /* Expand width on hover */
 }
 
@@ -74,13 +86,12 @@ nav ul li a:hover:after {
     letter-spacing: 2px; /* Spacing between letters */
     padding: 16px 40px; /* Padding inside button */
     border-radius: 500px; /* Rounded corners */
-    display: inline-block; /* Inline-block display */
+    display: inline-flex; /* Inline-flex display */
+    align-items: center; /* Center items vertically */
     font-weight: 500; /* Font weight */
     transition: all 0.4s ease-in-out; /* Transition effect */
-    background-size: 152% 100%; /* Background size */
-    background: #3a3a3a; /* Background color */
+    background: #3a3a3a; /* Dark readable grey background */
     border: 2px solid #3a3a3a; /* Border color */
-    align-items: center; /* Align items vertically centered */
 }
 
 .btn i {
@@ -100,7 +111,7 @@ nav ul li a:hover:after {
 }
 
 .content .title {
-    color: #3a3a3a; /* Title color */
+    color: #3a3a3a; /* Dark readable grey for title */
     font-size: 15px; /* Font size */
     text-transform: uppercase; /* Uppercase text */
     letter-spacing: 4px; /* Spacing between letters */
@@ -113,7 +124,7 @@ nav ul li a:hover:after {
 }
 
 .content h1 {
-    color: #2a2a2a; /* Heading color */
+    color: #2a2a2a; /* Dark readable grey for heading */
     font-size: 75px; /* Font size */
     font-weight: 900; /* Font weight */
     line-height: 90px; /* Line height */
@@ -122,11 +133,11 @@ nav ul li a:hover:after {
 }
 
 .content h1 span {
-    color: #3a3a3a; /* Span color */
+    color: #3a3a3a; /* Dark readable grey for span */
 }
 
 .content p {
-    color: #3a3a3a; /* Paragraph color */
+    color: #3a3a3a; /* Dark readable grey for paragraph */
     margin-top: 25px; /* Margin above */
     margin-bottom: 30px; /* Margin below */
 }
@@ -147,7 +158,7 @@ nav ul li a:hover:after {
 
 /* Content heading styles */
 .content h1 {
-    color: #2a2a2a; /* Heading color */
+    color: #2a2a2a; /* Dark readable grey for heading */
     font-size: 45px; /* Font size */
     font-weight: 700; /* Font weight */
     line-height: 55px; /* Line height */
@@ -164,7 +175,7 @@ nav ul li a:hover:after {
 .content ul li {
     margin-bottom: 10px; /* Margin below each list item */
     font-size: 18px; /* Font size */
-    color: #3a3a3a; /* List item color */
+    color: #3a3a3a; /* Dark readable grey for list items */
 }
 
 /* Portfolio styles */
@@ -192,13 +203,13 @@ nav ul li a:hover:after {
 .portfolio-item h3 {
     margin-top: 15px; /* Margin above */
     font-size: 20px; /* Font size */
-    color: #3a3a3a; /* Heading color */
+    color: #3a3a3a; /* Dark readable grey for heading */
 }
 
 .portfolio-item p {
     margin-top: 10px; /* Margin above */
     font-size: 16px; /* Font size */
-    color: #3a3a3a; /* Paragraph color */
+    color: #3a3a3a; /* Dark readable grey for paragraph */
 }
 
 /* Form styles */
@@ -237,12 +248,12 @@ form button {
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
     font-size: 18px; /* Font size */
-    color: #3a3a3a; /* Text color */
+    color: #3a3a3a; /* Dark readable grey for text */
 }
 
 .tech-item i {
     font-size: 24px; /* Icon font size */
-    color: #3a3a3a; /* Icon color */
+    color: #3a3a3a; /* Dark readable grey for icon */
 }
 
 /* About text styles */
@@ -254,7 +265,7 @@ form button {
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
     font-size: 18px; /* Font size */
-    color: #3a3a3a; /* Text color */
+    color: #3a3a3a; /* Dark readable grey for text */
     width: 90%; /* Width */
 }
 
@@ -267,7 +278,7 @@ form button {
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
     font-size: 18px; /* Font size */
-    color: #3a3a3a; /* Text color */
+    color: #3a3a3a; /* Dark readable grey for text */
 }
 
 /* Content wrapper styles */
@@ -282,4 +293,33 @@ form button {
 /* Social links styles */
 .social-links {
     margin-top: 20px; /* Margin above */
+}
+
+/* Responsive design for navigation */
+@media (max-width: 768px) {
+    nav {
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+
+    nav ul {
+        flex-direction: column; /* Stack nav items vertically */
+        gap: 10px; /* Adjust gap for smaller screens */
+    }
+
+    .btn {
+        font-size: 14px; /* Adjust font size for smaller screens */
+        padding: 12px 30px; /* Adjust padding for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul {
+        flex-direction: column; /* Stack nav items vertically */
+        gap: 10px; /* Adjust gap for smaller screens */
+    }
+
+    .btn {
+        font-size: 12px; /* Adjust font size for smaller screens */
+        padding: 10px 20px; /* Adjust padding for smaller screens */
+    }
 }
