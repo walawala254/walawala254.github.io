@@ -264,6 +264,7 @@ nav ul li a:hover::after {
         padding: 30px 20px;
         flex-direction: row;
         text-align: left;
+        flex-wrap: wrap;
     }
 
     .about-text .icon {
@@ -316,8 +317,10 @@ nav ul li a:hover::after {
     }
 
     .photo {
-        margin-bottom: 20px;
+        width: 100%;
+        max-width: 250px;
         order: 2; /* Ensures the photo stays on the right */
+        margin-left: auto;
     }
 
     .text-content {
