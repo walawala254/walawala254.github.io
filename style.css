@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
-/* Universal styles */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,6 @@ a {
     text-decoration: none;
 }
 
-/* Hero section */
 .hero {
     display: flex;
     flex-direction: column;
@@ -21,7 +19,6 @@ a {
     background: url('') no-repeat center center/cover;
 }
 
-/* Navigation styles */
 nav {
     display: flex;
     align-items: center;
@@ -29,22 +26,18 @@ nav {
     padding: 30px 100px;
 }
 
-nav ul {
-    display: flex;
-    gap: 20px;
-}
-
 nav ul li {
     list-style: none;
+    display: inline-block;
+    padding: 10px 20px;
 }
 
 nav ul li a {
-    color: #3a3a3a; /* Darker but readable shade of grey */
+    color: #3a3a3a; /* Changed to a darker but readable shade of grey */
     position: relative;
     padding: 5px 0;
     display: flex;
     align-items: center;
-    transition: color 0.3s;
 }
 
 nav ul li a i {
@@ -55,22 +48,21 @@ nav ul li a:hover {
     color: #1a1a1a; /* Darker hover color */
 }
 
-nav ul li a::after {
+nav ul li a:after {
     content: "";
     position: absolute;
     left: 0;
     width: 0;
     height: 3px;
     background: #1a1a1a; /* Darker underline color */
-    transition: width 0.3s;
+    transition: 0.3s;
     bottom: 0;
 }
 
-nav ul li a:hover::after {
+nav ul li a:hover:after {
     width: 100%;
 }
 
-/* Button styles */
 .btn {
     color: #fff;
     font-size: 16px;
@@ -78,12 +70,13 @@ nav ul li a:hover::after {
     letter-spacing: 2px;
     padding: 16px 40px;
     border-radius: 500px;
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     font-weight: 500;
     transition: all 0.4s ease-in-out;
+    background-size: 152% 100%;
     background: #3a3a3a; /* Darker button color */
     border: 2px solid #3a3a3a; /* Darker border color */
+    align-items: center;
 }
 
 .btn i {
@@ -96,7 +89,6 @@ nav ul li a:hover::after {
     color: #3a3a3a;
 }
 
-/* Content styles */
 .content {
     flex: 1;
     padding-right: 50px;
@@ -109,7 +101,12 @@ nav ul li a:hover::after {
     letter-spacing: 4px;
     display: inline-block;
     margin-bottom: 20px;
-    background: linear-gradient(120deg, #555555 20.69%, #777777 50.19%, #3a3a3a 79.69%);
+    background: linear-gradient(
+        120deg,
+        #555555 20.69%,
+        #777777 50.19%,
+        #3a3a3a 79.69%
+    );
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -122,7 +119,6 @@ nav ul li a:hover::after {
     line-height: 90px;
     text-transform: inherit;
     width: 70%;
-    margin-bottom: 20px;
 }
 
 .content h1 span {
@@ -135,7 +131,6 @@ nav ul li a:hover::after {
     margin-bottom: 30px;
 }
 
-/* Photo styles */
 .photo {
     flex-shrink: 0;
     width: 250px; /* Adjust the size as needed */
@@ -149,7 +144,15 @@ nav ul li a:hover::after {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Adds a shadow */
 }
 
-/* List styles */
+.content h1 {
+    color: #2a2a2a; /* Darker heading color */
+    font-size: 45px;
+    font-weight: 700;
+    line-height: 55px;
+    text-transform: inherit;
+    margin-bottom: 20px;
+}
+
 .content ul {
     list-style: none;
     padding: 0;
@@ -161,7 +164,6 @@ nav ul li a:hover::after {
     color: #3a3a3a; /* Darker list item color */
 }
 
-/* Portfolio styles */
 .portfolio-items {
     display: flex;
     flex-wrap: wrap;
@@ -195,7 +197,6 @@ nav ul li a:hover::after {
     color: #3a3a3a; /* Darker paragraph color */
 }
 
-/* Form styles */
 form {
     display: flex;
     flex-direction: column;
@@ -214,7 +215,6 @@ form button {
     align-self: flex-start;
 }
 
-/* Tech tools styles */
 .tech-tools {
     display: flex;
     flex-wrap: wrap;
@@ -239,9 +239,7 @@ form button {
     color: #3a3a3a; /* Darker icon color */
 }
 
-/* About text styles */
 .about-text {
-    display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 20px;
@@ -253,9 +251,7 @@ form button {
     width: 90%;
 }
 
-/* Services text styles */
 .services-text {
-    display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 20px;
@@ -266,7 +262,6 @@ form button {
     color: #3a3a3a; /* Darker text color */
 }
 
-/* Content wrapper styles */
 .content-wrapper {
     display: flex;
     justify-content: space-between;
@@ -275,7 +270,6 @@ form button {
     height: 100%;
 }
 
-/* Social links styles */
 .social-links {
     margin-top: 20px;
 }
