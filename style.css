@@ -1,274 +1,285 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
-{
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: "Poppins", sans-serif;
+/* Universal styles */
+* {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+    font-family: "Poppins", sans-serif; /* Set the default font family */
 }
+
 a {
-text-decoration: none;
+    text-decoration: none; /* Remove underline from links */
 }
 
+/* Hero section */
 .hero {
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 100vh;
-background: url('') no-repeat center center/cover;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    width: 100%; /* Full width */
+    height: 100vh; /* Full viewport height */
+    background: url('') no-repeat center center/cover; /* Background image settings */
 }
 
+/* Navigation styles */
 nav {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 30px 100px;
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically centered */
+    justify-content: space-between; /* Space out items evenly */
+    padding: 30px 100px; /* Padding around the nav */
 }
 
 nav ul li {
-list-style: none;
-display: inline-block;
-padding: 10px 20px;
+    list-style: none; /* Remove bullet points */
+    display: inline-block; /* Display list items inline */
+    padding: 10px 20px; /* Padding around list items */
 }
 
 nav ul li a {
-color: #3a3a3a; /* Changed to a darker but readable shade of grey */
-position: relative;
-padding: 5px 0;
-display: flex;
-align-items: center;
+    color: #3a3a3a; /* Text color for links */
+    position: relative; /* Position for pseudo-element */
+    padding: 5px 0; /* Padding around text */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically centered */
 }
 
 nav ul li a i {
-margin-right: 8px;
+    margin-right: 8px; /* Margin to the right of icons */
 }
 
 nav ul li a:hover {
-color: #1a1a1a; /* Darker hover color */
+    color: #1a1a1a; /* Darker color on hover */
 }
 
 nav ul li a:after {
-content: "";
-position: absolute;
-left: 0;
-width: 0;
-height: 3px;
-background: #1a1a1a; /* Darker underline color */
-transition: 0.3s;
-bottom: 0;
+    content: ""; /* Empty content for pseudo-element */
+    position: absolute; /* Position relative to parent */
+    left: 0; /* Align to the left */
+    width: 0; /* Initial width */
+    height: 3px; /* Height of underline */
+    background: #1a1a1a; /* Background color of underline */
+    transition: 0.3s; /* Transition effect */
+    bottom: 0; /* Position at the bottom */
 }
 
 nav ul li a:hover:after {
-width: 100%;
+    width: 100%; /* Expand width on hover */
 }
 
+/* Button styles */
 .btn {
-color: #fff;
-font-size: 16px;
-text-transform: uppercase;
-letter-spacing: 2px;
-padding: 16px 40px;
-border-radius: 500px;
-display: inline-block;
-font-weight: 500;
-transition: all 0.4s ease-in-out;
-background-size: 152% 100%;
-background: #3a3a3a; /* Darker button color /
-border: 2px solid #3a3a3a; / Darker border color */
-align-items: center;
+    color: #fff; /* Text color */
+    font-size: 16px; /* Font size */
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 2px; /* Spacing between letters */
+    padding: 16px 40px; /* Padding inside button */
+    border-radius: 500px; /* Rounded corners */
+    display: inline-block; /* Inline-block display */
+    font-weight: 500; /* Font weight */
+    transition: all 0.4s ease-in-out; /* Transition effect */
+    background-size: 152% 100%; /* Background size */
+    background: #3a3a3a; /* Background color */
+    border: 2px solid #3a3a3a; /* Border color */
+    align-items: center; /* Align items vertically centered */
 }
 
 .btn i {
-margin-right: 8px;
+    margin-right: 8px; /* Margin to the right of icons */
 }
 
 .btn:hover {
-background: transparent;
-border-color: #3a3a3a;
-color: #3a3a3a;
+    background: transparent; /* Transparent background on hover */
+    border-color: #3a3a3a; /* Border color on hover */
+    color: #3a3a3a; /* Text color on hover */
 }
 
+/* Content styles */
 .content {
-flex: 1;
-padding-right: 50px;
+    flex: 1; /* Flex-grow */
+    padding-right: 50px; /* Padding to the right */
 }
 
 .content .title {
-color: #3a3a3a; /* Darker title color */
-font-size: 15px;
-text-transform: uppercase;
-letter-spacing: 4px;
-display: inline-block;
-margin-bottom: 20px;
-background: linear-gradient(
-120deg,
-#555555 20.69%,
-#777777 50.19%,
-#3a3a3a 79.69%
-);
--webkit-background-clip: text;
-background-clip: text;
--webkit-text-fill-color: transparent;
+    color: #3a3a3a; /* Title color */
+    font-size: 15px; /* Font size */
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 4px; /* Spacing between letters */
+    display: inline-block; /* Inline-block display */
+    margin-bottom: 20px; /* Margin below */
+    background: linear-gradient(120deg, #555555 20.69%, #777777 50.19%, #3a3a3a 79.69%); /* Gradient background */
+    -webkit-background-clip: text; /* Clip background to text */
+    background-clip: text; /* Clip background to text */
+    -webkit-text-fill-color: transparent; /* Transparent text fill */
 }
 
 .content h1 {
-color: #2a2a2a; /* Darker heading color */
-font-size: 75px;
-font-weight: 900;
-line-height: 90px;
-text-transform: inherit;
-width: 70%;
+    color: #2a2a2a; /* Heading color */
+    font-size: 75px; /* Font size */
+    font-weight: 900; /* Font weight */
+    line-height: 90px; /* Line height */
+    text-transform: inherit; /* Inherit text transformation */
+    width: 70%; /* Width */
 }
 
 .content h1 span {
-color: #3a3a3a; /* Darker span color */
+    color: #3a3a3a; /* Span color */
 }
 
 .content p {
-color: #3a3a3a; /* Darker paragraph color */
-margin-top: 25px;
-margin-bottom: 30px;
+    color: #3a3a3a; /* Paragraph color */
+    margin-top: 25px; /* Margin above */
+    margin-bottom: 30px; /* Margin below */
 }
 
+/* Photo styles */
 .photo {
-flex-shrink: 0;
-width: 250px; /* Adjust the size as needed */
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 250px; /* Width */
 }
 
 .photo img {
-width: 100%;
-height: auto;
-border-radius: 50%; /* Makes the image circular /
-border: 5px solid #3a3a3a; / Adds a border around the image /
-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); / Adds a shadow */
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+    border-radius: 50%; /* Circular image */
+    border: 5px solid #3a3a3a; /* Border color and size */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
 }
 
+/* Content heading styles */
 .content h1 {
-color: #2a2a2a; /* Darker heading color */
-font-size: 45px;
-font-weight: 700;
-line-height: 55px;
-text-transform: inherit;
-margin-bottom: 20px;
+    color: #2a2a2a; /* Heading color */
+    font-size: 45px; /* Font size */
+    font-weight: 700; /* Font weight */
+    line-height: 55px; /* Line height */
+    text-transform: inherit; /* Inherit text transformation */
+    margin-bottom: 20px; /* Margin below */
 }
 
+/* List styles */
 .content ul {
-list-style: none;
-padding: 0;
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
 }
 
 .content ul li {
-margin-bottom: 10px;
-font-size: 18px;
-color: #3a3a3a; /* Darker list item color */
+    margin-bottom: 10px; /* Margin below each list item */
+    font-size: 18px; /* Font size */
+    color: #3a3a3a; /* List item color */
 }
 
+/* Portfolio styles */
 .portfolio-items {
-display: flex;
-flex-wrap: wrap;
-gap: 20px;
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Wrap items */
+    gap: 20px; /* Gap between items */
 }
 
 .portfolio-item {
-width: calc(20% - 20px);
-background: #fff;
-padding: 20px;
-border-radius: 10px;
-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-text-align: center;
+    width: calc(20% - 20px); /* Width calculation */
+    background: #fff; /* Background color */
+    padding: 20px; /* Padding inside */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    text-align: center; /* Center text */
 }
 
 .portfolio-item img {
-width: 100%;
-height: auto;
-border-radius: 10px;
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+    border-radius: 10px; /* Rounded corners */
 }
 
 .portfolio-item h3 {
-margin-top: 15px;
-font-size: 20px;
-color: #3a3a3a; /* Darker heading color */
+    margin-top: 15px; /* Margin above */
+    font-size: 20px; /* Font size */
+    color: #3a3a3a; /* Heading color */
 }
 
 .portfolio-item p {
-margin-top: 10px;
-font-size: 16px;
-color: #3a3a3a; /* Darker paragraph color */
+    margin-top: 10px; /* Margin above */
+    font-size: 16px; /* Font size */
+    color: #3a3a3a; /* Paragraph color */
 }
 
+/* Form styles */
 form {
-display: flex;
-flex-direction: column;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
 }
 
 form input, form textarea {
-width: 100%;
-padding: 15px;
-margin-bottom: 15px;
-border: 1px solid #ccc;
-border-radius: 5px;
-font-size: 16px;
+    width: 100%; /* Full width */
+    padding: 15px; /* Padding inside */
+    margin-bottom: 15px; /* Margin below */
+    border: 1px solid #ccc; /* Border color and size */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
 }
 
 form button {
-align-self: flex-start;
+    align-self: flex-start; /* Align button to start */
 }
 
+/* Tech tools styles */
 .tech-tools {
-display: flex;
-flex-wrap: wrap;
-gap: 20px;
-margin-top: 20px;
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Wrap items */
+    gap: 20px; /* Gap between items */
+    margin-top: 20px; /* Margin above */
 }
 
 .tech-item {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 10px 20px;
-background: #f9f9f9;
-border-radius: 5px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-font-size: 18px;
-color: #3a3a3a; /* Darker text color */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically centered */
+    gap: 10px; /* Gap between items */
+    padding: 10px 20px; /* Padding inside */
+    background: #f9f9f9; /* Background color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    font-size: 18px; /* Font size */
+    color: #3a3a3a; /* Text color */
 }
 
 .tech-item i {
-font-size: 24px;
-color: #3a3a3a; /* Darker icon color */
+    font-size: 24px; /* Icon font size */
+    color: #3a3a3a; /* Icon color */
 }
 
+/* About text styles */
 .about-text {
-align-items: center;
-gap: 10px;
-padding: 10px 20px;
-background: #f9f9f9;
-border-radius: 5px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-font-size: 18px;
-color: #3a3a3a; /* Darker text color */
-width: 90%;
+    align-items: center; /* Align items vertically centered */
+    gap: 10px; /* Gap between items */
+    padding: 10px 20px; /* Padding inside */
+    background: #f9f9f9; /* Background color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    font-size: 18px; /* Font size */
+    color: #3a3a3a; /* Text color */
+    width: 90%; /* Width */
 }
 
+/* Services text styles */
 .services-text {
-align-items: center;
-gap: 10px;
-padding: 10px 20px;
-background: #f9f9f9;
-border-radius: 5px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-font-size: 18px;
-color: #3a3a3a; /* Darker text color */
+    align-items: center; /* Align items vertically centered */
+    gap: 10px; /* Gap between items */
+    padding: 10px 20px; /* Padding inside */
+    background: #f9f9f9; /* Background color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    font-size: 18px; /* Font size */
+    color: #3a3a3a; /* Text color */
 }
 
+/* Content wrapper styles */
 .content-wrapper {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 0 100px;
-height: 100%;
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out items evenly */
+    align-items: center; /* Align items vertically centered */
+    padding: 0 100px; /* Padding around */
+    height: 100%; /* Full height */
 }
 
+/* Social links styles */
 .social-links {
-margin-top: 20px;
+    margin-top: 20px; /* Margin above */
 }
