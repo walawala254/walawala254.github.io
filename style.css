@@ -277,18 +277,25 @@ form button {
 /* About text styles */
 .about-text {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
     padding: 50px 20px;
     background: var(--background-color);
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     font-size: 18px;
     color: var(--text-color);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 50px auto;
-    text-align: center;
+}
+
+.about-text .icon {
+    font-size: 50px;
+    color: var(--primary-color);
+}
+
+.about-text .text-content {
+    flex: 1;
 }
 
 .about-text h2 {
@@ -311,18 +318,25 @@ form button {
 /* Services text styles */
 .services-text {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
     padding: 50px 20px;
     background: var(--background-color);
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     font-size: 18px;
     color: var(--text-color);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 50px auto;
-    text-align: center;
+}
+
+.services-text .icon {
+    font-size: 50px;
+    color: var(--primary-color);
+}
+
+.services-text .text-content {
+    flex: 1;
 }
 
 .services-text h2 {
@@ -360,6 +374,19 @@ form button {
         flex-direction: column;
         padding: 0 50px;
     }
+
+    .about-text, .services-text {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-text .icon, .services-text .icon {
+        font-size: 40px;
+    }
+
+    .about-text .text-content, .services-text .text-content {
+        text-align: center;
+    }
 }
 
 @media (max-width: 768px) {
@@ -389,6 +416,19 @@ form button {
     .about-text, .services-text {
         padding: 30px 20px;
     }
+
+    .about-text, .services-text {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-text .icon, .services-text .icon {
+        font-size: 40px;
+    }
+
+    .about-text .text-content, .services-text .text-content {
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -407,5 +447,18 @@ form button {
     
     .about-text, .services-text {
         padding: 20px;
+    }
+
+    .about-text, .services-text {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-text .icon, .services-text .icon {
+        font-size: 30px;
+    }
+
+    .about-text .text-content, .services-text .text-content {
+        text-align: center;
     }
 }
