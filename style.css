@@ -287,6 +287,7 @@ form button {
     color: var(--text-color);
     max-width: 1200px;
     margin: 50px auto;
+    text-align: left;
 }
 
 .about-text .icon {
@@ -328,6 +329,7 @@ form button {
     color: var(--text-color);
     max-width: 1200px;
     margin: 50px auto;
+    text-align: left;
 }
 
 .services-text .icon {
@@ -378,6 +380,7 @@ form button {
     .about-text, .services-text {
         flex-direction: column;
         text-align: center;
+        gap: 20px;
     }
 
     .about-text .icon, .services-text .icon {
@@ -417,11 +420,6 @@ form button {
         padding: 30px 20px;
     }
 
-    .about-text, .services-text {
-        flex-direction: column;
-        text-align: center;
-    }
-
     .about-text .icon, .services-text .icon {
         font-size: 40px;
     }
@@ -447,9 +445,6 @@ form button {
     
     .about-text, .services-text {
         padding: 20px;
-    }
-
-    .about-text, .services-text {
         flex-direction: column;
         text-align: center;
     }
