@@ -172,108 +172,6 @@ nav ul li a:hover::after {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Adds a shadow */
 }
 
-/* List styles */
-.content ul {
-    list-style: none;
-    padding: 0;
-}
-
-.content ul li {
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: var(--text-color);
-}
-
-/* Portfolio styles */
-.portfolio-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-}
-
-.portfolio-item {
-    width: calc(25% - 20px);
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s;
-}
-
-.portfolio-item:hover {
-    transform: translateY(-10px);
-}
-
-.portfolio-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.portfolio-item h3 {
-    margin-top: 15px;
-    font-size: 20px;
-    color: var(--primary-color);
-}
-
-.portfolio-item p {
-    margin-top: 10px;
-    font-size: 16px;
-    color: var(--text-color);
-}
-
-/* Form styles */
-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-form input, form textarea {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background: var(--background-color);
-}
-
-form button {
-    align-self: flex-start;
-}
-
-/* Tech tools styles */
-.tech-tools {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-    justify-content: center;
-}
-
-.tech-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    background: var(--background-color);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 18px;
-    color: var(--text-color);
-}
-
-.tech-item i {
-    font-size: 24px;
-    color: var(--primary-color);
-}
-
 /* About text styles */
 .about-text {
     display: flex;
@@ -316,60 +214,6 @@ form button {
     margin-top: 20px;
 }
 
-/* Services text styles */
-.services-text {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    padding: 50px 20px;
-    background: var(--background-color);
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    font-size: 18px;
-    color: var(--text-color);
-    max-width: 1200px;
-    margin: 50px auto;
-    text-align: left;
-}
-
-.services-text .icon {
-    font-size: 50px;
-    color: var(--primary-color);
-}
-
-.services-text .text-content {
-    flex: 1;
-}
-
-.services-text h2 {
-    font-size: 36px;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-}
-
-.services-text p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-/* Content wrapper styles */
-.content-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 100px;
-    height: 100%;
-}
-
-/* Social links styles */
-.social-links {
-    margin-top: 20px;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
 /* Responsive design */
 @media (max-width: 1200px) {
     .content-wrapper {
@@ -377,17 +221,17 @@ form button {
         padding: 0 50px;
     }
 
-    .about-text, .services-text {
+    .about-text {
         flex-direction: column;
         text-align: center;
         gap: 20px;
     }
 
-    .about-text .icon, .services-text .icon {
+    .about-text .icon {
         font-size: 40px;
     }
 
-    .about-text .text-content, .services-text .text-content {
+    .about-text .text-content {
         text-align: center;
     }
 }
@@ -412,19 +256,17 @@ form button {
         line-height: 1.2;
     }
     
-    .portfolio-item {
-        width: calc(50% - 20px);
-    }
-    
-    .about-text, .services-text {
+    .about-text {
         padding: 30px 20px;
+        flex-direction: column;
+        text-align: center;
     }
 
-    .about-text .icon, .services-text .icon {
+    .about-text .icon {
         font-size: 40px;
     }
 
-    .about-text .text-content, .services-text .text-content {
+    .about-text .text-content {
         text-align: center;
     }
 }
@@ -432,10 +274,6 @@ form button {
 @media (max-width: 480px) {
     .content {
         padding: 20px;
-    }
-    
-    .portfolio-item {
-        width: 100%;
     }
     
     .btn {
@@ -443,57 +281,36 @@ form button {
         padding: 10px 20px;
     }
     
-    .about-text, .services-text {
+    .about-text {
         padding: 20px;
         flex-direction: column;
         text-align: center;
     }
 
-    .about-text .icon, .services-text .icon {
+    .about-text .icon {
         font-size: 30px;
-    }
-
-    .about-text .text-content, .services-text .text-content {
-        text-align: center;
-    }
-}
-
-/* Fix for huge gaps on mobile */
-@media (max-width: 480px) {
-    .about-text, .services-text {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .about-text .icon, .services-text .icon {
         margin-bottom: 20px;
     }
 
-    .about-text .text-content, .services-text .text-content {
-        margin-bottom: 20px;
+    .about-text .text-content {
+        text-align: center;
+    }
+
+    .about-text h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .about-text p {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .about-text .btn {
+        margin-top: 10px;
     }
 
     .photo {
         margin-bottom: 20px;
-    }
-
-    .content {
-        padding: 20px;
-    }
-
-    .content h1 {
-        font-size: 32px;
-        line-height: 1.2;
-    }
-
-    .content p {
-        font-size: 16px;
-    }
-
-    .btn {
-        font-size: 14px;
-        padding: 10px 20px;
     }
 }
