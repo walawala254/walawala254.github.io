@@ -457,3 +457,43 @@ form button {
         text-align: center;
     }
 }
+
+/* Fix for huge gaps on mobile */
+@media (max-width: 480px) {
+    .about-text, .services-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-text .icon, .services-text .icon {
+        margin-bottom: 20px;
+    }
+
+    .about-text .text-content, .services-text .text-content {
+        margin-bottom: 20px;
+    }
+
+    .photo {
+        margin-bottom: 20px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .content h1 {
+        font-size: 32px;
+        line-height: 1.2;
+    }
+
+    .content p {
+        font-size: 16px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
