@@ -2,36 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Personal Portfolio Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dave Bryson | FinTech Risk, Fraud & Data Science</title>
+    <meta name="description" content="Dave Bryson blends data science, payments risk, AML thinking, merchant risk operations, and risk analytics for fintech teams." />
+    <meta name="theme-color" content="#070b10" />
+    <link rel="canonical" href="https://walawala254.github.io/" />
+    <meta property="og:title" content="Dave Bryson | FinTech Risk, Fraud & Data Science" />
+    <meta property="og:description" content="FinTech risk, fraud analytics, AML/CFT, merchant risk, transaction monitoring, and data science." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://walawala254.github.io/" />
+    <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070b10'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%2378ffd6'%3EDB%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="hero">
-        <nav>
-            <ul>
-                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="about.html"><i class="fas fa-user"></i> About</a></li>
-                <li><a href="services.html"><i class="fas fa-concierge-bell"></i> Services</a></li>
-                <li><a href="portfolio.html"><i class="fas fa-briefcase"></i> Portfolio</a></li>
-                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-            </ul>
-            <a href="https://github.com/walawala254" class="btn"><i class="fab fa-github"></i> GitHub</a>
-        </nav>
-        <div class="content-wrapper">
-            <div class="content">
-                <span class="title">Data Analyst | Data Scientist</span>
-                <h1>Hello, I’m <span>Dave Bryson</span></h1>
-                <p>
-                    I’m a Data Analyst with a passion for uncovering insights from data and providing actionable recommendations. 
-                    I specialize in data visualization, statistical analysis, and machine learning.
-                </p>
-                <a href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing"></i> Download CV</a>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <nav class="nav-shell" aria-label="Primary navigation">
+            <a class="brand" href="index.html" aria-label="Dave Bryson home">
+                <span class="brand-mark">DB</span>
+                <span class="brand-copy">
+                    <strong>Dave Bryson</strong>
+                    <small>Risk + Data</small>
+                </span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+            <div class="nav-panel" id="primary-menu">
+                <ul class="nav-links">
+                    <li><a class="active" href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="portfolio.html">Portfolio</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
+                </div>
             </div>
-            <div class="photo">
-                <img src="about_me.jpg" alt="Dave Bryson" />
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="hero-section">
+            <div class="ambient-grid" aria-hidden="true"></div>
+            <div class="container hero-grid">
+                <div class="hero-copy reveal">
+                    <p class="eyebrow">FinTech Risk, Fraud & Data Science Specialist</p>
+                    <h1>Dave Bryson turns messy payment signals into sharper risk decisions.</h1>
+                    <p class="hero-lede">
+                        I blend data science, payments risk, AML thinking, and merchant-risk operations to build sharper controls, better monitoring, and clearer decisions for fintech teams.
+                    </p>
+                    <div class="hero-actions" aria-label="Primary calls to action">
+                        <a class="btn primary" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
+                        <a class="btn secondary" href="portfolio.html"><i class="fas fa-layer-group" aria-hidden="true"></i> View Portfolio</a>
+                        <a class="btn tertiary" href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> Contact Me</a>
+                        <a class="btn tertiary" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+                    </div>
+                    <div class="signal-row" aria-label="Capability highlights">
+                        <span>Payments Risk</span>
+                        <span>Fraud Analytics</span>
+                        <span>AML/CFT</span>
+                        <span>Merchant Risk</span>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal" data-delay="150">
+                    <div class="portrait-card">
+                        <img src="about_me.jpg" alt="Dave Bryson portrait" width="893" height="861" decoding="async" fetchpriority="high" />
+                        <div class="portrait-overlay">
+                            <span>Risk intelligence</span>
+                            <strong>Data-backed controls</strong>
+                        </div>
+                    </div>
+                    <div class="floating-tags" aria-hidden="true">
+                        <span>Transaction Monitoring</span>
+                        <span>Fraud Rules</span>
+                        <span>AML/CFT</span>
+                        <span>Merchant Risk</span>
+                        <span>Python</span>
+                        <span>SQL</span>
+                        <span>Power BI</span>
+                        <span>Scheme Rules</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-heading reveal">
+                <p class="eyebrow">Useful middle ground</p>
+                <h2>Built for teams where risk, compliance, data, and operations meet.</h2>
+            </div>
+            <div class="container metrics-grid">
+                <article class="metric-card reveal">
+                    <strong>01</strong>
+                    <h3>Detect</h3>
+                    <p>Turn transaction behavior, velocity, merchant profile, and dispute signals into practical monitoring logic.</p>
+                </article>
+                <article class="metric-card reveal" data-delay="100">
+                    <strong>02</strong>
+                    <h3>Explain</h3>
+                    <p>Translate risk patterns into clear documentation, dashboards, review notes, and decision trails.</p>
+                </article>
+                <article class="metric-card reveal" data-delay="200">
+                    <strong>03</strong>
+                    <h3>Improve</h3>
+                    <p>Refine controls so fintech teams can move faster without losing sight of fraud, AML, and merchant exposure.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section split-section">
+            <div class="container split-grid">
+                <div class="reveal">
+                    <p class="eyebrow">Core stack</p>
+                    <h2>Risk analytics with a builder's mindset.</h2>
+                    <p>
+                        My background in data analysis gives me a practical lens for payments and compliance work: define the risk, inspect the behavior, build the control, and communicate the decision clearly.
+                    </p>
+                </div>
+                <div class="capability-cloud reveal" data-delay="150" aria-label="Capabilities">
+                    <span>Transaction Monitoring</span>
+                    <span>Fraud Rules</span>
+                    <span>KYB Review</span>
+                    <span>AML Typologies</span>
+                    <span>Chargebacks</span>
+                    <span>Merchant Intelligence</span>
+                    <span>Python</span>
+                    <span>SQL</span>
+                    <span>Power BI</span>
+                    <span>Risk Documentation</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <p>&copy; 2026 Dave Bryson. FinTech risk, fraud analytics, and data science.</p>
+            <div class="footer-links">
+                <a href="mailto:dbmbryson@gmail.com">Email</a>
+                <a href="https://www.linkedin.com/in/dave-bryson-07a2bb264" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
         </div>
-    </div>
+    </footer>
 </body>
 </html>
