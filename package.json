@@ -1,0 +1,19 @@
+{
+  "name": "dave-bryson-portfolio",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run validate:build",
+    "preview": "vite preview",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "validate:build": "node scripts/validate-build.mjs"
+  },
+  "devDependencies": {
+    "vite": "8.1.5"
+  }
+}

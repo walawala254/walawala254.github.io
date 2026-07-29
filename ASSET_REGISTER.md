@@ -1,0 +1,21 @@
+# Asset Register
+
+Phase 1 preserves every existing image. File sizes are repository working-tree byte counts recorded on 2026-07-29. "Provisional" means provenance or licence evidence must be confirmed before the redesign reuses the asset. "Quarantined" means a third-party indicator or explicit rights concern requires replacement or written clearance before production redesign approval.
+
+| File | Current use | Size | Known source information | Copyright metadata | Licence status | Governance status | Planned replacement status |
+| --- | --- | ---: | --- | --- | --- | --- | --- |
+| `about_me.jpg` | Home hero, About profile, home/about Open Graph image | 162,377 B | Portrait supplied with the existing repository; creator and capture date undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; confirm owner approval before final redesign |
+| `contact.jpg` | Contact page hero/card and Contact Open Graph image | 18,342 B | Embedded description: "Contact Info Symbols in sunset sky with sun"; creator/source URL undocumented | No embedded copyright field found | Not documented | Quarantined | Retain only for baseline fidelity; replace or clear rights before production redesign |
+| `database_mgmt.jpeg` | Merchant Risk & KYB portfolio card | 10,353 B | Source undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; source or replace before production redesign |
+| `data_analysis.jpeg` | Chargeback and scheme-rules portfolio card | 10,495 B | Source undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; source or replace before production redesign |
+| `data_collection2.png` | Transaction-monitoring portfolio card | 194,663 B | Source undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; source or replace before production redesign |
+| `data_visualization.jpeg` | Risk dashboard portfolio card | 6,233 B | Source undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; source or replace before production redesign |
+| `machine_learning.jpg` | AML/CFT typology portfolio card | 161,125 B | Visible credit states that WittySparks hosts an image sourced from Pixabay; original item and author not identified | No embedded copyright field found | Specific Pixabay licence/version not verified | Quarantined | Retain only for baseline fidelity; replace before production redesign unless original rights are verified |
+| `portfolio.jpg` | Portfolio hero and Portfolio Open Graph image | 22,057 B | Embedded description: "Portfolio folder." | Embedded copyright: "Tom Hahn" | Permission not documented | Quarantined | Retain only for baseline fidelity; replace or obtain written permission before production redesign |
+| `services.jpg` | Services hero/Open Graph image and Web Risk Screening portfolio card | 12,278 B | Embedded description: "Service tools icon on white background. Vector illustration"; creator/source URL undocumented | No embedded copyright field found | Not documented | Quarantined | Retain only for baseline fidelity; replace or clear rights before production redesign |
+| `Technical_writing.jpg` | Compliance documentation portfolio card | 44,204 B | Source undocumented | No embedded copyright field found | Not documented | Provisional | Retain in Phase 1; source or replace before production redesign |
+| `public/favicon.svg` | Browser favicon on all source and built pages | 259 B | Project-authored Phase 1 extraction of the existing DB data-URI design | Dave Bryson portfolio project | Project use approved | Approved | Retain unless superseded by an approved brand asset |
+
+## Downloadable and remote assets
+
+No downloadable CV is stored in this repository. The existing Download CV links point to a Google Drive document whose ownership and sharing permissions must be reconfirmed before production release. Google Fonts and Font Awesome are fetched remotely; their licence references are recorded in `OPEN_SOURCE_ATTRIBUTIONS.md`.

@@ -12,14 +12,14 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://walawala254.github.io/services.html" />
     <meta property="og:image" content="https://walawala254.github.io/services.jpg" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070b10'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%2378ffd6'%3EDB%3C/text%3E%3C/svg%3E" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
     <link rel="stylesheet" href="style.css?v=2.3" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script src="script.js?v=2.4" defer></script>
+    <script type="module" src="script.js?v=2.4"></script>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -38,7 +38,7 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a class="active" href="services.html">Services</a></li>
+                    <li><a class="active" href="services.html" aria-current="page">Services</a></li>
                     <li><a href="portfolio.html">Portfolio</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
@@ -66,7 +66,8 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" aria-labelledby="services-list-heading">
+            <h2 class="sr-only" id="services-list-heading">Available services</h2>
             <div class="container service-grid">
                 <article class="service-card reveal">
                     <i class="fas fa-wave-square" aria-hidden="true"></i>

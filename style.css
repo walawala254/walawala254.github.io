@@ -821,14 +821,20 @@ p {
         box-shadow: var(--shadow);
         transform: translateY(-12px);
         opacity: 0;
+        visibility: hidden;
         pointer-events: none;
-        transition: opacity 180ms ease, transform 180ms ease;
+        transition:
+            opacity 180ms ease,
+            transform 180ms ease,
+            visibility 0s linear 180ms;
     }
 
     .js .nav-panel.is-open {
         transform: translateY(0);
         opacity: 1;
+        visibility: visible;
         pointer-events: auto;
+        transition-delay: 0s;
     }
 
     .nav-links,
