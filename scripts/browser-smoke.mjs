@@ -216,9 +216,9 @@ async function inspectRoute(client) {
 function assertResults(report) {
   const failures = [];
 
-  for (const viewport of ["desktop", "mobile"]) {
+  for (const [viewport, routeResults] of Object.entries(report.results)) {
     for (const route of routes) {
-      const result = report.results[viewport][route];
+      const result = routeResults[route];
 
       if (result.overflow) failures.push(`${viewport} ${route} overflows`);
       if (result.current !== expectedCurrentPage[route]) {
@@ -345,6 +345,50 @@ async function main() {
       if (route === "portfolio.html") {
         await sleep(500);
         await captureScreenshot(client, "portfolio-desktop.png");
+        await evaluate(
+          client,
+          `(() => {
+            const grid = document.querySelector('.project-grid');
+            const header = document.querySelector('.site-header');
+            if (grid) {
+              scrollTo(
+                0,
+                grid.getBoundingClientRect().top +
+                  scrollY -
+                  (header?.offsetHeight || 0) -
+                  24
+              );
+            }
+            return true;
+          })()`
+        );
+        await sleep(500);
+        await captureScreenshot(client, "portfolio-index-desktop.png");
+      }
+      if (route === "about.html") {
+        await sleep(500);
+        await captureScreenshot(client, "about-desktop.png");
+      }
+      if (route === "services.html") {
+        await evaluate(
+          client,
+          `(() => {
+            const grid = document.querySelector('.service-grid');
+            const header = document.querySelector('.site-header');
+            if (grid) {
+              scrollTo(
+                0,
+                grid.getBoundingClientRect().top +
+                  scrollY -
+                  (header?.offsetHeight || 0) -
+                  24
+              );
+            }
+            return true;
+          })()`
+        );
+        await sleep(500);
+        await captureScreenshot(client, "services-index-desktop.png");
       }
     }
 
@@ -386,8 +430,86 @@ async function main() {
     for (const route of routes) {
       await navigate(client, `${baseUrl}/${route}`);
       results.mobile[route] = await inspectRoute(client);
+
+      if (route === "portfolio.html") {
+        await sleep(500);
+        await captureScreenshot(client, "portfolio-mobile-390.png");
+        await evaluate(
+          client,
+          `(() => {
+            const grid = document.querySelector('.project-grid');
+            const header = document.querySelector('.site-header');
+            if (grid) {
+              scrollTo(
+                0,
+                grid.getBoundingClientRect().top +
+                  scrollY -
+                  (header?.offsetHeight || 0) -
+                  16
+              );
+            }
+            return true;
+          })()`
+        );
+        await sleep(500);
+        await captureScreenshot(client, "portfolio-index-mobile-390.png");
+      }
+      if (route === "about.html") {
+        await sleep(500);
+        await captureScreenshot(client, "about-mobile-390.png");
+      }
+      if (route === "services.html") {
+        await evaluate(
+          client,
+          `(() => {
+            const grid = document.querySelector('.service-grid');
+            const header = document.querySelector('.site-header');
+            if (grid) {
+              scrollTo(
+                0,
+                grid.getBoundingClientRect().top +
+                  scrollY -
+                  (header?.offsetHeight || 0) -
+                  16
+              );
+            }
+            return true;
+          })()`
+        );
+        await sleep(500);
+        await captureScreenshot(client, "services-index-mobile-390.png");
+      }
     }
 
+    const responsiveViewports = [
+      { name: "narrow320", width: 320, height: 800, mobile: true },
+      { name: "tablet768", width: 768, height: 1024, mobile: true },
+      { name: "tablet1024", width: 1024, height: 900, mobile: false },
+      { name: "large1920", width: 1920, height: 1080, mobile: false }
+    ];
+
+    for (const viewport of responsiveViewports) {
+      results[viewport.name] = {};
+      await setViewport(
+        client,
+        viewport.width,
+        viewport.height,
+        viewport.mobile
+      );
+
+      for (const route of routes) {
+        await navigate(client, `${baseUrl}/${route}`);
+        results[viewport.name][route] = await inspectRoute(client);
+      }
+
+      if (viewport.name === "narrow320") {
+        await navigate(client, `${baseUrl}/index.html`);
+        await sleep(500);
+        await captureScreenshot(client, "home-mobile-320.png");
+      }
+    }
+
+    await setViewport(client, 390, 844, true);
     await navigate(client, `${baseUrl}/index.html`);
     const menuTest = await evaluate(
       client,

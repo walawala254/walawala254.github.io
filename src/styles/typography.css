@@ -1,0 +1,92 @@
+h1,
+h2,
+h3,
+p {
+    margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--color-text-primary);
+    font-weight: 800;
+    text-wrap: balance;
+}
+
+h1 {
+    max-width: 13ch;
+    margin-bottom: var(--space-5);
+    font-size: var(--type-page-title);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    overflow-wrap: break-word;
+}
+
+.home-page h1 {
+    max-width: 12ch;
+    font-size: var(--type-display);
+}
+
+h2 {
+    margin-bottom: var(--space-4);
+    font-size: var(--type-section-title);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    overflow-wrap: break-word;
+}
+
+h3 {
+    margin-bottom: var(--space-3);
+    font-size: var(--type-subheading);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+p {
+    color: var(--color-text-secondary);
+}
+
+.hero-lede,
+.page-hero p,
+.contact-hero p {
+    max-width: var(--reading-width);
+    font-size: var(--type-body-large);
+    line-height: 1.62;
+}
+
+.hero-copy {
+    max-width: 52rem;
+}
+
+.hero-copy .hero-lede {
+    color: var(--color-text-secondary);
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    margin: 0 0 var(--space-5);
+    padding: var(--space-2) var(--space-3);
+    border-block: var(--border-thin) solid var(--color-border);
+    border-left: var(--border-strong) solid var(--color-accent-primary);
+    color: var(--color-accent-primary);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.eyebrow::before {
+    width: 0.35rem;
+    height: 0.35rem;
+    background: currentColor;
+    content: "";
+}
+
+.section-heading > p:not(.eyebrow) {
+    max-width: var(--reading-width);
+}

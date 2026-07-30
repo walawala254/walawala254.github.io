@@ -1,0 +1,103 @@
+.btn,
+.nav-btn,
+.nav-toggle,
+.nav-links a,
+.project-card a,
+.contact-list a,
+.footer-links a,
+.metric-card,
+.info-card,
+.matrix-card,
+.service-card {
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard),
+        border-color var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn:hover,
+    .nav-btn:hover {
+        transform: translateY(calc(var(--hover-shift) * -1));
+    }
+
+    .btn.primary:hover {
+        background: var(--color-focus);
+    }
+
+    .btn.secondary:hover,
+    .nav-btn:hover {
+        border-color: var(--color-accent-primary);
+        background: var(--color-accent-wash);
+    }
+
+    .btn.tertiary:hover,
+    .btn.icon-action:hover {
+        color: var(--color-text-primary);
+        border-color: var(--color-border-strong);
+    }
+
+    .btn.text-action:hover,
+    .project-card a:hover {
+        color: var(--color-accent-primary);
+    }
+
+    .nav-links a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    .metric-card:hover,
+    .info-card:hover {
+        background: var(--color-background-elevated);
+    }
+
+    .matrix-card:hover,
+    .service-card:hover {
+        border-top-color: var(--color-accent-primary);
+        background: var(--color-background-subtle);
+    }
+
+    .contact-list a:hover,
+    .footer-links a:hover {
+        color: var(--color-accent-primary);
+    }
+}
+
+.btn:active,
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+.js .reveal {
+    opacity: 0;
+    transform: translateY(0.875rem);
+}
+
+.js .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity var(--duration-reveal) var(--ease-emphasized),
+        transform var(--duration-reveal) var(--ease-emphasized);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}

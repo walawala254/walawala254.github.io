@@ -50,6 +50,8 @@ The repeated header, navigation, and footer are deliberately still authored in e
 
 Static public files such as the favicon, crawler policy, and sitemap live in `public/`. Vite copies them to the root of `dist/`. The production base is `/`, which matches this GitHub user site.
 
+The Risk Intelligence Circuit visual language, tokens, component hierarchy, responsive rules, and accessibility constraints are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
+
 ## Accessibility principles
 
 - Preserve semantic landmarks and logical heading order.

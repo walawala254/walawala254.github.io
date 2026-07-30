@@ -1,0 +1,120 @@
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    min-height: var(--header-height);
+    border-bottom: var(--border-thin) solid var(--color-border);
+    background: var(--color-header-opaque);
+}
+
+.nav-shell {
+    min-height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: max-content;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%);
+    color: var(--color-on-accent);
+    background: var(--color-accent-primary);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: 800;
+}
+
+.brand-copy {
+    display: grid;
+    line-height: 1.05;
+}
+
+.brand-copy strong {
+    font-size: 0.96rem;
+    letter-spacing: -0.02em;
+}
+
+.brand-copy small {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--type-metadata);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.nav-panel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+.nav-links,
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.nav-links {
+    justify-content: flex-end;
+}
+
+.nav-links a {
+    position: relative;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding-inline: var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: var(--type-supporting);
+    font-weight: 700;
+}
+
+.nav-links a::after {
+    position: absolute;
+    right: var(--space-3);
+    bottom: 0.35rem;
+    left: var(--space-3);
+    height: var(--border-strong);
+    transform: scaleX(0);
+    transform-origin: right;
+    background: var(--color-accent-primary);
+    content: "";
+    transition: transform var(--duration-standard) var(--ease-standard);
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+    color: var(--color-text-primary);
+}
+
+.nav-links a[aria-current="page"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: var(--border-thin) solid var(--color-border);
+    border-radius: var(--radius-xs);
+    color: var(--color-text-primary);
+    background: var(--color-background-elevated);
+    cursor: pointer;
+}
