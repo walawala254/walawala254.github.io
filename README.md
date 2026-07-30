@@ -2,7 +2,7 @@
 
 This repository contains Dave Bryson's multi-page portfolio for fintech risk, fraud, AML/CFT, merchant risk, payments operations, and data science. The production website is [walawala254.github.io](https://walawala254.github.io/).
 
-Phase 1 establishes a Vite-based vanilla JavaScript development and validation foundation. It intentionally preserves the version-two content, appearance, five public routes, and edge-scroll page chaining. It is not the Risk Intelligence Circuit visual redesign.
+The repository now contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, and an isolated Motion and 3D Technical Prototype lab. The five public routes and their current behavior remain separate from the lab; the complete Phase 3 homepage has not started.
 
 ## Branch and deployment policy
 
@@ -31,6 +31,7 @@ Available commands:
 - `npm run build` builds every HTML route and validates the generated routes and local assets.
 - `npm run preview` serves the production build locally, normally at `http://localhost:4173/`.
 - `npm run test:browser` runs the dependency-free Edge/Chrome smoke test against a separately running preview server.
+- `npm run test:prototypes` runs the isolated SVG, Canvas 2D, and Three.js lifecycle and responsive smoke tests against a separately running preview server.
 - `npm run validate:build` validates an existing `dist` directory.
 
 ## Architecture
@@ -52,6 +53,18 @@ Static public files such as the favicon, crawler policy, and sitemap live in `pu
 
 The Risk Intelligence Circuit visual language, tokens, component hierarchy, responsive rules, and accessibility constraints are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
 
+## Motion and 3D prototype lab
+
+The lab compares three isolated implementations of the same transaction-signal narrative:
+
+- `prototypes/svg-css.html`
+- `prototypes/canvas-2d.html`
+- `prototypes/three-js.html`
+
+`prototypes/index.html` links the comparison routes. All four pages are `noindex, nofollow`, are absent from the sitemap, and are not linked from the production portfolio. They are build inputs for controlled testing, not a production homepage change.
+
+[PROTOTYPE_EVALUATION.md](PROTOTYPE_EVALUATION.md) records dependency licences, measured chunks, lifecycle evidence, the full comparison, and the recommendation to use SVG/CSS for the homepage Risk Intelligence Core.
+
 ## Accessibility principles
 
 - Preserve semantic landmarks and logical heading order.
@@ -68,9 +81,9 @@ No current image is deleted or replaced in Phase 1. [ASSET_REGISTER.md](ASSET_RE
 
 Do not add images, models, textures, fonts, audio, or copied proprietary code without documenting their source, licence, and permitted use. [OPEN_SOURCE_ATTRIBUTIONS.md](OPEN_SOURCE_ATTRIBUTIONS.md) records the direct development dependency, CI actions, and retained externally hosted front-end resources.
 
-## Future Three.js prototype policy
+## Future Three.js policy
 
-Three.js is not installed in Phase 1. A future prototype requires separate approval and must demonstrate meaningful communication value, a measured performance budget, reduced-motion and non-WebGL fallbacks, mobile quality reduction, resource disposal, and documented asset rights before adoption.
+Three.js is installed only for the approved isolated comparison. The procedural prototype includes dynamic visibility loading, low-power quality reduction, DPR caps, reduced-motion and WebGL fallbacks, visibility pausing, and full disposal. It is not approved for homepage integration because its added depth did not justify its measured bundle and runtime cost. Any future Three.js use still requires separate evidence and approval.
 
 ## Production and rollback
 

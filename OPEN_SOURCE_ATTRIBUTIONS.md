@@ -1,6 +1,6 @@
 # Open-Source Attributions
 
-Phase 1 introduces one direct package dependency and retains existing externally hosted front-end resources. No open-source code or media from the Lando Norris website is used.
+The current redesign foundation uses one direct build dependency and two isolated prototype runtime dependencies. No code or media from the Lando Norris website is used.
 
 ## Development dependency
 
@@ -11,6 +11,19 @@ Phase 1 introduces one direct package dependency and retains existing externally
 Vite is a development dependency and is not loaded as an application runtime library. Its transitive dependency versions and integrity hashes are fixed by `package-lock.json`; their package metadata remains available under `node_modules` after `npm ci`.
 
 The lockfile metadata review recorded 49 transitive/optional package entries: 33 MIT, 12 MPL-2.0, one Apache-2.0, one ISC, one BSD-3-Clause, and one 0BSD. These are build-time packages rather than browser runtime dependencies. Their complete licence texts remain in their installed packages and upstream distributions.
+
+## Motion and rendering prototype dependencies
+
+| Component | Version | Use | Licence | Source |
+| --- | --- | --- | --- | --- |
+| GSAP | 3.15.0 | Prototype timeline, `gsap.matchMedia()`, and ScrollTrigger evaluation | GreenSock Standard “no charge” licence | [GreenSock licence](https://gsap.com/standard-license/) |
+| ScrollTrigger | Included with GSAP 3.15.0 | Visibility-triggered prototype choreography | Same GreenSock licence as the GSAP package | [ScrollTrigger documentation](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) |
+| Three.js | 0.185.1 | Dynamically loaded procedural WebGL comparison | MIT | [mrdoob/three.js](https://github.com/mrdoob/three.js) |
+| GSAP Skills | Commit `aed9cfd3277740755f6bfc1155c7aa645403b760` | Official implementation guidance; not installed or bundled | MIT | [greensock/gsap-skills](https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760) |
+
+GSAP and Three.js declare no runtime package dependencies. Their exact versions and integrity hashes are committed in `package-lock.json`. GSAP's runtime package uses GreenSock's custom no-charge licence; the MIT licence shown by the separate GSAP Skills repository applies only to that guidance repository.
+
+No Codrops repository, demo, dependency, source file, scene, shader, camera path, or visual composition is installed or copied.
 
 ## GitHub Actions
 

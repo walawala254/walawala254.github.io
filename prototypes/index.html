@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risk Intelligence Core | Technical Prototype Lab</title>
+    <meta name="description" content="An isolated technical comparison of SVG, Canvas 2D, and Three.js implementations for the Risk Intelligence Core." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#080b0d" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../src/styles/prototypes.css" />
+</head>
+<body class="prototype-page">
+    <a class="skip-link" href="#main">Skip to prototype options</a>
+
+    <header class="prototype-header">
+        <div class="prototype-shell prototype-header-inner">
+            <a class="prototype-brand" href="../index.html">Dave Bryson portfolio</a>
+            <nav class="prototype-nav" aria-label="Prototype navigation">
+                <a href="index.html" aria-current="page">Lab</a>
+                <a href="svg-css.html">SVG/CSS</a>
+                <a href="canvas-2d.html">Canvas 2D</a>
+                <a href="three-js.html">Three.js</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="prototype-shell">
+        <section class="prototype-intro">
+            <div>
+                <p class="eyebrow">Controlled technical prototype</p>
+                <h1>One risk concept. Three rendering approaches.</h1>
+                <p class="prototype-intro-copy">
+                    These isolated routes compare how the same transaction-monitoring story behaves in SVG, Canvas 2D, and procedural Three.js before any approach is integrated into the homepage.
+                </p>
+            </div>
+            <dl class="prototype-spec">
+                <div><dt>Scope</dt><dd>Motion and rendering only</dd></div>
+                <div><dt>Indexing</dt><dd>Disabled for every lab route</dd></div>
+                <div><dt>Models</dt><dd>None; procedural geometry only</dd></div>
+                <div><dt>Production</dt><dd>Portfolio routes unchanged</dd></div>
+            </dl>
+        </section>
+
+        <section class="prototype-lab-grid" aria-label="Prototype options">
+            <article class="prototype-option">
+                <span class="prototype-option-index">01 / DOM</span>
+                <h2>SVG and CSS</h2>
+                <p>Semantic vector geometry, direct DOM inspection, and precise GSAP choreography with no rendering runtime.</p>
+                <a href="svg-css.html">Open SVG/CSS prototype →</a>
+            </article>
+            <article class="prototype-option">
+                <span class="prototype-option-index">02 / 2D</span>
+                <h2>Canvas 2D</h2>
+                <p>Imperative drawing with a small runtime footprint and explicit responsive scaling.</p>
+                <a href="canvas-2d.html">Open Canvas prototype →</a>
+            </article>
+            <article class="prototype-option">
+                <span class="prototype-option-index">03 / WebGL</span>
+                <h2>Three.js</h2>
+                <p>Dynamically loaded procedural depth with visibility-aware rendering and a complete SVG fallback.</p>
+                <a href="three-js.html">Open Three.js prototype →</a>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

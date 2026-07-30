@@ -14,14 +14,26 @@ const routes = [
   { file: "contact.html", canonical: `${productionOrigin}/contact.html` }
 ];
 
+const prototypeRoutes = [
+  "prototypes/index.html",
+  "prototypes/svg-css.html",
+  "prototypes/canvas-2d.html",
+  "prototypes/three-js.html"
+];
+
 const requiredOutputFiles = [
   ...routes.map(({ file }) => file),
+  ...prototypeRoutes,
   "404.html",
   "favicon.svg",
   "robots.txt",
   "sitemap.xml"
 ];
-const pagesToValidate = [...routes, { file: "404.html" }];
+const pagesToValidate = [
+  ...routes,
+  ...prototypeRoutes.map((file) => ({ file })),
+  { file: "404.html" }
+];
 
 const localReferencePattern =
   /(?:href|src)=["'](?!https?:|mailto:|tel:|#|data:)([^"'?#]+)(?:[?#][^"']*)?["']/g;
@@ -65,4 +77,6 @@ for (const { canonical } of routes) {
   }
 }
 
-console.log(`Validated ${routes.length} production routes and their local assets.`);
+console.log(
+  `Validated ${routes.length} production routes, ${prototypeRoutes.length} isolated prototype routes, and their local assets.`
+);

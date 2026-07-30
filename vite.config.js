@@ -17,7 +17,11 @@ export default defineConfig({
         services: page("services.html"),
         portfolio: page("portfolio.html"),
         contact: page("contact.html"),
-        notFound: page("404.html")
+        notFound: page("404.html"),
+        prototypeLab: page("prototypes/index.html"),
+        prototypeSvg: page("prototypes/svg-css.html"),
+        prototypeCanvas: page("prototypes/canvas-2d.html"),
+        prototypeThree: page("prototypes/three-js.html")
       }
     }
   },
