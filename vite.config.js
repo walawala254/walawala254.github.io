@@ -17,6 +17,9 @@ export default defineConfig({
         services: page("services.html"),
         portfolio: page("portfolio.html"),
         contact: page("contact.html"),
+        caseTransactionMonitoring: page(
+          "case-studies/transaction-monitoring/index.html"
+        ),
         notFound: page("404.html"),
         prototypeLab: page("prototypes/index.html"),
         prototypeSvg: page("prototypes/svg-css.html"),
