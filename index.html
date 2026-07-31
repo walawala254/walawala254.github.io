@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dave Bryson | FinTech Risk, Fraud & Data Science</title>
-    <meta name="description" content="Dave Bryson blends data science, payments risk, AML thinking, merchant risk operations, and risk analytics for fintech teams." />
-    <meta name="theme-color" content="#070b10" />
+    <title>Dave Bryson | Payments Risk, Fraud & Data Science</title>
+    <meta name="description" content="Dave Bryson turns payment, merchant, fraud, AML/CFT and operational signals into clearer risk decisions, controls and analysis." />
+    <meta name="theme-color" content="#080b0d" />
     <link rel="canonical" href="https://walawala254.github.io/" />
-    <meta property="og:title" content="Dave Bryson | FinTech Risk, Fraud & Data Science" />
-    <meta property="og:description" content="FinTech risk, fraud analytics, AML/CFT, merchant risk, transaction monitoring, and data science." />
+    <meta property="og:title" content="Dave Bryson | Payments Risk, Fraud & Data Science" />
+    <meta property="og:description" content="Risk intelligence at the intersection of payments, fraud, AML/CFT, merchant operations and data science." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://walawala254.github.io/" />
     <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
-    <link rel="stylesheet" href="style.css?v=2.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script type="module" src="script.js?v=2.4"></script>
+    <link rel="stylesheet" href="style.css?v=3.0" />
+    <link rel="stylesheet" href="./src/styles/home.css?v=3.0" />
+    <script type="module" src="script.js?v=3.0"></script>
+    <script type="module" src="./src/scripts/home/home-motion.js?v=3.0"></script>
 </head>
-<body class="home-page">
+<body class="home-page" data-page-flow="disabled">
     <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="home-intro" data-home-intro hidden>
+        <div class="home-intro__sequence" aria-hidden="true">
+            <p data-intro-line>DAVE BRYSON</p>
+            <p data-intro-line>RISK INTELLIGENCE</p>
+            <p class="home-intro__status" data-intro-line><span></span>SYSTEM ONLINE</p>
+        </div>
+        <button class="home-intro__skip" type="button" data-intro-skip>Skip introduction</button>
+    </div>
 
     <header class="site-header">
         <nav class="nav-shell" aria-label="Primary navigation">
@@ -35,7 +44,7 @@
             </a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
                 <span class="sr-only">Toggle navigation</span>
-                <i class="fas fa-bars" aria-hidden="true"></i>
+                <span class="nav-toggle__glyph" aria-hidden="true"><span></span><span></span><span></span></span>
             </button>
             <div class="nav-panel" id="primary-menu">
                 <ul class="nav-links">
@@ -46,103 +55,418 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
-                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
+                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
                 </div>
             </div>
         </nav>
     </header>
 
     <main id="main">
-        <section class="hero-section">
-            <div class="ambient-grid" aria-hidden="true"></div>
-            <div class="container hero-grid">
-                <div class="hero-copy reveal">
-                    <p class="eyebrow">FinTech Risk, Fraud & Data Science Specialist</p>
-                    <h1>Dave Bryson turns messy payment signals into sharper risk decisions.</h1>
-                    <p class="hero-lede">
-                        I blend data science, payments risk, AML thinking, and merchant-risk operations to build sharper controls, better monitoring, and clearer decisions for fintech teams.
+        <section class="home-hero" aria-labelledby="home-title">
+            <div class="home-hero__routes" aria-hidden="true"></div>
+            <div class="container-wide home-hero__layout">
+                <div class="home-hero__lead">
+                    <p class="home-kicker" data-hero-reveal>
+                        <span>Risk intelligence</span>
+                        <span>Payments / Fraud / Data</span>
                     </p>
-                    <div class="hero-actions" role="group" aria-label="Primary calls to action">
-                        <a class="btn primary" href="portfolio.html"><i class="fas fa-layer-group" aria-hidden="true"></i> View selected work</a>
-                        <a class="btn text-action" href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> Contact Me</a>
-                        <a class="btn secondary" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
-                        <a class="btn icon-action" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+                    <h1 id="home-title" class="home-hero__title" aria-label="I turn payment signals into sharper risk decisions.">
+                        <span class="home-hero__line"><span data-hero-line>I turn</span></span>
+                        <span class="home-hero__line"><span class="text-accent" data-hero-line>payment signals</span></span>
+                        <span class="home-hero__line"><span data-hero-line>into sharper</span></span>
+                        <span class="home-hero__line"><span data-hero-line>risk decisions.</span></span>
+                    </h1>
+                    <p class="home-hero__lede" data-hero-reveal>
+                        I work where payments risk, fraud operations, AML/CFT, merchant review and data science meet—turning complex behaviour into controls, analysis and decision trails people can use.
+                    </p>
+                    <div class="home-hero__actions" data-hero-reveal role="group" aria-label="Homepage actions">
+                        <a class="btn primary" href="#selected-work">View selected work</a>
+                        <a class="btn text-action" href="contact.html">Contact</a>
+                        <a class="btn secondary" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
                     </div>
-                    <div class="signal-row" role="list" aria-label="Capability highlights">
-                        <span role="listitem">Payments Risk</span>
-                        <span role="listitem">Fraud Analytics</span>
-                        <span role="listitem">AML/CFT</span>
-                        <span role="listitem">Merchant Risk</span>
+                    <div class="home-hero__supporting" data-hero-reveal>
+                        <span>Also on</span>
+                        <a href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="https://www.linkedin.com/in/dave-bryson-07a2bb264" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </div>
                 </div>
 
-                <div class="hero-visual reveal" data-delay="150">
-                    <div class="portrait-card">
-                        <img src="about_me.jpg" alt="Dave Bryson portrait" width="893" height="861" decoding="async" fetchpriority="high" />
-                        <div class="portrait-overlay">
-                            <span>Risk intelligence</span>
-                            <strong>Data-backed controls</strong>
-                        </div>
+                <aside class="home-hero__proof" data-hero-proof aria-label="Dave Bryson profile">
+                    <div class="home-hero__coordinate" aria-hidden="true">
+                        <span>DB / RI</span>
+                        <span>PROFILE 01</span>
                     </div>
-                    <div class="floating-tags" aria-hidden="true">
-                        <span>Transaction Monitoring</span>
-                        <span>Fraud Rules</span>
-                        <span>AML/CFT</span>
-                        <span>Merchant Risk</span>
-                        <span>Python</span>
-                        <span>SQL</span>
-                        <span>Power BI</span>
-                        <span>Scheme Rules</span>
+                    <div class="home-hero__portrait">
+                        <img src="about_me.jpg" alt="Dave Bryson" width="893" height="861" decoding="async" fetchpriority="high" />
                     </div>
-                </div>
+                    <p>Hybrid risk operator and data builder</p>
+                    <ul aria-label="Core disciplines">
+                        <li><span>01</span> Payments risk</li>
+                        <li><span>02</span> Fraud operations</li>
+                        <li><span>03</span> AML/CFT</li>
+                        <li><span>04</span> Data science</li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="container-wide home-hero__foot" aria-hidden="true">
+                <span>Signal in</span>
+                <span>Decision out</span>
+                <span>Scroll to trace the system</span>
             </div>
         </section>
 
-        <section class="section">
-            <div class="container section-heading reveal">
-                <p class="eyebrow">Useful middle ground</p>
-                <h2>Built for teams where risk, compliance, data, and operations meet.</h2>
-            </div>
-            <div class="container metrics-grid">
-                <article class="metric-card reveal">
-                    <strong>01</strong>
-                    <h3>Detect</h3>
-                    <p>Turn transaction behavior, velocity, merchant profile, and dispute signals into practical monitoring logic.</p>
-                </article>
-                <article class="metric-card reveal" data-delay="100">
-                    <strong>02</strong>
-                    <h3>Explain</h3>
-                    <p>Translate risk patterns into clear documentation, dashboards, review notes, and decision trails.</p>
-                </article>
-                <article class="metric-card reveal" data-delay="200">
-                    <strong>03</strong>
-                    <h3>Improve</h3>
-                    <p>Refine controls so fintech teams can move faster without losing sight of fraud, AML, and merchant exposure.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="section split-section">
-            <div class="container split-grid">
-                <div class="reveal">
-                    <p class="eyebrow">Core stack</p>
-                    <h2>Risk analytics with a builder's mindset.</h2>
+        <section class="risk-core section" id="risk-core" aria-labelledby="risk-core-title">
+            <div class="container-wide">
+                <div class="home-section-heading">
+                    <div>
+                        <p class="home-index">01 / Risk Intelligence Core</p>
+                        <h2 id="risk-core-title">A signal becomes useful when its decision trail is clear.</h2>
+                    </div>
                     <p>
-                        My background in data analysis gives me a practical lens for payments and compliance work: define the risk, inspect the behavior, build the control, and communicate the decision clearly.
+                        Raw activity is not a decision. It becomes risk intelligence when context, detection logic, investigation and documentation connect into one explainable route.
                     </p>
                 </div>
-                <div class="capability-cloud reveal" data-delay="150" role="list" aria-label="Capabilities">
-                    <span role="listitem">Transaction Monitoring</span>
-                    <span role="listitem">Fraud Rules</span>
-                    <span role="listitem">KYB Review</span>
-                    <span role="listitem">AML Typologies</span>
-                    <span role="listitem">Chargebacks</span>
-                    <span role="listitem">Merchant Intelligence</span>
+
+                <figure class="risk-core__figure" data-risk-core>
+                    <div class="risk-core__canvas">
+                        <svg viewBox="0 0 1200 650" role="img" aria-labelledby="risk-core-svg-title risk-core-svg-desc">
+                            <title id="risk-core-svg-title">Payment signal to risk decision process</title>
+                            <desc id="risk-core-svg-desc">Transaction and merchant signals enter detection layers. An unusual signal activates risk indicators, branches into investigation, reaches a documented review decision and feeds improvements back into monitoring controls.</desc>
+
+                            <g class="core-grid" aria-hidden="true">
+                                <path d="M40 110H1160M40 220H1160M40 330H1160M40 440H1160M40 550H1160" />
+                                <path d="M170 55V595M390 55V595M610 55V595M830 55V595M1050 55V595" />
+                            </g>
+
+                            <g class="core-frame" aria-hidden="true">
+                                <path d="M40 92V40H92M1108 40H1160V92M1160 558V610H1108M92 610H40V558" />
+                                <text x="58" y="72">RIC / 03</text>
+                                <text x="1024" y="72">STATE: REVIEW</text>
+                            </g>
+
+                            <g class="core-inputs" data-core-group="signal">
+                                <text class="core-label" x="70" y="140">SIGNAL STREAM</text>
+                                <rect class="core-node core-node--information" data-core-signal x="82" y="172" width="18" height="18" />
+                                <rect class="core-node" data-core-signal x="122" y="232" width="14" height="14" />
+                                <rect class="core-node" data-core-signal x="74" y="304" width="16" height="16" />
+                                <rect class="core-node" data-core-signal x="132" y="375" width="12" height="12" />
+                                <text x="70" y="424">TXN</text>
+                                <text x="112" y="424">MERCHANT</text>
+                                <text x="70" y="450">DEVICE / BEHAVIOUR</text>
+                                <path class="core-route core-route--inbound" data-core-path d="M101 181H228C286 181 288 286 350 286H407" />
+                                <path class="core-route core-route--inbound" data-core-path d="M136 239H246C310 239 304 303 370 303H407" />
+                                <path class="core-route core-route--inbound" data-core-path d="M90 312H407" />
+                                <path class="core-route core-route--inbound" data-core-path d="M144 381H242C304 381 302 328 370 328H407" />
+                            </g>
+
+                            <g class="core-detection" data-core-group="detect">
+                                <text class="core-label" x="370" y="140">DETECTION LAYERS</text>
+                                <path class="core-bracket" data-core-layer d="M432 160H378V460H432" />
+                                <path class="core-bracket" data-core-layer d="M490 196H444V424H490" />
+                                <path class="core-bracket" data-core-layer d="M542 230H500V390H542" />
+                                <text x="386" y="485">BASELINE</text>
+                                <text x="462" y="455">RULE</text>
+                                <text x="516" y="420">ANOMALY</text>
+                                <rect class="core-node core-node--critical" data-core-anomaly x="530" y="296" width="24" height="24" />
+                                <path class="core-route core-route--critical" data-core-path d="M554 308H612" />
+                            </g>
+
+                            <g class="core-investigation" data-core-group="investigate">
+                                <text class="core-label" x="620" y="140">INVESTIGATE</text>
+                                <path class="core-route" data-core-investigate data-core-path d="M612 308C652 308 650 214 702 214H742" />
+                                <path class="core-route" data-core-investigate data-core-path d="M612 308H742" />
+                                <path class="core-route" data-core-investigate data-core-path d="M612 308C652 308 650 402 702 402H742" />
+                                <rect class="core-risk-node" data-core-risk-node x="742" y="202" width="24" height="24" />
+                                <rect class="core-risk-node core-risk-node--warning" data-core-risk-node x="742" y="296" width="24" height="24" />
+                                <rect class="core-risk-node" data-core-risk-node x="742" y="390" width="24" height="24" />
+                                <text x="782" y="218">MERCHANT CONTEXT</text>
+                                <text x="782" y="312">RISK DRIVERS</text>
+                                <text x="782" y="406">RELATED ACTIVITY</text>
+                            </g>
+
+                            <g class="core-decision" data-core-group="decide">
+                                <text class="core-label" x="930" y="140">DECISION ROUTE</text>
+                                <path class="core-route core-route--decision" data-core-decision-path d="M766 308H914C954 308 950 278 990 278H1022" />
+                                <path class="core-route core-route--decision" data-core-decision-path d="M914 308C954 308 950 338 990 338H1022" />
+                                <rect class="core-decision-node" data-core-decision-node x="1022" y="248" width="112" height="120" />
+                                <text class="core-decision-title" x="1044" y="294">REVIEW</text>
+                                <text x="1044" y="322">CONTROL</text>
+                                <text x="1044" y="344">DOCUMENT</text>
+                            </g>
+
+                            <g class="core-feedback" data-core-group="improve">
+                                <path class="core-route core-route--feedback" data-core-feedback d="M1078 368V520H534V460" />
+                                <rect class="core-node core-node--positive" data-core-feedback-node x="526" y="508" width="16" height="16" />
+                                <text class="core-label" x="650" y="552">FEEDBACK / TUNE CONTROLS / IMPROVE</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <figcaption>
+                        <span>Static and accessible by default.<small>Swipe the diagram on narrow screens.</small></span>
+                        <p>Signals enter monitoring, an anomaly is contextualised, an analyst route forms, the decision is documented, and learning returns to the control layer.</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="decision-story section" id="decision-story" aria-labelledby="decision-story-title">
+            <div class="container-wide decision-story__layout">
+                <header class="decision-story__header">
+                    <p class="home-index">02 / Signal to decision</p>
+                    <h2 id="decision-story-title">Five stages. One explainable risk process.</h2>
+                    <p>The tooling changes. The reasoning path should stay legible.</p>
+                    <div class="decision-story__progress" aria-hidden="true">
+                        <span data-story-progress></span>
+                    </div>
+                </header>
+
+                <div class="decision-story__rows">
+                    <article class="decision-step is-active" data-story-step="signal">
+                        <span class="decision-step__index">01</span>
+                        <div>
+                            <p class="decision-step__label">Signal</p>
+                            <h3>Start with behaviour, not assumptions.</h3>
+                        </div>
+                        <p>Bring transaction activity, merchant behaviour, velocity, location, device indicators and operational data into a usable view.</p>
+                        <ul aria-label="Signal inputs">
+                            <li>Transactions</li>
+                            <li>Merchant activity</li>
+                            <li>Behaviour</li>
+                        </ul>
+                    </article>
+
+                    <article class="decision-step" data-story-step="detect">
+                        <span class="decision-step__index">02</span>
+                        <div>
+                            <p class="decision-step__label">Detect</p>
+                            <h3>Separate meaningful variance from noise.</h3>
+                        </div>
+                        <p>Use thresholds, baselines, monitoring rules, pattern recognition and risk indicators to make unusual activity visible.</p>
+                        <ul aria-label="Detection methods">
+                            <li>Rules</li>
+                            <li>Baselines</li>
+                            <li>Anomalies</li>
+                        </ul>
+                    </article>
+
+                    <article class="decision-step" data-story-step="investigate">
+                        <span class="decision-step__index">03</span>
+                        <div>
+                            <p class="decision-step__label">Investigate</p>
+                            <h3>Add context before choosing an action.</h3>
+                        </div>
+                        <p>Compare related activity, merchant context, behavioural history, risk drivers and supporting evidence through an analyst lens.</p>
+                        <ul aria-label="Investigation inputs">
+                            <li>Context</li>
+                            <li>Evidence</li>
+                            <li>Reasoning</li>
+                        </ul>
+                    </article>
+
+                    <article class="decision-step" data-story-step="decide">
+                        <span class="decision-step__index">04</span>
+                        <div>
+                            <p class="decision-step__label">Decide</p>
+                            <h3>Make the control and its rationale clear.</h3>
+                        </div>
+                        <p>Translate the review into an escalation, action, control or documented decision with a trail another person can follow.</p>
+                        <ul aria-label="Decision outputs">
+                            <li>Action</li>
+                            <li>Control</li>
+                            <li>Decision trail</li>
+                        </ul>
+                    </article>
+
+                    <article class="decision-step" data-story-step="improve">
+                        <span class="decision-step__index">05</span>
+                        <div>
+                            <p class="decision-step__label">Improve</p>
+                            <h3>Feed learning back into the system.</h3>
+                        </div>
+                        <p>Tune monitoring, refine the process, strengthen reporting and turn repeated investigation insight into better operational controls.</p>
+                        <ul aria-label="Improvement activities">
+                            <li>Rule tuning</li>
+                            <li>Reporting</li>
+                            <li>Refinement</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="selected-work section" id="selected-work" aria-labelledby="selected-work-title">
+            <div class="container-wide">
+                <div class="home-section-heading">
+                    <div>
+                        <p class="home-index">03 / Selected work</p>
+                        <h2 id="selected-work-title">Systems, controls and concepts for practical risk work.</h2>
+                    </div>
+                    <p>Presented without invented outcomes. Each preview states what exists, what it is for and where its limits are.</p>
+                </div>
+
+                <div class="selected-work__list">
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>01</span>
+                            <strong class="status--warning">Concept build · In development</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Transaction monitoring</p>
+                            <h3>Lightweight Transaction Monitoring Engine</h3>
+                            <p>Explores explainable rule testing for transaction, velocity, merchant, card, IP and BIN signals without requiring a heavyweight platform.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Upload, rules and hit breakdowns</dd></div>
+                                <div><dt>Tools</dt><dd>Python · Pandas · Rule logic</dd></div>
+                                <div><dt>Evidence</dt><dd>Concept build; no live outcome claims</dd></div>
+                            </dl>
+                            <a href="portfolio.html">View portfolio context</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--monitoring" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                            <i></i><i></i><i></i>
+                        </div>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>02</span>
+                            <strong class="status--information">Concept build</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Chargebacks and reporting</p>
+                            <h3>Chargebacks &amp; Risk Dashboard</h3>
+                            <p>Structures dispute outcomes, scheme-rule pressure, operational leakage and risk-reporting views so review priorities are easier to inspect.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Disputes, exposure and reporting</dd></div>
+                                <div><dt>Tools</dt><dd>Power BI · Python · Scheme logic</dd></div>
+                                <div><dt>Evidence</dt><dd>Reporting concept; not a live dashboard</dd></div>
+                            </dl>
+                            <a href="portfolio.html">View portfolio context</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--dashboard" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                            <i></i><i></i><i></i><i></i><i></i>
+                        </div>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>03</span>
+                            <strong class="status--information">Concept</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">PSP risk operations</p>
+                            <h3>PSP Risk Desk Assistant</h3>
+                            <p>Frames a guided workspace for review steps, evidence requirements, escalation paths and decision documentation across a payment-risk desk.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Consistent operational decisions</dd></div>
+                                <div><dt>Format</dt><dd>Guided workflow concept</dd></div>
+                                <div><dt>Evidence</dt><dd>Early concept; no public demo</dd></div>
+                            </dl>
+                            <a href="contact.html">Discuss the concept</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--assistant" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                            <i></i><i></i><i></i>
+                        </div>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>04</span>
+                            <strong class="status--information">Framework · Case study</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Merchant risk</p>
+                            <h3>Merchant Risk &amp; Onboarding Controls</h3>
+                            <p>Organises website, licensing, trust, business-model, vertical-risk and prohibited-activity indicators into a consistent review structure.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Structured merchant review</dd></div>
+                                <div><dt>Methods</dt><dd>KYB · Merchant risk · EDD notes</dd></div>
+                                <div><dt>Evidence</dt><dd>Framework case study</dd></div>
+                            </dl>
+                            <a href="portfolio.html">View portfolio context</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--merchant" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                            <i></i><i></i>
+                        </div>
+                    </article>
+                </div>
+
+                <a class="selected-work__all" href="portfolio.html">Explore all portfolio work <span aria-hidden="true">→</span></a>
+            </div>
+        </section>
+
+        <section class="working-method section" aria-labelledby="working-method-title">
+            <div class="container-wide">
+                <div class="home-section-heading">
+                    <div>
+                        <p class="home-index">04 / Working method</p>
+                        <h2 id="working-method-title">Technical enough to build. Clear enough to operate.</h2>
+                    </div>
+                    <p>My approach connects analysis with the people, controls and documentation that make a risk system usable.</p>
+                </div>
+
+                <ol class="method-route">
+                    <li data-method-step>
+                        <span>01</span>
+                        <strong>Define the risk</strong>
+                        <p>Clarify the behaviour, exposure and decision that matter.</p>
+                    </li>
+                    <li data-method-step>
+                        <span>02</span>
+                        <strong>Inspect the behaviour</strong>
+                        <p>Use transaction, merchant and operational evidence to test assumptions.</p>
+                    </li>
+                    <li data-method-step>
+                        <span>03</span>
+                        <strong>Build the control</strong>
+                        <p>Shape monitoring rules, review logic, data views or process checks.</p>
+                    </li>
+                    <li data-method-step>
+                        <span>04</span>
+                        <strong>Explain the decision</strong>
+                        <p>Document the rationale in language operators and stakeholders can follow.</p>
+                    </li>
+                    <li data-method-step>
+                        <span>05</span>
+                        <strong>Refine the system</strong>
+                        <p>Use feedback, reporting and repeated patterns to strengthen the next decision.</p>
+                    </li>
+                </ol>
+
+                <div class="working-method__capabilities" role="list" aria-label="Capabilities">
+                    <span role="listitem">Transaction monitoring</span>
+                    <span role="listitem">Merchant review</span>
+                    <span role="listitem">Fraud rules</span>
+                    <span role="listitem">Risk documentation</span>
                     <span role="listitem">Python</span>
                     <span role="listitem">SQL</span>
                     <span role="listitem">Power BI</span>
-                    <span role="listitem">Risk Documentation</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-close section" aria-labelledby="home-close-title">
+            <div class="home-close__route" aria-hidden="true"></div>
+            <div class="container-wide home-close__layout">
+                <div>
+                    <p class="home-index">05 / Start a conversation</p>
+                    <h2 id="home-close-title">Need a clearer view of payment risk?</h2>
+                </div>
+                <div class="home-close__copy">
+                    <p>If you are working through fraud signals, merchant risk, transaction monitoring or the operational controls around them, I would be glad to hear what you are solving.</p>
+                    <div class="home-close__actions">
+                        <a class="btn primary" href="contact.html">Contact Dave</a>
+                        <a class="btn text-action" href="portfolio.html">View portfolio</a>
+                        <a class="btn secondary" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
+                    </div>
+                    <div class="home-close__supporting">
+                        <a href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="https://www.linkedin.com/in/dave-bryson-07a2bb264" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    </div>
                 </div>
             </div>
         </section>

@@ -6,4 +6,7 @@ document.documentElement.classList.add("js");
 
 initNavigation();
 initReveals();
-initPageFlow();
+
+if (document.body.dataset.pageFlow !== "disabled") {
+  initPageFlow();
+}
