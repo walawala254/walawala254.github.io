@@ -2,7 +2,7 @@
 
 This repository contains Dave Bryson's multi-page portfolio for fintech risk, fraud, AML/CFT, merchant risk, payments operations, and data science. The production website is [walawala254.github.io](https://walawala254.github.io/).
 
-The repository now contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, and an isolated Motion and 3D Technical Prototype lab. The five public routes and their current behavior remain separate from the lab; the complete Phase 3 homepage has not started.
+The repository contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, a cinematic Phase 3 homepage, and an isolated Motion and 3D Technical Prototype lab. The five public routes remain separate pages and the experimental lab remains outside production navigation and indexing.
 
 ## Branch and deployment policy
 
@@ -53,6 +53,8 @@ Static public files such as the favicon, crawler policy, and sitemap live in `pu
 
 The Risk Intelligence Circuit visual language, tokens, component hierarchy, responsive rules, and accessibility constraints are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
 
+The homepage has one route-specific stylesheet (`src/styles/home.css`) and three route-specific motion modules under `src/scripts/home/`. Semantic HTML and a static inline SVG are the baseline; a short session-scoped introduction and scoped GSAP/ScrollTrigger choreography progressively enhance them. The homepage opts out of legacy edge-scroll page chaining, while internal pages retain the existing behavior until Phase 5.
+
 ## Motion and 3D prototype lab
 
 The lab compares three isolated implementations of the same transaction-signal narrative:
@@ -83,7 +85,7 @@ Do not add images, models, textures, fonts, audio, or copied proprietary code wi
 
 ## Future Three.js policy
 
-Three.js is installed only for the approved isolated comparison. The procedural prototype includes dynamic visibility loading, low-power quality reduction, DPR caps, reduced-motion and WebGL fallbacks, visibility pausing, and full disposal. It is not approved for homepage integration because its added depth did not justify its measured bundle and runtime cost. Any future Three.js use still requires separate evidence and approval.
+Three.js is installed only for the approved isolated comparison. The procedural prototype includes dynamic visibility loading, low-power quality reduction, DPR caps, reduced-motion and WebGL fallbacks, visibility pausing, and full disposal. It is not imported, preloaded or requested by the production homepage. Any future Three.js use still requires separate evidence and approval.
 
 ## Production and rollback
 

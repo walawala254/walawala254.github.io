@@ -77,6 +77,46 @@ for (const { canonical } of routes) {
   }
 }
 
+if (sitemap.includes("/prototypes/")) {
+  throw new Error("sitemap.xml must not include experimental prototype routes.");
+}
+
+for (const file of prototypeRoutes) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+  if (!html.includes('name="robots" content="noindex, nofollow"')) {
+    throw new Error(`${file} must remain noindex, nofollow.`);
+  }
+}
+
+const homepage = await readFile(path.join(outputRoot, "index.html"), "utf8");
+if (
+  !homepage.includes(
+    '<a class="btn primary" href="#selected-work">View selected work</a>'
+  )
+) {
+  throw new Error("Homepage primary CTA must be View selected work.");
+}
+if (homepage.includes('href="prototypes/')) {
+  throw new Error("Homepage must not link to experimental prototype routes.");
+}
+
+const homepageAssetPattern = /(?:href|src)="(\/assets\/[^"]+\.(?:js|css))"/g;
+const homepageAssets = [
+  ...new Set([...homepage.matchAll(homepageAssetPattern)].map((match) => match[1]))
+];
+
+for (const asset of homepageAssets) {
+  if (/prototype|three-core/i.test(asset)) {
+    throw new Error(`Homepage must not preload experimental asset: ${asset}`);
+  }
+
+  if (!asset.endsWith(".js")) continue;
+  const source = await readFile(path.join(outputRoot, asset.slice(1)), "utf8");
+  if (/three-core|from\s*["']three(?:\/|["'])/i.test(source)) {
+    throw new Error(`Homepage JavaScript imports Three.js through ${asset}.`);
+  }
+}
+
 console.log(
-  `Validated ${routes.length} production routes, ${prototypeRoutes.length} isolated prototype routes, and their local assets.`
+  `Validated ${routes.length} production routes, ${prototypeRoutes.length} isolated prototype routes, homepage bundle isolation, and local assets.`
 );

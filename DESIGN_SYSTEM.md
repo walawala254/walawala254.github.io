@@ -28,6 +28,7 @@ It is not a dashboard skin, cybersecurity template, cryptocurrency interface, te
 | `components.css` | Buttons, signal motifs, media frames, indexed content, projects, contact, and footer |
 | `motion.css` | Token-driven interactions, reveal behavior, and reduced-motion overrides |
 | `responsive.css` | Breakpoint-specific composition and mobile navigation presentation |
+| `home.css` | Route-specific cinematic homepage composition, Risk Intelligence Core, editorial story, evidence frames and responsive tiers |
 
 Keep rules in the narrowest responsible module. Add a token instead of repeating a raw value. Raw colour values are intentionally confined to `tokens.css`.
 
@@ -60,6 +61,7 @@ Inter remains the display and body family because it is readable across interfac
 | Level | Token or selector | Use |
 | --- | --- | --- |
 | Display | `--type-display` / `.home-page h1` | Homepage positioning statement |
+| Cinematic display | `--type-home-display` / `.home-hero__title` | Phase 3 homepage statement only |
 | Page title | `--type-page-title` / `h1` | Internal-page opening statement |
 | Section title | `--type-section-title` / `h2` | Major narrative or capability section |
 | Subheading | `--type-subheading` / `h3` | Component or subsection title |
@@ -169,9 +171,13 @@ Motifs must be static by default, clipped to their owning component, and prevent
 | `--ease-emphasized` | decelerating ease | Reveal entrance |
 | `--hover-shift` | 2px | Maximum hover translation |
 
-No perpetual decoration, scroll pinning, scroll hijacking, custom cursor, or timeline framework is part of the design system. Future animation must consume these tokens and justify its communication purpose.
+Phase 3 uses GSAP and ScrollTrigger as the single production motion system on the homepage. Timelines are route-specific, scoped with `gsap.context()` and `gsap.matchMedia()`, and reverted on teardown. ScrollTrigger activates the Risk Intelligence Core, story states and evidence-frame transitions without pinning or replacing native scroll.
+
+No perpetual decoration, scroll pinning, scroll hijacking, custom cursor or second animation framework is part of the design system. Motion must consume the established timing principles and justify its communication purpose.
 
 With `prefers-reduced-motion: reduce`, smooth scrolling stops, transitions collapse to effectively zero duration, animations run once, and reveal content is immediately visible without transformation.
+
+The Phase 3 opening sequence is session-scoped, skippable, hidden by default in HTML and bypassed for reduced motion. The homepage remains fully visible when JavaScript is disabled or motion setup fails.
 
 ## Accessibility
 

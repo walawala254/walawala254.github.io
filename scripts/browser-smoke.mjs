@@ -247,6 +247,57 @@ function assertResults(report) {
     failures.push("Reduced-motion fallback is not active");
   }
   if (report.consoleErrors.length) failures.push("Browser console has errors");
+  if (!report.homepage.intro.activeOnFirstView) {
+    failures.push("Homepage intro did not activate on first view");
+  }
+  if (!report.homepage.intro.skipWorked) {
+    failures.push("Homepage intro skip did not dismiss the overlay");
+  }
+  if (!report.homepage.intro.keyboardReachable) {
+    failures.push("Homepage intro skip is not keyboard reachable");
+  }
+  if (!report.homepage.intro.sessionBypass) {
+    failures.push("Homepage intro replayed in the same session");
+  }
+  if (!report.homepage.reducedMotion.introBypassed) {
+    failures.push("Reduced motion did not bypass the homepage intro");
+  }
+  if (!report.homepage.noJavaScript.contentVisible) {
+    failures.push("Homepage content is not visible without JavaScript");
+  }
+  if (!report.homepage.noJavaScript.navigationVisible) {
+    failures.push("Homepage navigation is not visible without JavaScript");
+  }
+  if (!report.homepage.noJavaScript.staticCoreVisible) {
+    failures.push("Static Risk Intelligence Core is not visible without JavaScript");
+  }
+  if (report.homepage.primaryCta.text !== "View selected work") {
+    failures.push("Homepage primary CTA is incorrect");
+  }
+  if (!report.homepage.primaryCta.target.endsWith("#selected-work")) {
+    failures.push("Homepage primary CTA does not target selected work");
+  }
+  if (!report.homepage.motion.setup || !report.homepage.motion.riskCoreSetup) {
+    failures.push("Homepage GSAP/ScrollTrigger setup is incomplete");
+  }
+  if (!report.homepage.motion.cleanup) {
+    failures.push("Homepage GSAP/ScrollTrigger cleanup failed");
+  }
+  if (report.homepage.motion.hiddenImportantContent.length) {
+    failures.push("Homepage cleanup left important content hidden");
+  }
+  if (report.homepage.resources.threeRequests.length) {
+    failures.push("Homepage requested a Three.js resource");
+  }
+  if (report.homepage.prototypeNavigationLinks.length) {
+    failures.push("Prototype routes are linked from production navigation");
+  }
+  if (!report.homepage.pageFlowDisabled) {
+    failures.push("Homepage edge-scroll page flow remains active");
+  }
+  if (!report.homepage.slowConnection.heroVisible) {
+    failures.push("Homepage hero was not visible under simulated slow connection");
+  }
 
   if (failures.length) {
     throw new Error(`Browser smoke test failed:\n- ${failures.join("\n- ")}`);
@@ -330,6 +381,78 @@ async function main() {
     await client.send("Page.enable");
     await client.send("Runtime.enable");
     await client.send("Log.enable");
+    await client.send("Network.enable");
+
+    const homepage = {
+      intro: {},
+      reducedMotion: {},
+      noJavaScript: {},
+      primaryCta: {},
+      motion: {},
+      resources: {},
+      prototypeNavigationLinks: [],
+      pageFlowDisabled: false,
+      slowConnection: {}
+    };
+
+    await setViewport(client, 1440, 1000);
+    await navigate(client, `${baseUrl}/about.html`);
+    await evaluate(
+      client,
+      `sessionStorage.removeItem('dave-bryson-risk-intro-seen'); true`
+    );
+    await navigate(client, `${baseUrl}/index.html`);
+    homepage.intro.activeOnFirstView = await evaluate(
+      client,
+      `(() => {
+        const intro = document.querySelector('[data-home-intro]');
+        return Boolean(
+          intro &&
+          !intro.hidden &&
+          window.__HOME_MOTION_DIAGNOSTICS__?.intro?.shown
+        );
+      })()`
+    );
+    await evaluate(client, "document.activeElement?.blur(); true");
+    for (let tab = 0; tab < 2; tab += 1) {
+      await client.send("Input.dispatchKeyEvent", {
+        type: "keyDown",
+        key: "Tab",
+        code: "Tab",
+        windowsVirtualKeyCode: 9
+      });
+      await client.send("Input.dispatchKeyEvent", {
+        type: "keyUp",
+        key: "Tab",
+        code: "Tab",
+        windowsVirtualKeyCode: 9
+      });
+    }
+    homepage.intro.keyboardReachable = await evaluate(
+      client,
+      "document.activeElement?.matches('[data-intro-skip]') === true"
+    );
+    await captureScreenshot(client, "home-intro-desktop.png");
+    homepage.intro.skipWorked = await evaluate(
+      client,
+      `(async () => {
+        document.querySelector('[data-intro-skip]')?.click();
+        await new Promise((resolve) => setTimeout(resolve, 80));
+        return document.querySelector('[data-home-intro]')?.hidden === true;
+      })()`
+    );
+    await navigate(client, `${baseUrl}/about.html`);
+    await navigate(client, `${baseUrl}/index.html`);
+    homepage.intro.sessionBypass = await evaluate(
+      client,
+      `(() => {
+        const diagnostics = window.__HOME_MOTION_DIAGNOSTICS__;
+        return (
+          document.querySelector('[data-home-intro]')?.hidden === true &&
+          diagnostics?.intro?.skippedReason === 'session'
+        );
+      })()`
+    );
 
     const results = { desktop: {}, mobile: {} };
     await setViewport(client, 1440, 1000);
@@ -502,11 +625,18 @@ async function main() {
         results[viewport.name][route] = await inspectRoute(client);
       }
 
-      if (viewport.name === "narrow320") {
-        await navigate(client, `${baseUrl}/index.html`);
-        await sleep(500);
-        await captureScreenshot(client, "home-mobile-320.png");
-      }
+      const viewportScreenshotNames = {
+        narrow320: "home-mobile-320.png",
+        tablet768: "home-tablet-768.png",
+        tablet1024: "home-tablet-1024.png",
+        large1920: "home-large-1920.png"
+      };
+      await navigate(client, `${baseUrl}/index.html`);
+      await sleep(1200);
+      await captureScreenshot(
+        client,
+        viewportScreenshotNames[viewport.name]
+      );
     }
 
     await setViewport(client, 390, 844, true);
@@ -538,7 +668,7 @@ async function main() {
       })()`
     );
     await evaluate(client, "document.activeElement?.blur(); true");
-    await sleep(500);
+    await sleep(1200);
     await captureScreenshot(client, "home-mobile-390.png");
 
     await navigate(client, `${baseUrl}/about.html`);
@@ -567,7 +697,7 @@ async function main() {
     const reducedMotion = await evaluate(
       client,
       `(() => {
-        const reveal = document.querySelector('.reveal');
+        const reveal = document.querySelector('.reveal, [data-hero-line]');
         return {
           mediaMatches: matchMedia('(prefers-reduced-motion: reduce)').matches,
           opacity: getComputedStyle(reveal).opacity,
@@ -576,6 +706,265 @@ async function main() {
         };
       })()`
     );
+
+    homepage.reducedMotion = await evaluate(
+      client,
+      `(() => ({
+        introBypassed:
+          document.querySelector('[data-home-intro]')?.hidden === true &&
+          window.__HOME_MOTION_DIAGNOSTICS__?.intro?.skippedReason ===
+            'reduced-motion',
+        coreVisible:
+          document.querySelector('[data-risk-core] svg')
+            ?.getBoundingClientRect().width > 0,
+        motionTier: document.body.dataset.motion || null
+      }))()`
+    );
+
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "no-preference" }]
+    });
+
+    await setViewport(client, 390, 844, true);
+    await client.send("Emulation.setScriptExecutionDisabled", {
+      value: true
+    });
+    await client.send("Page.navigate", { url: `${baseUrl}/index.html` });
+    await sleep(1000);
+    await captureScreenshot(client, "home-no-javascript-390.png");
+    await client.send("Emulation.setScriptExecutionDisabled", {
+      value: false
+    });
+    homepage.noJavaScript = await evaluate(
+      client,
+      `(() => {
+        const primary = document.querySelector('.home-hero__actions .btn.primary');
+        const navigation = document.querySelector('.nav-panel');
+        const core = document.querySelector('[data-risk-core] svg');
+        const title = document.querySelector('#home-title');
+        return {
+          contentVisible:
+            !document.documentElement.classList.contains('js') &&
+            title &&
+            getComputedStyle(title).display !== 'none' &&
+            getComputedStyle(title).visibility === 'visible' &&
+            primary &&
+            getComputedStyle(primary).display !== 'none',
+          navigationVisible:
+            navigation &&
+            getComputedStyle(navigation).display !== 'none' &&
+            getComputedStyle(navigation).visibility === 'visible',
+          staticCoreVisible:
+            core &&
+            core.getBoundingClientRect().width > 0 &&
+            getComputedStyle(core).visibility === 'visible',
+          introHidden: document.querySelector('[data-home-intro]')?.hidden === true
+        };
+      })()`
+    );
+
+    await setViewport(client, 1440, 1000);
+    await navigate(client, `${baseUrl}/index.html`);
+    await sleep(1500);
+    await captureScreenshot(client, "home-hero-final-desktop.png");
+
+    homepage.primaryCta = await evaluate(
+      client,
+      `(() => {
+        const link = document.querySelector('.home-hero__actions .btn.primary');
+        return {
+          text: link?.textContent.trim() || '',
+          target: link?.href || ''
+        };
+      })()`
+    );
+    homepage.prototypeNavigationLinks = await evaluate(
+      client,
+      `[...document.querySelectorAll('.site-header a')]
+        .map((link) => link.getAttribute('href'))
+        .filter((href) => href?.includes('prototypes'))`
+    );
+    homepage.resources.initialRequests = await evaluate(
+      client,
+      `performance.getEntriesByType('resource').map((entry) => ({
+        name: entry.name,
+        initiatorType: entry.initiatorType,
+        transferSize: entry.transferSize,
+        encodedBodySize: entry.encodedBodySize
+      }))`
+    );
+    homepage.resources.threeRequests =
+      homepage.resources.initialRequests.filter((entry) =>
+        /three(?:-core|\\.module|\\.js)?/i.test(entry.name)
+      );
+    homepage.motion = await evaluate(
+      client,
+      `(() => {
+        const diagnostics = window.__HOME_MOTION_DIAGNOSTICS__;
+        return {
+          setup:
+            diagnostics?.initialized === true &&
+            diagnostics?.scrollTriggersCreated > 0,
+          riskCoreSetup:
+            diagnostics?.riskCore?.timelineCreated === true &&
+            diagnostics?.riskCore?.scrollTriggerCreated === true,
+          cleanup: false,
+          hiddenImportantContent: []
+        };
+      })()`
+    );
+
+    const sectionScreenshots = [
+      ["[data-risk-core]", "home-risk-core-desktop.png", 1400],
+      [".decision-story__rows", "home-decision-story-desktop.png", 500],
+      ["#selected-work", "home-selected-work-desktop.png", 500],
+      [".working-method", "home-working-method-desktop.png", 500],
+      [".home-close", "home-closing-cta-desktop.png", 500]
+    ];
+
+    await evaluate(
+      client,
+      "document.documentElement.style.scrollBehavior = 'auto'; true"
+    );
+
+    for (const [selector, fileName, delay] of sectionScreenshots) {
+      await evaluate(
+        client,
+        `(() => {
+          const target = document.querySelector(${JSON.stringify(selector)});
+          const header = document.querySelector('.site-header');
+          if (target) {
+            scrollTo(
+              0,
+              target.getBoundingClientRect().top +
+                scrollY -
+                (header?.offsetHeight || 0) -
+                24
+            );
+          }
+          return Boolean(target);
+        })()`
+      );
+      await sleep(delay);
+      await captureScreenshot(client, fileName);
+    }
+
+    await setViewport(client, 390, 844, true);
+    await navigate(client, `${baseUrl}/index.html`);
+    await sleep(1200);
+    await evaluate(
+      client,
+      "document.documentElement.style.scrollBehavior = 'auto'; true"
+    );
+    const mobileSectionScreenshots = [
+      ["[data-risk-core]", "home-risk-core-mobile-390.png"],
+      ["#selected-work", "home-selected-work-mobile-390.png"],
+      [".home-close", "home-closing-cta-mobile-390.png"]
+    ];
+
+    for (const [selector, fileName] of mobileSectionScreenshots) {
+      await evaluate(
+        client,
+        `(() => {
+          const target = document.querySelector(${JSON.stringify(selector)});
+          const header = document.querySelector('.site-header');
+          if (target) {
+            scrollTo(
+              0,
+              target.getBoundingClientRect().top +
+                scrollY -
+                (header?.offsetHeight || 0) -
+                16
+            );
+          }
+          return Boolean(target);
+        })()`
+      );
+      await sleep(700);
+      await captureScreenshot(client, fileName);
+    }
+
+    await setViewport(client, 1440, 1000);
+    await navigate(client, `${baseUrl}/index.html`);
+    await sleep(1200);
+    await evaluate(client, "scrollTo(0, document.documentElement.scrollHeight); true");
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mouseWheel",
+      x: 700,
+      y: 800,
+      deltaX: 0,
+      deltaY: 360
+    });
+    await sleep(650);
+    homepage.pageFlowDisabled = await evaluate(
+      client,
+      `location.pathname.endsWith('/index.html')`
+    );
+
+    const cleanupResult = await evaluate(
+      client,
+      `(async () => {
+        window.__HOME_MOTION_CLEANUP__?.();
+        await new Promise((resolve) => setTimeout(resolve, 80));
+        const important = [
+          ...document.querySelectorAll(
+            '[data-hero-line], .home-hero__lede, .decision-step, .work-row__body, .method-route li, .home-close__layout'
+          )
+        ];
+        return {
+          cleanup:
+            window.__HOME_MOTION_DIAGNOSTICS__?.cleanupComplete === true,
+          hiddenImportantContent: important
+            .filter((element) => {
+              const style = getComputedStyle(element);
+              return (
+                style.display === 'none' ||
+                style.visibility === 'hidden' ||
+                Number(style.opacity) === 0
+              );
+            })
+            .map((element) => element.className || element.tagName)
+        };
+      })()`
+    );
+    homepage.motion.cleanup = cleanupResult.cleanup;
+    homepage.motion.hiddenImportantContent =
+      cleanupResult.hiddenImportantContent;
+
+    await client.send("Network.setCacheDisabled", { cacheDisabled: true });
+    await client.send("Network.emulateNetworkConditions", {
+      offline: false,
+      latency: 150,
+      downloadThroughput: 204800,
+      uploadThroughput: 102400,
+      connectionType: "cellular3g"
+    });
+    await setViewport(client, 390, 844, true);
+    await navigate(client, `${baseUrl}/index.html`);
+    await sleep(1200);
+    homepage.slowConnection = await evaluate(
+      client,
+      `(() => {
+        const title = document.querySelector('#home-title');
+        const navigation = performance.getEntriesByType('navigation')[0];
+        return {
+          heroVisible:
+            title &&
+            getComputedStyle(title).visibility === 'visible' &&
+            Number(getComputedStyle(title).opacity) > 0,
+          navigationDuration: Math.round(navigation?.duration || 0)
+        };
+      })()`
+    );
+    await captureScreenshot(client, "home-slow-connection-390.png");
+    await client.send("Network.emulateNetworkConditions", {
+      offline: false,
+      latency: 0,
+      downloadThroughput: -1,
+      uploadThroughput: -1,
+      connectionType: "none"
+    });
+    await client.send("Network.setCacheDisabled", { cacheDisabled: false });
 
     const report = {
       results,
@@ -586,6 +975,7 @@ async function main() {
       },
       menuTest,
       reducedMotion,
+      homepage,
       consoleErrors: [...new Set(consoleErrors)],
       environmentErrors: [...new Set(environmentErrors)],
       screenshots: screenshotDirectory

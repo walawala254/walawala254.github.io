@@ -25,6 +25,12 @@ GSAP and Three.js declare no runtime package dependencies. Their exact versions 
 
 No Codrops repository, demo, dependency, source file, scene, shader, camera path, or visual composition is installed or copied.
 
+## Phase 3 production motion
+
+Phase 3 reuses the installed GSAP 3.15.0 package and its included ScrollTrigger plugin for the homepage introduction, hero hierarchy, Risk Intelligence Core, story states and evidence-frame choreography. The implementation uses `gsap.context()`, `gsap.matchMedia()` and explicit teardown following the pinned GSAP Skills guidance above. No dependency version changes in Phase 3.
+
+Three.js remains restricted to the isolated prototype routes and is not imported, preloaded or requested by the homepage. Font Awesome remains on existing internal pages, but Phase 3 removes it from the homepage request graph and uses a project-authored CSS navigation glyph instead.
+
 ## GitHub Actions
 
 | Action | Workflow reference | Release checked for Phase 1 | Use | Licence | Source |
