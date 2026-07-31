@@ -29,6 +29,7 @@ It is not a dashboard skin, cybersecurity template, cryptocurrency interface, te
 | `motion.css` | Token-driven interactions, reveal behavior, and reduced-motion overrides |
 | `responsive.css` | Breakpoint-specific composition and mobile navigation presentation |
 | `home.css` | Route-specific cinematic homepage composition, Risk Intelligence Core, editorial story, evidence frames and responsive tiers |
+| `portfolio.css` | Evidence-led portfolio index, status system, case-study typography, accessible diagrams and responsive case-study layouts |
 
 Keep rules in the narrowest responsible module. Add a token instead of repeating a raw value. Raw colour values are intentionally confined to `tokens.css`.
 

@@ -55,6 +55,22 @@ The Risk Intelligence Circuit visual language, tokens, component hierarchy, resp
 
 The homepage has one route-specific stylesheet (`src/styles/home.css`) and three route-specific motion modules under `src/scripts/home/`. Semantic HTML and a static inline SVG are the baseline; a short session-scoped introduction and scoped GSAP/ScrollTrigger choreography progressively enhance them. The homepage opts out of legacy edge-scroll page chaining, while internal pages retain the existing behavior until Phase 5.
 
+## Portfolio and case-study architecture
+
+`portfolio.html` is the public selected-work index. Phase 4 publishes only case studies that pass the claim and confidentiality checks in `PROJECT_EVIDENCE_MATRIX.md`.
+
+The flagship transaction-monitoring case study uses a physical nested route:
+
+```text
+case-studies/
+  transaction-monitoring/
+    index.html
+```
+
+Vite includes the nested HTML file as an explicit multi-page input and emits `dist/case-studies/transaction-monitoring/index.html`. The route works as static HTML at `/case-studies/transaction-monitoring/`, uses root-relative production assets for this GitHub user site, requires no client-side router, remains usable without JavaScript, and is listed in `public/sitemap.xml`.
+
+`src/styles/portfolio.css` is shared only by the portfolio index and published case-study pages. Those routes use the existing lightweight navigation/reveal entry and do not import GSAP, ScrollTrigger, Three.js or prototype code. Future case-study pages require sufficient verified evidence before they are added to Vite or the sitemap.
+
 ## Motion and 3D prototype lab
 
 The lab compares three isolated implementations of the same transaction-signal narrative:

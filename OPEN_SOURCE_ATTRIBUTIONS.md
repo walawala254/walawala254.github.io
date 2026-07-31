@@ -31,6 +31,12 @@ Phase 3 reuses the installed GSAP 3.15.0 package and its included ScrollTrigger 
 
 Three.js remains restricted to the isolated prototype routes and is not imported, preloaded or requested by the homepage. Font Awesome remains on existing internal pages, but Phase 3 removes it from the homepage request graph and uses a project-authored CSS navigation glyph instead.
 
+## Phase 4 evidence sources
+
+The transaction-monitoring case study was independently paraphrased from the owner-operated public repository `walawala254/payouts-transaction-monitoring-engine-mvp` at commit `5c6887525cda880259cf465e862c88497c134c64`. That repository is MIT-licensed. Its source, interface, documentation, mascot and screenshots are not copied into this portfolio. Phase 4 creates original inline SVG diagrams from the verified processing flow and links readers to the public evidence.
+
+The portfolio and case-study routes add no dependency. They reuse the existing base stylesheet and lightweight vanilla JavaScript navigation/reveal entry; GSAP, ScrollTrigger and Three.js are not requested on those routes.
+
 ## GitHub Actions
 
 | Action | Workflow reference | Release checked for Phase 1 | Use | Licence | Source |

@@ -11,7 +11,11 @@ const routes = [
   { file: "about.html", canonical: `${productionOrigin}/about.html` },
   { file: "services.html", canonical: `${productionOrigin}/services.html` },
   { file: "portfolio.html", canonical: `${productionOrigin}/portfolio.html` },
-  { file: "contact.html", canonical: `${productionOrigin}/contact.html` }
+  { file: "contact.html", canonical: `${productionOrigin}/contact.html` },
+  {
+    file: "case-studies/transaction-monitoring/index.html",
+    canonical: `${productionOrigin}/case-studies/transaction-monitoring/`
+  }
 ];
 
 const prototypeRoutes = [
@@ -37,6 +41,12 @@ const pagesToValidate = [
 
 const localReferencePattern =
   /(?:href|src)=["'](?!https?:|mailto:|tel:|#|data:)([^"'?#]+)(?:[?#][^"']*)?["']/g;
+const productionEvidencePages = [
+  "portfolio.html",
+  "case-studies/transaction-monitoring/index.html"
+];
+const prohibitedPlaceholderPattern =
+  /\b(?:lorem ipsum|coming soon|tbd|todo|built\s*\/\s*proposed|best-in-class|world-class|enterprise-grade|revolutionary)\b/i;
 
 async function assertReadable(relativePath) {
   const absolutePath = path.join(outputRoot, relativePath);
@@ -88,6 +98,77 @@ for (const file of prototypeRoutes) {
   }
 }
 
+for (const file of productionEvidencePages) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+
+  if (prohibitedPlaceholderPattern.test(html)) {
+    throw new Error(`${file} contains prohibited placeholder or unsupported wording.`);
+  }
+
+  if (/\b\d+(?:\.\d+)?%\s+(?:reduction|increase|accuracy|improvement)\b/i.test(html)) {
+    throw new Error(`${file} contains an unsupported numerical outcome claim.`);
+  }
+
+  const externalLinks = html.match(/<a\b[^>]*href="https:\/\/[^>]+>/g) || [];
+  for (const link of externalLinks) {
+    if (!/target="_blank"/.test(link) || !/rel="[^"]*noopener[^"]*noreferrer[^"]*"/.test(link)) {
+      throw new Error(`${file} contains an external link without secure new-tab attributes.`);
+    }
+  }
+
+  const images = html.match(/<img\b[^>]*>/g) || [];
+  for (const image of images) {
+    if (!/alt="[^"]*"/.test(image) || !/width="\d+"/.test(image) || !/height="\d+"/.test(image)) {
+      throw new Error(`${file} contains an image without alt text and explicit dimensions.`);
+    }
+  }
+
+  const pageAssetPattern = /(?:href|src)="(\/assets\/[^"]+\.(?:js|css))"/g;
+  const assets = [...new Set([...html.matchAll(pageAssetPattern)].map((match) => match[1]))];
+  for (const asset of assets) {
+    if (/prototype|three-core/i.test(asset)) {
+      throw new Error(`${file} must not request experimental asset: ${asset}`);
+    }
+
+    if (!asset.endsWith(".js")) continue;
+    const source = await readFile(path.join(outputRoot, asset.slice(1)), "utf8");
+    if (/three-core|from\s*["']three(?:\/|["'])/i.test(source)) {
+      throw new Error(`${file} imports Three.js through ${asset}.`);
+    }
+  }
+}
+
+const portfolio = await readFile(path.join(outputRoot, "portfolio.html"), "utf8");
+const portfolioProjects = (portfolio.match(/data-portfolio-project/g) || []).length;
+const portfolioStatuses = (portfolio.match(/data-project-status-label/g) || []).length;
+if (!portfolioProjects || portfolioProjects !== portfolioStatuses) {
+  throw new Error("Every portfolio project must have one visible project-status label.");
+}
+
+const transactionCase = await readFile(
+  path.join(outputRoot, "case-studies/transaction-monitoring/index.html"),
+  "utf8"
+);
+if (!transactionCase.includes('id="limitations"')) {
+  throw new Error("Transaction-monitoring case study must contain a limitations section.");
+}
+if (!transactionCase.includes("My role") || !transactionCase.includes("data-case-status")) {
+  throw new Error("Transaction-monitoring case study must state Dave's role and project status.");
+}
+if (!transactionCase.includes("synthetic") || !transactionCase.includes("fully anonymised")) {
+  throw new Error("Transaction-monitoring case study must state its data boundary.");
+}
+
+const assetRegister = await readFile(path.join(projectRoot, "ASSET_REGISTER.md"), "utf8");
+for (const assetName of [
+  "Portfolio transaction route preview",
+  "Transaction-monitoring architecture"
+]) {
+  if (!assetRegister.includes(assetName)) {
+    throw new Error(`ASSET_REGISTER.md is missing ${assetName}.`);
+  }
+}
+
 const homepage = await readFile(path.join(outputRoot, "index.html"), "utf8");
 if (
   !homepage.includes(
@@ -118,5 +199,5 @@ for (const asset of homepageAssets) {
 }
 
 console.log(
-  `Validated ${routes.length} production routes, ${prototypeRoutes.length} isolated prototype routes, homepage bundle isolation, and local assets.`
+  `Validated ${routes.length} production routes, ${prototypeRoutes.length} isolated prototype routes, portfolio evidence requirements, bundle isolation, and local assets.`
 );

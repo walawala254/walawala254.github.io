@@ -28,12 +28,18 @@ const routes = [
   "about.html",
   "services.html",
   "portfolio.html",
-  "contact.html"
+  "contact.html",
+  "case-studies/transaction-monitoring/"
 ];
 
-const expectedCurrentPage = Object.fromEntries(
-  routes.map((route) => [route, route])
-);
+const expectedCurrentPage = {
+  "index.html": "index.html",
+  "about.html": "about.html",
+  "services.html": "services.html",
+  "portfolio.html": "portfolio.html",
+  "contact.html": "contact.html",
+  "case-studies/transaction-monitoring/": "/portfolio.html"
+};
 
 const sleep = (milliseconds) =>
   new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -298,6 +304,39 @@ function assertResults(report) {
   if (!report.homepage.slowConnection.heroVisible) {
     failures.push("Homepage hero was not visible under simulated slow connection");
   }
+  if (!report.caseStudy.statusVisible || !report.caseStudy.roleVisible) {
+    failures.push("Case-study status or Dave's role is not visible");
+  }
+  if (!report.caseStudy.limitationsVisible) {
+    failures.push("Case-study limitations section is missing or hidden");
+  }
+  if (!report.caseStudy.breadcrumb.navigationWorked) {
+    failures.push("Case-study breadcrumb navigation failed");
+  }
+  if (!report.caseStudy.breadcrumb.backWorked) {
+    failures.push("Browser Back did not restore the case-study route");
+  }
+  if (!report.caseStudy.noJavaScript.contentVisible) {
+    failures.push("Case-study content is not visible without JavaScript");
+  }
+  if (!report.caseStudy.noJavaScript.diagramVisible) {
+    failures.push("Case-study diagram is not visible without JavaScript");
+  }
+  if (!report.caseStudy.reducedMotion.contentVisible) {
+    failures.push("Reduced motion hid case-study content");
+  }
+  if (report.caseStudy.resources.threeRequests.length) {
+    failures.push("Case study requested a Three.js resource");
+  }
+  if (report.caseStudy.resources.prototypeRequests.length) {
+    failures.push("Case study requested a prototype resource");
+  }
+  if (report.caseStudy.hiddenImportantContent.length) {
+    failures.push("Case study left important content hidden");
+  }
+  if (!report.caseStudy.pageFlowDisabled) {
+    failures.push("Case study unexpectedly participates in edge-scroll page flow");
+  }
 
   if (failures.length) {
     throw new Error(`Browser smoke test failed:\n- ${failures.join("\n- ")}`);
@@ -394,6 +433,21 @@ async function main() {
       pageFlowDisabled: false,
       slowConnection: {}
     };
+    const caseStudy = {
+      breadcrumb: {},
+      noJavaScript: {},
+      reducedMotion: {},
+      resources: {
+        initialRequests: [],
+        threeRequests: [],
+        prototypeRequests: []
+      },
+      statusVisible: false,
+      roleVisible: false,
+      limitationsVisible: false,
+      hiddenImportantContent: [],
+      pageFlowDisabled: false
+    };
 
     await setViewport(client, 1440, 1000);
     await navigate(client, `${baseUrl}/about.html`);
@@ -488,6 +542,10 @@ async function main() {
         await sleep(500);
         await captureScreenshot(client, "portfolio-index-desktop.png");
       }
+      if (route === "case-studies/transaction-monitoring/") {
+        await sleep(500);
+        await captureScreenshot(client, "case-transaction-monitoring-desktop.png");
+      }
       if (route === "about.html") {
         await sleep(500);
         await captureScreenshot(client, "about-desktop.png");
@@ -577,6 +635,10 @@ async function main() {
         await sleep(500);
         await captureScreenshot(client, "portfolio-index-mobile-390.png");
       }
+      if (route === "case-studies/transaction-monitoring/") {
+        await sleep(500);
+        await captureScreenshot(client, "case-transaction-monitoring-mobile-390.png");
+      }
       if (route === "about.html") {
         await sleep(500);
         await captureScreenshot(client, "about-mobile-390.png");
@@ -631,6 +693,18 @@ async function main() {
         tablet1024: "home-tablet-1024.png",
         large1920: "home-large-1920.png"
       };
+      const portfolioScreenshotNames = {
+        narrow320: "portfolio-mobile-320.png",
+        tablet768: "portfolio-tablet-768.png",
+        tablet1024: "portfolio-tablet-1024.png",
+        large1920: "portfolio-large-1920.png"
+      };
+      await navigate(client, `${baseUrl}/portfolio.html`);
+      await sleep(600);
+      await captureScreenshot(
+        client,
+        portfolioScreenshotNames[viewport.name]
+      );
       await navigate(client, `${baseUrl}/index.html`);
       await sleep(1200);
       await captureScreenshot(
@@ -966,6 +1040,249 @@ async function main() {
     });
     await client.send("Network.setCacheDisabled", { cacheDisabled: false });
 
+    await setViewport(client, 1440, 1000);
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    const caseInspection = await evaluate(
+      client,
+      `(() => {
+        const visible = (element) =>
+          Boolean(
+            element &&
+            getComputedStyle(element).display !== 'none' &&
+            getComputedStyle(element).visibility === 'visible' &&
+            element.getBoundingClientRect().width > 0
+          );
+        return {
+          statusVisible: visible(document.querySelector('[data-case-status]')),
+          roleVisible:
+            visible(document.querySelector('.case-facts')) &&
+            document.querySelector('.case-facts')?.textContent.includes('My role'),
+          limitationsVisible:
+            visible(document.querySelector('#limitations')) &&
+            document.querySelector('#limitations')?.textContent.includes(
+              'What this prototype does not do'
+            )
+        };
+      })()`
+    );
+    caseStudy.statusVisible = caseInspection.statusVisible;
+    caseStudy.roleVisible = caseInspection.roleVisible;
+    caseStudy.limitationsVisible = caseInspection.limitationsVisible;
+
+    caseStudy.resources.initialRequests = await evaluate(
+      client,
+      `performance.getEntriesByType('resource').map((entry) => ({
+        name: entry.name,
+        initiatorType: entry.initiatorType,
+        transferSize: entry.transferSize,
+        encodedBodySize: entry.encodedBodySize
+      }))`
+    );
+    caseStudy.resources.threeRequests =
+      caseStudy.resources.initialRequests.filter((entry) =>
+        /three(?:-core|\.module|\.js)?/i.test(entry.name)
+      );
+    caseStudy.resources.prototypeRequests =
+      caseStudy.resources.initialRequests.filter((entry) =>
+        /prototype/i.test(entry.name)
+      );
+
+    await evaluate(
+      client,
+      "document.querySelector('.breadcrumbs a')?.click(); true"
+    );
+    await sleep(600);
+    caseStudy.breadcrumb.navigationWorked = await evaluate(
+      client,
+      `location.pathname.endsWith('/portfolio.html')`
+    );
+    await evaluate(client, "history.back(); true");
+    await sleep(600);
+    caseStudy.breadcrumb.backWorked = await evaluate(
+      client,
+      `location.pathname.endsWith('/case-studies/transaction-monitoring/')`
+    );
+
+    const caseSections = [
+      [".case-hero", "case-hero-desktop.png"],
+      ["#summary", "case-summary-desktop.png"],
+      ["#problem", null],
+      ["#architecture", "case-architecture-desktop.png"],
+      ["#approach", null],
+      ["#decisions", null],
+      ["#risk", null],
+      ["#implementation", null],
+      ["#evidence", "case-evidence-desktop.png"],
+      ["#limitations", "case-limitations-desktop.png"],
+      ["#value", null],
+      ["#next", null],
+      [".case-close", "case-closing-navigation-desktop.png"]
+    ];
+
+    // Test captures should jump to their target. Leaving the site's smooth
+    // scrolling enabled can photograph an intermediate section on long pages.
+    await evaluate(
+      client,
+      "document.documentElement.style.scrollBehavior = 'auto'; true"
+    );
+
+    for (const [selector, fileName] of caseSections) {
+      await evaluate(
+        client,
+        `(() => {
+          const target = document.querySelector(${JSON.stringify(selector)});
+          const header = document.querySelector('.site-header');
+          if (target) {
+            scrollTo(
+              0,
+              target.getBoundingClientRect().top +
+                scrollY -
+                (header?.offsetHeight || 0) -
+                20
+            );
+          }
+          return Boolean(target);
+        })()`
+      );
+      // Allow the existing IntersectionObserver reveal transition to settle so
+      // visual-review captures represent the final rendered section state.
+      await sleep(900);
+      if (fileName) await captureScreenshot(client, fileName);
+    }
+
+    caseStudy.hiddenImportantContent = await evaluate(
+      client,
+      `[...document.querySelectorAll('.case-section, .case-hero, .architecture-diagram, .case-close')]
+        .filter((element) => {
+          const style = getComputedStyle(element);
+          return (
+            style.display === 'none' ||
+            style.visibility === 'hidden' ||
+            Number(style.opacity) === 0
+          );
+        })
+        .map((element) => element.id || element.className || element.tagName)`
+    );
+
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    await evaluate(client, "scrollTo(0, document.documentElement.scrollHeight); true");
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mouseWheel",
+      x: 700,
+      y: 800,
+      deltaX: 0,
+      deltaY: 360
+    });
+    await sleep(650);
+    caseStudy.pageFlowDisabled = await evaluate(
+      client,
+      `location.pathname.endsWith('/case-studies/transaction-monitoring/')`
+    );
+
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "reduce" }]
+    });
+    await setViewport(client, 390, 844, true);
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    caseStudy.reducedMotion = await evaluate(
+      client,
+      `(() => {
+        const sections = [...document.querySelectorAll('.case-section')];
+        const diagram = document.querySelector('.architecture-diagram svg');
+        return {
+          mediaMatches: matchMedia('(prefers-reduced-motion: reduce)').matches,
+          contentVisible:
+            sections.length > 0 &&
+            sections.every((section) => {
+              const style = getComputedStyle(section);
+              return style.visibility === 'visible' && Number(style.opacity) > 0;
+            }) &&
+            diagram?.getBoundingClientRect().width > 0
+        };
+      })()`
+    );
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "no-preference" }]
+    });
+
+    await client.send("Emulation.setScriptExecutionDisabled", {
+      value: true
+    });
+    await client.send("Page.navigate", {
+      url: `${baseUrl}/case-studies/transaction-monitoring/`
+    });
+    await sleep(900);
+    await captureScreenshot(client, "case-no-javascript-mobile-390.png");
+    await client.send("Emulation.setScriptExecutionDisabled", {
+      value: false
+    });
+    caseStudy.noJavaScript = await evaluate(
+      client,
+      `(() => {
+        const title = document.querySelector('#case-title');
+        const limitations = document.querySelector('#limitations');
+        const diagram = document.querySelector('.architecture-diagram svg');
+        return {
+          contentVisible:
+            !document.documentElement.classList.contains('js') &&
+            title &&
+            limitations &&
+            getComputedStyle(title).visibility === 'visible' &&
+            getComputedStyle(limitations).visibility === 'visible',
+          diagramVisible:
+            diagram &&
+            diagram.getBoundingClientRect().width > 0 &&
+            getComputedStyle(diagram).visibility === 'visible'
+        };
+      })()`
+    );
+
+    await client.send("Page.navigate", {
+      url: `${baseUrl}/case-studies/transaction-monitoring/`
+    });
+    await sleep(700);
+    await evaluate(
+      client,
+      "document.documentElement.style.scrollBehavior = 'auto'; true"
+    );
+    const mobileCaseSections = [
+      [".case-hero", "case-hero-mobile-390.png"],
+      ["#architecture", "case-architecture-mobile-390.png"],
+      ["#evidence", "case-evidence-mobile-390.png"],
+      ["#limitations", "case-limitations-mobile-390.png"],
+      [".case-close", "case-closing-navigation-mobile-390.png"]
+    ];
+    for (const [selector, fileName] of mobileCaseSections) {
+      await evaluate(
+        client,
+        `(() => {
+          const target = document.querySelector(${JSON.stringify(selector)});
+          const header = document.querySelector('.site-header');
+          if (target) {
+            scrollTo(
+              0,
+              target.getBoundingClientRect().top +
+                scrollY -
+                (header?.offsetHeight || 0) -
+                12
+            );
+          }
+          return Boolean(target);
+        })()`
+      );
+      await sleep(900);
+      await captureScreenshot(client, fileName);
+    }
+
     const report = {
       results,
       skipLinkFocus,
@@ -976,6 +1293,7 @@ async function main() {
       menuTest,
       reducedMotion,
       homepage,
+      caseStudy,
       consoleErrors: [...new Set(consoleErrors)],
       environmentErrors: [...new Set(environmentErrors)],
       screenshots: screenshotDirectory
