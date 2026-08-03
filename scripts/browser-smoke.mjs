@@ -711,7 +711,11 @@ async function main() {
       const location = details.url
         ? ` (${details.url}:${(details.lineNumber || 0) + 1})`
         : "";
-      if (/^AbortError: Transition was skipped\b/.test(description)) {
+      if (
+        /^(?:AbortError: Transition was skipped|InvalidStateError: Transition was aborted because of invalid state)\b/.test(
+          description
+        )
+      ) {
         nativeTransitionCancellations.push(`${description}${location}`);
         return;
       }
