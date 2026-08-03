@@ -51,8 +51,10 @@ These are owner-controlled production changes and were not performed in Phase 8:
 5. Apply the recommended `main` branch protection before merge where available.
 6. Open the prepared pull request, complete review, and merge only when the owner confirms that steps 1–5 are complete.
 
-Expected production URL: `https://walawala254.github.io/`.  
-Expected artifact: the contents of reproducible `dist`, not the directory wrapper.  
+Expected production URL: `https://walawala254.github.io/`.
+
+Expected artifact: the contents of reproducible `dist`, not the directory wrapper.
+
 Expected trigger after activation: a reviewed push/merge to `main`, or an explicitly dispatched workflow on `main`.
 
 ## Controlled merge plan

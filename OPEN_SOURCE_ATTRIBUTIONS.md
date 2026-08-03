@@ -51,6 +51,22 @@ Phase 5 adds no dependency and copies no third-party implementation. The route t
 
 The CI workflow grants only `contents: read` and contains no deployment step or secret.
 
+## Phase 8 Pages deployment draft
+
+The following official GitHub actions appear only in `.github/workflows/deploy-pages.yml.disabled`. The unsupported extension makes the workflow inactive throughout Phase 8; it is preparation, not a deployment or production configuration change.
+
+| Action | Draft reference | Release checked | Use after separate approval | Licence | Source |
+| --- | --- | --- | --- | --- | --- |
+| actions/configure-pages | `actions/configure-pages@v6` | 6.0.0 | Configure the official Pages artifact deployment | MIT | [actions/configure-pages](https://github.com/actions/configure-pages) |
+| actions/upload-pages-artifact | `actions/upload-pages-artifact@v5` | 5.0.0 | Upload only the validated `dist` directory | MIT | [actions/upload-pages-artifact](https://github.com/actions/upload-pages-artifact) |
+| actions/deploy-pages | `actions/deploy-pages@v5` | 5.0.0 | Deploy the approved artifact to the platform-managed Pages environment | MIT | [actions/deploy-pages](https://github.com/actions/deploy-pages) |
+
+The draft reuses `actions/checkout@v7` and `actions/setup-node@v7` recorded above. It requests only `contents: read`, `pages: write`, and `id-token: write`, uses no third-party deployment action and contains no repository secret.
+
+## Phase 8 validation service
+
+`npm run test:html` uses project-authored, dependency-free JavaScript to submit generated HTML to the public [W3C Nu HTML Checker](https://validator.w3.org/nu/). The service is validation infrastructure, not a package dependency, copied implementation or production request. It is called only during development/CI and never by a visitor's browser.
+
 ## Phase 7 transient audit tooling
 
 These tools were executed through the local npm cache for a controlled audit or one-off conversion and were not added to `package.json`, the lockfile or the production bundle.

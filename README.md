@@ -4,6 +4,12 @@ This repository contains Dave Bryson's multi-page portfolio for fintech risk, fr
 
 The repository contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, a cinematic Phase 3 homepage, an evidence-led nested case study, and an isolated Motion and 3D Technical Prototype lab. Public routes remain separate documents and the experimental lab remains outside production navigation and indexing.
 
+## Release-candidate status
+
+`redesign/risk-intelligence-v3` is frozen as the **Risk Intelligence Circuit v3 Release Candidate**. Only release-blocking, accessibility, link, metadata, asset, deployment, test, rollback, and documentation corrections are permitted until the owner accepts the release gates. New design concepts, routes, features, content, animation, dependencies, and major refactors are outside the freeze.
+
+Production is unchanged. The prepared Pages workflow is deliberately stored as `.github/workflows/deploy-pages.yml.disabled` and cannot run. Review [FINAL_OWNER_REVIEW.md](FINAL_OWNER_REVIEW.md), [RELEASE_READINESS.md](RELEASE_READINESS.md), and [DEPLOYMENT_RUNBOOK.md](DEPLOYMENT_RUNBOOK.md) before any merge or production configuration change.
+
 ## Branch and deployment policy
 
 - `main` remains the production branch.
@@ -32,6 +38,7 @@ Available commands:
 - `npm run preview` serves the production build locally, normally at `http://localhost:4173/`.
 - `npm run test:a11y` runs the local axe-core WCAG A/AA audit against a separately running preview server.
 - `npm run test:browser` runs the dependency-free Edge/Chrome smoke test against a separately running preview server.
+- `npm run test:html` validates every generated HTML document with the W3C Nu service.
 - `npm run test:prototypes` runs the isolated SVG, Canvas 2D, and Three.js lifecycle and responsive smoke tests against a separately running preview server.
 - `npm run validate:build` validates an existing `dist` directory.
 

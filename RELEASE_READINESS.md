@@ -148,3 +148,119 @@ git worktree add ..\portfolio-phase6-rollback 7ca0d6428199e6f747c461e0103b0e385a
 Portfolio v2 remains inspectable at `3ff63e37b2560e5a7f1870dd047c0a3582c87c99`. Do not reset a shared branch, force-push, merge or deploy as a rollback shortcut.
 
 Recommendation: the redesign branch is technically ready to enter Phase 8 deployment preparation after Phase 7 CI and preview checks pass. This is not permission to merge or deploy. Real-device/manual gates above remain prerequisites for production approval.
+
+---
+
+# Phase 8 Release Candidate Record
+
+Date: 2026-08-03
+
+Label: **Risk Intelligence Circuit v3 Release Candidate**
+
+Production baseline: `3ff63e37b2560e5a7f1870dd047c0a3582c87c99`
+
+Phase 7 candidate baseline: `6c0cb61530b24f41c749805d4baa6436a939dbb6`
+
+## Release freeze
+
+The redesign branch is frozen. Permitted changes are release-blocking fixes; accessibility, broken-link, metadata and asset corrections; deployment and rollback preparation; test corrections; and release documentation. New design concepts, routes, project content, features, animation, dependencies, major CSS changes and major JavaScript refactors are rejected until after the release decision.
+
+Production is unchanged. No tag, release, pull request, merge, `main` push, Pages setting change, Vercel Production change or active deployment workflow was created in Phase 8.
+
+## Preflight and production boundaries
+
+- Local and `origin/redesign/risk-intelligence-v3` started Phase 8 together at the exact Phase 7 head `6c0cb61530b24f41c749805d4baa6436a939dbb6`; the working tree was clean.
+- `origin/main` remained at `3ff63e37b2560e5a7f1870dd047c0a3582c87c99`.
+- GitHub Pages reported legacy `main:/` publishing, HTTPS enforced, no CNAME and no custom domain.
+- Vercel Production was Ready on `main` at the version-two commit; the redesign deployment was a separate Ready Preview and had not been promoted.
+- No redesign pull request had been merged. The GitHub API reported no current branch protection on `main`.
+- Node.js 24.18.0, npm 11.16.0 and Vite 8.1.5 satisfied the locked project requirements.
+- The Phase 7 baseline rebuilt at 30 files and 1,194,843 bytes with 0 dependency vulnerabilities.
+
+## Owner confirmation gate
+
+No new owner confirmations were supplied during Phase 8. Status is recorded without including unnecessary personal data.
+
+| Confirmation | Status | Release disposition |
+| --- | --- | --- |
+| Public name presentation | Outstanding | Owner must approve before deployment |
+| Professional positioning and first-person project-role wording | Outstanding | Confirm claims do not overstate employment, ownership, status or results |
+| Public transaction-monitoring repository link | Outstanding continued approval | Link resolves automatically; owner approval still required |
+| Streamlit demo link | Outstanding continued approval and access check | App origin redirects to Streamlit authentication; do not describe access as public until the owner verifies it |
+| Synthetic-data and non-production limitations | Verified visible in public content | Owner should confirm wording remains accurate |
+| Concept project labels | Verified visible | Owner should confirm status labels remain current |
+| Portrait permission | Previously documented as owner-approved | Reconfirm before production; no other production raster is used |
+| CV ownership/control, current version and intended public sharing | Outstanding | Release blocker for the CV action until confirmed |
+| CV sensitive-content review | Outstanding | Do not replace/download automatically; remove only the CV action if separately approved |
+
+## Manual device and assistive-technology gate
+
+No owner results were supplied. `RELEASE_TEST_CHECKLIST.md` records iPhone Safari, Android Chrome, VoiceOver, TalkBack, NVDA, owner keyboard, physical orientation and battery/heat as **Not tested**. Automated Edge coverage passes keyboard navigation, menu focus lifecycle, reduced motion, JavaScript-disabled content, 320–1920px layouts, an 844 × 390 landscape emulation, 200% text and practical 400% reflow proxies. Those results are not substitutes for the physical environments.
+
+## Final content and evidence review
+
+- Public claims were rechecked against `PROJECT_EVIDENCE_MATRIX.md`.
+- No employer relationship, client, partner, revenue, merchant/transaction volume, fraud/chargeback reduction, accuracy rate, user count, years-of-experience claim, certification, licensing approval, production usage or regulatory endorsement was added.
+- The public case study retains synthetic-demo, in-memory-state, heuristic-rule and non-production limitations.
+- GitHub profile, repository evidence and CV destinations return HTTP 200 automatically. The Streamlit app origin returns an in-service redirect to Streamlit authentication; it is not classified as a dead link, but public visitor access is unverified. LinkedIn returns an automation-blocked response and remains a manual user-facing check rather than being classified as broken.
+- Email and internal navigation destinations are structurally valid.
+
+## Final automated release evidence
+
+The local Phase 8 release suite passed locked install/audit/build, W3C Nu validation, JavaScript syntax, all public/deep/404 routes, metadata, JSON-LD, sitemap/canonical policy, local and external links, browser console, keyboard/focus/history, reduced motion, no JavaScript, slow network, font and portrait failure, external-evidence unavailability, zoom/reflow, prototype lifecycle/isolation, asset/security/privacy scans, bundle analysis and repeat Lighthouse runs. The expanded browser suite produced 125 state screenshots with zero console/environment errors and no horizontal overflow at the required viewports or the 844 × 390 landscape emulation.
+
+Automated accessibility language remains deliberately narrow: **automated WCAG-oriented checks passed**. Full WCAG conformance and real assistive-technology behaviour are not claimed.
+
+### Phase 8 Lighthouse methodology and medians
+
+Lighthouse 13.4.1 ran twice per route and profile against the local production preview in Microsoft Edge 151.0.4129.59. Mobile used Lighthouse's default simulated mobile throttling; Desktop used its desktop preset. Cache/profile state was fresh per run. The table reports the arithmetic median of the two runs, not the better result. Transfer/resource bytes and request counts come from Lighthouse's network-request records. Results are laboratory diagnostics, not field Core Web Vitals.
+
+| Profile / route | Perf / A11y / BP / SEO | FCP / LCP | CLS / TBT | Speed Index | Requests | Transfer / resource | JS execution / main thread |
+| --- | --- | --- | --- | --- | ---: | --- | --- |
+| Mobile Home | 99 / 100 / 100 / 100 | 1,358 / 1,808ms | 0 / 46ms | 1,689ms | 8 | 135,187 / 281,998 B | 384 / 1,428ms |
+| Mobile About | 100 / 100 / 100 / 100 | 906 / 1,506ms | 0 / 0ms | 906ms | 7 | 80,254 / 113,027 B | 17 / 496ms |
+| Mobile Portfolio | 100 / 100 / 100 / 100 | 910 / 1,060ms | 0 / 0ms | 910ms | 7 | 20,613 / 81,618 B | 12 / 445ms |
+| Mobile case study | 100 / 100 / 100 / 100 | 908 / 1,058ms | 0 / 0ms | 908ms | 7 | 24,885 / 99,010 B | 9 / 686ms |
+| Mobile Contact | 100 / 100 / 100 / 100 | 907 / 907ms | 0 / 0ms | 907ms | 6 | 13,601 / 46,592 B | 14 / 432ms |
+| Desktop Home | 100 / 100 / 100 / 100 | 350 / 410ms | 0 / 0ms | 588ms | 8 | 135,187 / 281,998 B | 81 / 334ms |
+| Desktop About | 100 / 100 / 100 / 100 | 247 / 407ms | 0 / 0ms | 247ms | 7 | 80,254 / 113,027 B | 1 / 112ms |
+| Desktop Portfolio | 100 / 100 / 100 / 100 | 247 / 247ms | 0 / 0ms | 247ms | 7 | 20,613 / 81,618 B | 4 / 149ms |
+| Desktop case study | 100 / 100 / 100 / 100 | 255 / 255ms | 0 / 0ms | 255ms | 7 | 24,885 / 99,010 B | 1 / 155ms |
+| Desktop Contact | 100 / 100 / 100 / 100 | 246 / 246ms | 0 / 0ms | 271ms | 6 | 13,601 / 46,592 B | 1 / 125ms |
+
+Compared with Phase 7, Home remains 99 mobile with a 42ms LCP variation and lower median TBT (46ms versus 60ms); internal routes remain 100 performance with CLS/TBT zero. These are normal local laboratory variations, not a material regression. The initial 20-report matrix was complete and parseable; after the Streamlit-access wording correction, four fresh case-study reports replaced that route's medians because it was the only browser artifact that changed. Lighthouse returned its known Windows `EPERM` temporary-profile cleanup warning after each report; this did not affect the reports, site, build or repository.
+
+The browser resource map, which counts ordinary document resource entries rather than Lighthouse's audit overhead, remains: Home 6, About 5, Services 4, Portfolio 5, Contact 4, case study 5 and 404 4. It records zero automatic external, Three.js, prototype, font/CDN or quarantined-asset requests. ScrollTrigger appears once on Home and nowhere else.
+
+## Build and dependency boundaries
+
+- The release artifact remains the reproducible `dist` output described by `BUILD_MANIFEST_V3.md`; `dist` is not hand-edited or committed.
+- Final Phase 8 output is 30 files / 1,194,937 bytes: 143,273 B HTML, 160,752 B CSS, 661,674 B JavaScript and 228,331 B raster artifacts. It is 94 B (+0.008%) above Phase 7 solely from the hosted-demo access wording correction; CSS, JavaScript and image payload are unchanged.
+- No runtime or development dependency was added, removed or upgraded in Phase 8.
+- The new HTML release gate is a dependency-free client of the public W3C Nu validation service.
+- Production routes contain no Three.js/prototype request, no automatic third-party request and no persistent rendering loop. GSAP/ScrollTrigger remains Home-only.
+- `.env` variants, local test output and Lighthouse reports are explicitly ignored. Scans find no tracked secret, credential, preview token, source map, local path, payment data or unintended personal identifier.
+
+## Deployment, merge and rollback decision
+
+- Selected deployment strategy: official GitHub Actions Pages artifact deployment from locked `main` source.
+- The workflow is prepared only as `.github/workflows/deploy-pages.yml.disabled`; GitHub cannot recognise or run it.
+- Committed `dist` and continued root-source deployment are rejected as less safe/incompatible approaches.
+- A merge commit is recommended to preserve phase history and create one auditable `git revert -m 1` boundary.
+- Pages must be deliberately switched from legacy branch publishing to Actions, and Vercel Production auto-deployment from `main` must be contained, before merge.
+- The rollback procedure uses a normal merge revert, retains the Pages workflow so it can publish the allowlisted version-two artifact, and references known-good content `3ff63e37b2560e5a7f1870dd047c0a3582c87c99`.
+- The version-two allowlist was dry-run in a detached worktree: 17 artifact files, 712,586 bytes and no missing local references. No branch or production state changed. OneDrive left read-only temporary placeholders after Git unregistered the worktree; only those verified dry-run paths were moved to the Windows Recycle Bin, and the redesign worktree remained the sole registered worktree.
+
+## Release blocker register
+
+| ID | Issue | Area | Severity | Evidence | Owner action | Developer action | Release impact | Workaround | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| RC-01 | Identity, positioning and first-person project wording not explicitly approved | Public content | High release gate, not a detected defect | Owner response absent | Review and approve/correct | Apply only approved correction | No production approval | None without owner review | Open |
+| RC-02 | CV ownership, currency, public sharing and privacy not verified | CV action | High for CV action | URL resolves; ownership/content cannot be inferred | Inspect destination and confirm all four points | Remove/disable only if separately approved | CV action must not launch unverified | Owner-approved temporary removal | Open |
+| RC-03 | Real mobile and assistive-technology results absent | Cross-site | High residual release gate, not a detected defect | Results table remains Not tested | Complete tests or explicitly accept residual risk | Fix any reported defect and retest | No unconditional GO | Conditional GO only | Open |
+| RC-04 | Legacy Pages and Vercel Production can react to a `main` merge | Deployment | Critical if merge is attempted before containment; currently controlled | Read-only provider configuration | Approve deployment window and provider changes | Activate workflow only after approval | Do not merge under current settings | Keep production unchanged | Controlled/open |
+| RC-05 | LinkedIn blocks automated link verification | External link | Low | HTTP automation blocked | Open signed out and confirm | Correct only if destination is wrong | Manual check required | None needed if user test passes | Open |
+| RC-06 | Isolated Three.js prototype exceeds Vite's 500kB chunk warning | Experimental lab | Low | Build warning and isolation tests | None | Keep isolated; review only if lab scope changes | No production-route impact | SVG/CSS is the production Core | Accepted |
+| RC-07 | Hosted demo redirects through Streamlit authentication | External project evidence | Medium | HTTP 303 to Streamlit authentication on 2026-08-03 | Confirm intended signed-out access or accept authenticated access | Keep access wording accurate; update link only from owner-supplied destination | Demo access may be limited; repository evidence remains public | Retain “hosted” wording and sign-in note | Open |
+
+Because unresolved High owner gates remain, Phase 8 cannot issue an unconditional GO. The accurate release recommendation is **CONDITIONAL GO — OWNER MANUAL AND CONTENT/CV GATES OUTSTANDING**. Production must remain unchanged until the owner records a disposition and separately gives the exact approval statement in `FINAL_OWNER_REVIEW.md`.

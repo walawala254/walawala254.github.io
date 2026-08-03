@@ -64,3 +64,20 @@ Repeat the VoiceOver steps using swipe navigation and touch exploration. Also co
 ## Pass criteria and reporting
 
 The manual gate passes only when no critical or high-severity issue remains and medium issues have an owner-approved disposition. Attach results to the Phase 8 deployment-preparation review. Native Safari, iOS/Android screen readers, physical touch, thermal behavior and battery use are not represented by desktop emulation and must not be marked passed unless actually tested.
+
+## Phase 8 results intake
+
+Use one row per environment. Replace **Not tested** only when the named device or assistive technology was actually used. Link evidence by safe repository issue/attachment reference; do not add private device identifiers or personal information.
+
+| Test ID | Device | Browser or assistive technology | Test date | Tester | Result | Issue | Severity | Evidence reference | Resolution | Retest result |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| IOS-01 | Physical iPhone/iPad | Safari + Reduce Motion/text size | — | — | **Not tested** | Owner result not supplied | Release gate | — | Complete checklist | Not tested |
+| AND-01 | Physical Android, low-end where available | Chrome + reduced motion | — | — | **Not tested** | Owner result not supplied | Release gate | — | Complete checklist | Not tested |
+| VO-01 | iPhone or Mac | VoiceOver | — | — | **Not tested** | Owner result not supplied | Release gate | — | Complete checklist | Not tested |
+| TB-01 | Android | TalkBack | — | — | **Not tested** | Owner result not supplied | Release gate | — | Complete checklist | Not tested |
+| NVDA-01 | Windows where available | NVDA + supported browser | — | — | **Not tested** | Owner result not supplied | Release gate | — | Complete checklist where available | Not tested |
+| KEY-01 | Physical desktop/laptop | Keyboard-only in production-target browser | — | — | **Not tested** | Owner result not supplied; automated Chromium coverage passed | Release gate | Local browser suite | Repeat manually | Not tested |
+| ORIENT-01 | Physical iOS and Android | Portrait/landscape + browser chrome | — | — | **Not tested** | Owner result not supplied; 844 × 390 emulation passed | Release gate | Phase 8 browser suite | Repeat physically | Not tested |
+| THERMAL-01 | Physical Android/iPhone | Several-minute battery/heat observation | — | — | **Not tested** | Cannot be represented by desktop automation | Release gate | — | Observe and record | Not tested |
+
+Valid result values are **Pass**, **Fail**, and **Not tested**. For every failure, record a reproducible issue, classify it Critical/High/Medium/Low, link evidence, record its resolution, and retest the same environment before approval.
