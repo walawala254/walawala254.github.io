@@ -1,7 +1,6 @@
-# INACTIVE RELEASE DRAFT
-# GitHub does not recognise the .disabled extension as a workflow.
-# Do not rename this file until the owner explicitly approves production deployment,
-# Vercel production auto-deployment is contained, and Pages is switched to Actions.
+# APPROVED PRODUCTION WORKFLOW
+# Activated after explicit owner deployment approval and Vercel Git containment.
+# Push deployment is restricted to reviewed changes reaching main.
 
 name: Deploy portfolio to GitHub Pages
 
