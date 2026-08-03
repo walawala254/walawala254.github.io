@@ -47,6 +47,16 @@ const productionEvidencePages = [
 ];
 const prohibitedPlaceholderPattern =
   /\b(?:lorem ipsum|coming soon|tbd|todo|built\s*\/\s*proposed|best-in-class|world-class|enterprise-grade|revolutionary)\b/i;
+const navigationLabels = ["Home", "About", "Services", "Portfolio", "Contact"];
+const currentNavigation = new Map([
+  ["index.html", "Home"],
+  ["about.html", "About"],
+  ["services.html", "Services"],
+  ["portfolio.html", "Portfolio"],
+  ["contact.html", "Contact"],
+  ["case-studies/transaction-monitoring/index.html", "Portfolio"],
+  ["404.html", null]
+]);
 
 async function assertReadable(relativePath) {
   const absolutePath = path.join(outputRoot, relativePath);
@@ -78,6 +88,76 @@ for (const { file, canonical } of pagesToValidate) {
       throw new Error(`${file} references missing local asset: ${reference}`);
     });
   }
+
+  if (/data-page-(?:flow|transition)/.test(html)) {
+    throw new Error(`${file} contains obsolete page-flow or transition-overlay markup.`);
+  }
+}
+
+for (const [file, expectedCurrent] of currentNavigation) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+  const navList = html.match(/<ul class="nav-links">([\s\S]*?)<\/ul>/)?.[1];
+  if (!navList) {
+    throw new Error(`${file} is missing the static primary navigation.`);
+  }
+
+  const labels = [...navList.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)].map(
+    (match) => match[1].replace(/<[^>]+>/g, "").trim()
+  );
+  if (JSON.stringify(labels) !== JSON.stringify(navigationLabels)) {
+    throw new Error(`${file} has an inconsistent primary-navigation order.`);
+  }
+
+  const currentItems = [
+    ...navList.matchAll(/<a\b[^>]*aria-current="page"[^>]*>([\s\S]*?)<\/a>/g)
+  ].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
+  const expectedItems = expectedCurrent ? [expectedCurrent] : [];
+  if (JSON.stringify(currentItems) !== JSON.stringify(expectedItems)) {
+    throw new Error(`${file} has an incorrect static aria-current state.`);
+  }
+
+  if (
+    !html.includes('class="nav-toggle"') ||
+    !html.includes('class="nav-toggle__glyph" aria-hidden="true"')
+  ) {
+    throw new Error(`${file} is missing the shared accessible navigation toggle.`);
+  }
+}
+
+const sourceEntry = await readFile(path.join(projectRoot, "script.js"), "utf8");
+if (/page-flow|initPageFlow|wheel|touchstart|touchend|location\.href/i.test(sourceEntry)) {
+  throw new Error("script.js still contains or imports legacy gesture page routing.");
+}
+
+await access(path.join(projectRoot, "src/scripts/page-flow.js"), constants.F_OK)
+  .then(() => {
+    throw new Error("The obsolete page-flow module must remain removed.");
+  })
+  .catch((error) => {
+    if (error?.message === "The obsolete page-flow module must remain removed.") {
+      throw error;
+    }
+  });
+
+const motionStyles = await readFile(
+  path.join(projectRoot, "src/styles/motion.css"),
+  "utf8"
+);
+if (
+  !/@media\s*\(prefers-reduced-motion:\s*no-preference\)[\s\S]*@view-transition\s*{[\s\S]*navigation:\s*auto/.test(
+    motionStyles
+  ) ||
+  !motionStyles.includes("view-transition-name: circuit-page")
+) {
+  throw new Error("The reduced-motion-aware native route transition is missing.");
+}
+
+const prototypeStyles = await readFile(
+  path.join(projectRoot, "src/styles/prototypes.css"),
+  "utf8"
+);
+if (!/@view-transition\s*{\s*navigation:\s*none;\s*}/.test(prototypeStyles)) {
+  throw new Error("Experimental prototype routes must opt out of route transitions.");
 }
 
 const sitemap = await readFile(path.join(outputRoot, "sitemap.xml"), "utf8");
@@ -149,6 +229,23 @@ const transactionCase = await readFile(
   path.join(outputRoot, "case-studies/transaction-monitoring/index.html"),
   "utf8"
 );
+if (
+  !/<nav class="breadcrumbs" aria-label="Breadcrumb">[\s\S]*<li aria-current="page">Transaction monitoring<\/li>[\s\S]*<\/nav>/.test(
+    transactionCase
+  )
+) {
+  throw new Error("Transaction-monitoring breadcrumbs must expose a non-link current item.");
+}
+for (const destination of [
+  'href="/index.html"',
+  'href="/portfolio.html"',
+  'href="/contact.html"',
+  'href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp"'
+]) {
+  if (!transactionCase.includes(destination)) {
+    throw new Error(`Transaction-monitoring navigation is missing ${destination}.`);
+  }
+}
 if (!transactionCase.includes('id="limitations"')) {
   throw new Error("Transaction-monitoring case study must contain a limitations section.");
 }
@@ -179,6 +276,13 @@ if (
 }
 if (homepage.includes('href="prototypes/')) {
   throw new Error("Homepage must not link to experimental prototype routes.");
+}
+
+const notFound = await readFile(path.join(outputRoot, "404.html"), "utf8");
+for (const destination of ["/index.html", "/portfolio.html", "/contact.html"]) {
+  if (!notFound.includes(`href="${destination}"`)) {
+    throw new Error(`404.html is missing its ${destination} recovery route.`);
+  }
 }
 
 const homepageAssetPattern = /(?:href|src)="(\/assets\/[^"]+\.(?:js|css))"/g;

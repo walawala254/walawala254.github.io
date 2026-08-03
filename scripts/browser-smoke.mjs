@@ -29,7 +29,8 @@ const routes = [
   "services.html",
   "portfolio.html",
   "contact.html",
-  "case-studies/transaction-monitoring/"
+  "case-studies/transaction-monitoring/",
+  "404.html"
 ];
 
 const expectedCurrentPage = {
@@ -38,7 +39,8 @@ const expectedCurrentPage = {
   "services.html": "services.html",
   "portfolio.html": "portfolio.html",
   "contact.html": "contact.html",
-  "case-studies/transaction-monitoring/": "/portfolio.html"
+  "case-studies/transaction-monitoring/": "/portfolio.html",
+  "404.html": null
 };
 
 const sleep = (milliseconds) =>
@@ -196,6 +198,140 @@ async function captureScreenshot(client, fileName) {
   );
 }
 
+async function waitForPath(client, expectedPath, timeout = 4_000) {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < timeout) {
+    try {
+      if ((await evaluate(client, "location.pathname")) === expectedPath) {
+        return true;
+      }
+    } catch {
+      // Cross-document navigation is replacing the execution context.
+    }
+
+    await sleep(40);
+  }
+
+  return false;
+}
+
+async function clickSelector(client, selector) {
+  const point = await evaluate(
+    client,
+    `(() => {
+      const element = document.querySelector(${JSON.stringify(selector)});
+      if (!element) return null;
+      let rect = element.getBoundingClientRect();
+      const headerBottom = document.querySelector('.site-header')
+        ?.getBoundingClientRect().bottom || 0;
+      if (
+        !element.closest('.site-header') &&
+        (rect.top < headerBottom + 8 || rect.bottom > innerHeight - 8)
+      ) {
+        element.scrollIntoView({ block: 'center', behavior: 'instant' });
+        rect = element.getBoundingClientRect();
+      }
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    })()`
+  );
+
+  if (!point) return false;
+
+  await client.send("Input.dispatchMouseEvent", {
+    type: "mousePressed",
+    x: point.x,
+    y: point.y,
+    button: "left",
+    buttons: 1,
+    clickCount: 1
+  });
+  await client.send("Input.dispatchMouseEvent", {
+    type: "mouseReleased",
+    x: point.x,
+    y: point.y,
+    button: "left",
+    buttons: 0,
+    clickCount: 1
+  });
+  return true;
+}
+
+async function activateSelectorWithKeyboard(client, selector) {
+  const focused = await evaluate(
+    client,
+    `(() => {
+      const element = document.querySelector(${JSON.stringify(selector)});
+      element?.focus();
+      return document.activeElement === element;
+    })()`
+  );
+  if (!focused) return false;
+
+  for (const type of ["keyDown", "keyUp"]) {
+    await client.send("Input.dispatchKeyEvent", {
+      type,
+      key: "Enter",
+      code: "Enter",
+      windowsVirtualKeyCode: 13
+    });
+  }
+  return true;
+}
+
+async function rapidlyActivateSelector(client, selector) {
+  const point = await evaluate(
+    client,
+    `(() => {
+      const element = document.querySelector(${JSON.stringify(selector)});
+      const rect = element?.getBoundingClientRect();
+      return rect
+        ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+        : null;
+    })()`
+  );
+  if (!point) return false;
+
+  for (let click = 0; click < 2; click += 1) {
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mousePressed",
+      x: point.x,
+      y: point.y,
+      button: "left",
+      buttons: 1,
+      clickCount: 1
+    });
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mouseReleased",
+      x: point.x,
+      y: point.y,
+      button: "left",
+      buttons: 0,
+      clickCount: 1
+    });
+  }
+  return true;
+}
+
+async function observeViewTransition(client) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await sleep(25);
+    try {
+      const observed = await evaluate(
+        client,
+        `document.getAnimations().some(
+          (animation) => animation.effect?.pseudoElement?.startsWith('::view-transition')
+        )`
+      );
+      if (observed) return true;
+    } catch {
+      // The destination document has not created its execution context yet.
+    }
+  }
+
+  return false;
+}
+
 async function inspectRoute(client) {
   return evaluate(
     client,
@@ -206,8 +342,22 @@ async function inspectRoute(client) {
       width: document.documentElement.clientWidth,
       scrollWidth: document.documentElement.scrollWidth,
       current:
-        document.querySelector('[aria-current="page"]')?.getAttribute('href') ||
+        document.querySelector('.nav-links [aria-current="page"]')?.getAttribute('href') ||
         null,
+      currentCount: document.querySelectorAll(
+        '.nav-links [aria-current="page"]'
+      ).length,
+      currentMarkerVisible: (() => {
+        const current = document.querySelector(
+          '.nav-links [aria-current="page"]'
+        );
+        if (!current) return true;
+        const marker = getComputedStyle(current, '::after');
+        return (
+          parseFloat(marker.height) >= 2 &&
+          !['none', 'matrix(0, 0, 0, 1, 0, 0)'].includes(marker.transform)
+        );
+      })(),
       brokenEagerImages: [...document.images]
         .filter(
           (image) =>
@@ -230,6 +380,13 @@ function assertResults(report) {
       if (result.current !== expectedCurrentPage[route]) {
         failures.push(`${viewport} ${route} has incorrect aria-current`);
       }
+      const expectedCurrentCount = route === "404.html" ? 0 : 1;
+      if (result.currentCount !== expectedCurrentCount) {
+        failures.push(`${viewport} ${route} has an incorrect current-item count`);
+      }
+      if (!result.currentMarkerVisible) {
+        failures.push(`${viewport} ${route} current state lacks a visible marker`);
+      }
       if (result.brokenEagerImages.length) {
         failures.push(`${viewport} ${route} has broken eager images`);
       }
@@ -237,8 +394,8 @@ function assertResults(report) {
   }
 
   if (!report.skipLinkFocus) failures.push("Skip link is not first in tab order");
-  for (const [check, passed] of Object.entries(report.pageFlowTest)) {
-    if (!passed) failures.push(`Page-flow check failed: ${check}`);
+  for (const [check, passed] of Object.entries(report.gestureNavigationTest)) {
+    if (!passed) failures.push(`Gesture navigation regression: ${check}`);
   }
   for (const [check, passed] of Object.entries(report.menuTest)) {
     if (!passed) failures.push(`Mobile menu check failed: ${check}`);
@@ -298,8 +455,8 @@ function assertResults(report) {
   if (report.homepage.prototypeNavigationLinks.length) {
     failures.push("Prototype routes are linked from production navigation");
   }
-  if (!report.homepage.pageFlowDisabled) {
-    failures.push("Homepage edge-scroll page flow remains active");
+  if (!report.homepage.edgeGestureStayedOnPage) {
+    failures.push("Homepage edge wheel input changed the page");
   }
   if (!report.homepage.slowConnection.heroVisible) {
     failures.push("Homepage hero was not visible under simulated slow connection");
@@ -334,8 +491,14 @@ function assertResults(report) {
   if (report.caseStudy.hiddenImportantContent.length) {
     failures.push("Case study left important content hidden");
   }
-  if (!report.caseStudy.pageFlowDisabled) {
-    failures.push("Case study unexpectedly participates in edge-scroll page flow");
+  if (!report.caseStudy.edgeGestureStayedOnPage) {
+    failures.push("Case-study edge wheel input changed the page");
+  }
+  for (const [check, passed] of Object.entries(report.navigationBehavior)) {
+    if (!passed) failures.push(`Navigation behavior failed: ${check}`);
+  }
+  for (const [check, passed] of Object.entries(report.transitionBehavior)) {
+    if (!passed) failures.push(`Transition behavior failed: ${check}`);
   }
 
   if (failures.length) {
@@ -387,7 +550,12 @@ async function main() {
       "https://cdnjs.cloudflare.com"
     ]);
     client.on("Runtime.exceptionThrown", (event) => {
-      consoleErrors.push(`exception: ${event.exceptionDetails.text}`);
+      const details = event.exceptionDetails;
+      const description = details.exception?.description || details.text;
+      const location = details.url
+        ? ` (${details.url}:${(details.lineNumber || 0) + 1})`
+        : "";
+      consoleErrors.push(`exception: ${description}${location}`);
     });
     client.on("Runtime.consoleAPICalled", (event) => {
       if (event.type === "error") {
@@ -430,7 +598,7 @@ async function main() {
       motion: {},
       resources: {},
       prototypeNavigationLinks: [],
-      pageFlowDisabled: false,
+      edgeGestureStayedOnPage: false,
       slowConnection: {}
     };
     const caseStudy = {
@@ -446,7 +614,7 @@ async function main() {
       roleVisible: false,
       limitationsVisible: false,
       hiddenImportantContent: [],
-      pageFlowDisabled: false
+      edgeGestureStayedOnPage: false
     };
 
     await setViewport(client, 1440, 1000);
@@ -573,19 +741,44 @@ async function main() {
       }
     }
 
-    await navigate(client, `${baseUrl}/about.html`);
-    await client.send("Input.dispatchMouseEvent", {
-      type: "mouseWheel",
-      x: 500,
-      y: 400,
-      deltaX: 0,
-      deltaY: -300
-    });
-    await sleep(500);
-    const wheelPreviousPage = await evaluate(
-      client,
-      'location.pathname.endsWith("/index.html")'
-    );
+    const wheelEdgeResults = {};
+    for (const route of routes) {
+      const expectedPath = new URL(`${baseUrl}/${route}`).pathname;
+      await navigate(client, `${baseUrl}/${route}`);
+      await evaluate(client, "scrollTo(0, 0); true");
+      await client.send("Input.dispatchMouseEvent", {
+        type: "mouseWheel",
+        x: 500,
+        y: 180,
+        deltaX: 0,
+        deltaY: -420
+      });
+      await sleep(120);
+      const topStayed = await evaluate(
+        client,
+        `location.pathname === ${JSON.stringify(expectedPath)}`
+      );
+
+      await evaluate(
+        client,
+        "scrollTo(0, document.documentElement.scrollHeight); true"
+      );
+      for (const deltaY of [90, 130, 180, 240]) {
+        await client.send("Input.dispatchMouseEvent", {
+          type: "mouseWheel",
+          x: 500,
+          y: 760,
+          deltaX: 0,
+          deltaY
+        });
+      }
+      await sleep(180);
+      const bottomStayed = await evaluate(
+        client,
+        `location.pathname === ${JSON.stringify(expectedPath)}`
+      );
+      wheelEdgeResults[route] = topStayed && bottomStayed;
+    }
 
     await navigate(client, `${baseUrl}/index.html`);
     await evaluate(client, "document.activeElement?.blur(); true");
@@ -746,6 +939,7 @@ async function main() {
     await captureScreenshot(client, "home-mobile-390.png");
 
     await navigate(client, `${baseUrl}/about.html`);
+    await evaluate(client, "scrollTo(0, 0); true");
     await client.send("Input.dispatchTouchEvent", {
       type: "touchStart",
       touchPoints: [{ x: 195, y: 120, radiusX: 1, radiusY: 1 }]
@@ -758,10 +952,33 @@ async function main() {
       type: "touchEnd",
       touchPoints: []
     });
-    await sleep(500);
-    const touchPreviousPage = await evaluate(
+    await sleep(250);
+    const touchTopStayed = await evaluate(
       client,
-      'location.pathname.endsWith("/index.html")'
+      'location.pathname.endsWith("/about.html")'
+    );
+
+    await navigate(client, `${baseUrl}/contact.html`);
+    await evaluate(
+      client,
+      "scrollTo(0, document.documentElement.scrollHeight); true"
+    );
+    await client.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ x: 195, y: 720, radiusX: 1, radiusY: 1 }]
+    });
+    await client.send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [{ x: 195, y: 140, radiusX: 1, radiusY: 1 }]
+    });
+    await client.send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: []
+    });
+    await sleep(250);
+    const touchBottomStayed = await evaluate(
+      client,
+      'location.pathname.endsWith("/contact.html")'
     );
 
     await client.send("Emulation.setEmulatedMedia", {
@@ -970,7 +1187,7 @@ async function main() {
       deltaY: 360
     });
     await sleep(650);
-    homepage.pageFlowDisabled = await evaluate(
+    homepage.edgeGestureStayedOnPage = await evaluate(
       client,
       `location.pathname.endsWith('/index.html')`
     );
@@ -1180,7 +1397,7 @@ async function main() {
       deltaY: 360
     });
     await sleep(650);
-    caseStudy.pageFlowDisabled = await evaluate(
+    caseStudy.edgeGestureStayedOnPage = await evaluate(
       client,
       `location.pathname.endsWith('/case-studies/transaction-monitoring/')`
     );
@@ -1283,17 +1500,401 @@ async function main() {
       await captureScreenshot(client, fileName);
     }
 
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "no-preference" }]
+    });
+    await client.send("Emulation.setScriptExecutionDisabled", { value: false });
+    await setViewport(client, 1440, 1000);
+
+    await navigate(client, `${baseUrl}/`);
+    const rootRoute = await inspectRoute(client);
+    const directRootRoute =
+      (await evaluate(client, "location.pathname")) === "/" &&
+      rootRoute.current === "index.html" &&
+      rootRoute.currentCount === 1;
+
+    await navigate(client, `${baseUrl}/index.html`);
+    const defaultLinkBehavior = await evaluate(
+      client,
+      `(() => {
+        const probe = (selector, type = 'click', init = {}) => {
+          const link = document.querySelector(selector);
+          if (!link) return false;
+          let preventedBeforeProbe = null;
+          const stopDefault = (event) => {
+            preventedBeforeProbe = event.defaultPrevented;
+            event.preventDefault();
+          };
+          document.addEventListener(type, stopDefault, { once: true });
+          link.dispatchEvent(
+            new MouseEvent(type, {
+              bubbles: true,
+              cancelable: true,
+              button: 0,
+              ...init
+            })
+          );
+          return preventedBeforeProbe === false;
+        };
+        return {
+          controlClick: probe('.nav-links a[href="about.html"]', 'click', { ctrlKey: true }),
+          commandClick: probe('.nav-links a[href="about.html"]', 'click', { metaKey: true }),
+          shiftClick: probe('.nav-links a[href="about.html"]', 'click', { shiftKey: true }),
+          altClick: probe('.nav-links a[href="about.html"]', 'click', { altKey: true }),
+          middleClick: probe('.nav-links a[href="about.html"]', 'auxclick', { button: 1 }),
+          externalLink: probe('.nav-actions a[href^="https://github.com"]'),
+          mailtoLink: probe('a[href^="mailto:"]'),
+          cvLink: probe('.nav-actions a[href*="drive.google.com"]'),
+          targetBlankLink: probe('a[target="_blank"]'),
+          hashLink: probe('a[href^="#"]'),
+          contextMenu: probe('.nav-links a[href="about.html"]', 'contextmenu')
+        };
+      })()`
+    );
+
+    await navigate(client, `${baseUrl}/about.html`);
+    const primaryLinkActivated = await clickSelector(
+      client,
+      '.nav-links a[href="services.html"]'
+    );
+    const primaryNavigation =
+      primaryLinkActivated && (await waitForPath(client, "/services.html"));
+
+    await navigate(client, `${baseUrl}/portfolio.html`);
+    const caseLinkActivated = await clickSelector(
+      client,
+      '.featured-case__actions .btn.primary'
+    );
+    const caseStudyLink =
+      caseLinkActivated &&
+      (await waitForPath(client, "/case-studies/transaction-monitoring/"));
+    const breadcrumbSemantics = await evaluate(
+      client,
+      `(() => {
+        const nav = document.querySelector('nav.breadcrumbs[aria-label="Breadcrumb"]');
+        const current = nav?.querySelector('li[aria-current="page"]');
+        return Boolean(nav && current && !current.querySelector('a'));
+      })()`
+    );
+    const breadcrumbActivated = await activateSelectorWithKeyboard(
+      client,
+      '.breadcrumbs a[href="/portfolio.html"]'
+    );
+    const breadcrumbNavigation =
+      breadcrumbActivated && (await waitForPath(client, "/portfolio.html"));
+
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    const backToPortfolioActivated = await clickSelector(
+      client,
+      '.case-close .btn.primary'
+    );
+    const backToPortfolio =
+      backToPortfolioActivated &&
+      (await waitForPath(client, "/portfolio.html"));
+
+    await navigate(client, `${baseUrl}/about.html`);
+    await clickSelector(client, '.nav-links a[href="services.html"]');
+    await waitForPath(client, "/services.html");
+    await evaluate(client, "history.back(); true");
+    const browserBack = await waitForPath(client, "/about.html");
+    await evaluate(client, "history.forward(); true");
+    const browserForward = await waitForPath(client, "/services.html");
+    const browserForwardState = await evaluate(
+      client,
+      `(() => ({
+        contentVisible:
+          getComputedStyle(document.querySelector('main')).visibility === 'visible' &&
+          Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+        pointerAvailable:
+          getComputedStyle(document.documentElement).pointerEvents !== 'none' &&
+          getComputedStyle(document.body).pointerEvents !== 'none'
+      }))()`
+    );
+
+    await navigate(client, `${baseUrl}/portfolio.html`);
+    await evaluate(client, "scrollTo(0, 900); true");
+    await sleep(120);
+    await clickSelector(client, '.nav-links a[href="about.html"]');
+    await waitForPath(client, "/about.html");
+    await evaluate(client, "history.back(); true");
+    await waitForPath(client, "/portfolio.html");
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      if ((await evaluate(client, "scrollY")) > 650) break;
+      await sleep(100);
+    }
+    const restorationState = await evaluate(
+      client,
+      `(() => ({
+        scrollRestored: scrollY > 650,
+        menuReset:
+          !document.body.classList.contains('nav-open') &&
+          document.querySelector('.nav-toggle')?.getAttribute('aria-expanded') === 'false',
+        contentVisible:
+          getComputedStyle(document.querySelector('main')).visibility === 'visible' &&
+          Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+        pointerAvailable:
+          getComputedStyle(document.documentElement).pointerEvents !== 'none' &&
+          getComputedStyle(document.body).pointerEvents !== 'none'
+      }))()`
+    );
+    await captureScreenshot(client, "transition-browser-back-restored.png");
+
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    await client.send("Page.reload");
+    const deepLinkReload = await waitForPath(
+      client,
+      "/case-studies/transaction-monitoring/"
+    );
+    await sleep(300);
+    const deepLinkContent = await evaluate(
+      client,
+      `Boolean(document.querySelector('#case-title'))`
+    );
+
+    const recoveryLinks = {};
+    for (const [name, selector, pathName] of [
+      ["home", '.hero-actions a[href="/index.html"]', "/index.html"],
+      ["portfolio", '.hero-actions a[href="/portfolio.html"]', "/portfolio.html"],
+      ["contact", '.nav-links a[href="/contact.html"]', "/contact.html"]
+    ]) {
+      await navigate(client, `${baseUrl}/404.html`);
+      const activated = await clickSelector(client, selector);
+      recoveryLinks[name] =
+        activated && (await waitForPath(client, pathName));
+    }
+
+    await client.send("Emulation.setScriptExecutionDisabled", { value: true });
+    await client.send("Page.navigate", { url: `${baseUrl}/about.html` });
+    await sleep(500);
+    const noJavaScriptActivated = await clickSelector(
+      client,
+      '.nav-links a[href="services.html"]'
+    );
+    const noJavaScriptNavigation =
+      noJavaScriptActivated && (await waitForPath(client, "/services.html"));
+    await client.send("Emulation.setScriptExecutionDisabled", { value: false });
+
+    await setViewport(client, 390, 844, true);
+    await navigate(client, `${baseUrl}/about.html`);
+    await clickSelector(client, ".nav-toggle");
+    const mobileMenuOpened = await evaluate(
+      client,
+      `document.querySelector('.nav-toggle')?.getAttribute('aria-expanded') === 'true'`
+    );
+    const mobileMenuLinkActivated = await clickSelector(
+      client,
+      '.nav-links a[href="services.html"]'
+    );
+    const mobileMenuNavigation =
+      mobileMenuLinkActivated && (await waitForPath(client, "/services.html"));
+    const mobileMenuReset = await evaluate(
+      client,
+      `(() => ({
+        closed: document.querySelector('.nav-toggle')?.getAttribute('aria-expanded') === 'false',
+        bodyUnlocked: !document.body.classList.contains('nav-open')
+      }))()`
+    );
+    await captureScreenshot(client, "transition-mobile-menu-navigation.png");
+
+    await setViewport(client, 1440, 1000);
+    await navigate(client, `${baseUrl}/about.html`);
+    const nativeViewTransitionSupport = await evaluate(
+      client,
+      `CSS.supports('view-transition-name: circuit-page')`
+    );
+
+    const transitionCaptures = [];
+    const captureNavigation = async ({
+      source,
+      selector,
+      destination,
+      name,
+      prepare
+    }) => {
+      if (prepare) await evaluate(client, prepare);
+      await navigate(client, `${baseUrl}${source}`);
+      const activated = await clickSelector(client, selector);
+      if (!activated) return false;
+      const observed = await observeViewTransition(client);
+      await captureScreenshot(client, `${name}-transition.png`);
+      const arrived = await waitForPath(client, destination);
+      await sleep(300);
+      await captureScreenshot(client, `${name}-settled.png`);
+      transitionCaptures.push(observed);
+      return arrived;
+    };
+
+    const homeToPortfolio = await captureNavigation({
+      source: "/index.html",
+      selector: '.nav-links a[href="portfolio.html"]',
+      destination: "/portfolio.html",
+      name: "transition-home-to-portfolio",
+      prepare:
+        "sessionStorage.setItem('dave-bryson-risk-intro-seen', 'true'); true"
+    });
+    const portfolioToCase = await captureNavigation({
+      source: "/portfolio.html",
+      selector: ".featured-case__actions .btn.primary",
+      destination: "/case-studies/transaction-monitoring/",
+      name: "transition-portfolio-to-case"
+    });
+    const caseToPortfolio = await captureNavigation({
+      source: "/case-studies/transaction-monitoring/",
+      selector: ".case-close .btn.primary",
+      destination: "/portfolio.html",
+      name: "transition-case-to-portfolio"
+    });
+    const aboutToServices = await captureNavigation({
+      source: "/about.html",
+      selector: '.nav-links a[href="services.html"]',
+      destination: "/services.html",
+      name: "transition-about-to-services"
+    });
+    const servicesToContact = await captureNavigation({
+      source: "/services.html",
+      selector: '.nav-links a[href="contact.html"]',
+      destination: "/contact.html",
+      name: "transition-services-to-contact"
+    });
+
+    await navigate(client, `${baseUrl}/about.html`);
+    await evaluate(
+      client,
+      `(() => {
+        const style = document.createElement('style');
+        style.textContent = '@view-transition { navigation: none; }';
+        document.head.append(style);
+        return true;
+      })()`
+    );
+    const fallbackActivated = await clickSelector(
+      client,
+      '.nav-links a[href="services.html"]'
+    );
+    const transitionDisabledFallback =
+      fallbackActivated && (await waitForPath(client, "/services.html"));
+
+    await navigate(client, `${baseUrl}/about.html`);
+    const rapidActivation = await rapidlyActivateSelector(
+      client,
+      '.nav-links a[href="services.html"]'
+    );
+    const rapidNavigation =
+      rapidActivation && (await waitForPath(client, "/services.html"));
+    await sleep(350);
+    const rapidNavigationSettled = await evaluate(
+      client,
+      `location.pathname === '/services.html' &&
+       document.querySelectorAll('[data-page-transition]').length === 0 &&
+       getComputedStyle(document.body).pointerEvents !== 'none'`
+    );
+
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "reduce" }]
+    });
+    await navigate(client, `${baseUrl}/about.html`);
+    const reducedStartedAt = Date.now();
+    await clickSelector(client, '.nav-links a[href="services.html"]');
+    const reducedArrived = await waitForPath(client, "/services.html");
+    const reducedElapsed = Date.now() - reducedStartedAt;
+    const reducedTransitionAnimations = await evaluate(
+      client,
+      `document.getAnimations().filter(
+        (animation) => animation.effect?.pseudoElement?.startsWith('::view-transition')
+      ).length`
+    );
+    await captureScreenshot(client, "transition-reduced-motion.png");
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "no-preference" }]
+    });
+
+    const transitionResidue = await evaluate(
+      client,
+      `(() => ({
+        overlayCount: document.querySelectorAll('[data-page-transition]').length,
+        contentVisible:
+          getComputedStyle(document.querySelector('main')).visibility === 'visible' &&
+          Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+        pointerAvailable:
+          getComputedStyle(document.documentElement).pointerEvents !== 'none' &&
+          getComputedStyle(document.body).pointerEvents !== 'none'
+      }))()`
+    );
+
+    const navigationBehavior = {
+      directRootRoute,
+      primaryNavigation,
+      caseStudyLink,
+      breadcrumbSemantics,
+      breadcrumbNavigation,
+      backToPortfolio,
+      browserBack,
+      browserForward,
+      browserForwardContentVisible: browserForwardState.contentVisible,
+      browserForwardPointerAvailable: browserForwardState.pointerAvailable,
+      deepLinkReload: deepLinkReload && deepLinkContent,
+      scrollRestoration: restorationState.scrollRestored,
+      bfcacheMenuReset: restorationState.menuReset,
+      bfcacheContentVisible: restorationState.contentVisible,
+      bfcachePointerAvailable: restorationState.pointerAvailable,
+      controlClick: defaultLinkBehavior.controlClick,
+      commandClick: defaultLinkBehavior.commandClick,
+      shiftClick: defaultLinkBehavior.shiftClick,
+      altClick: defaultLinkBehavior.altClick,
+      middleClick: defaultLinkBehavior.middleClick,
+      externalLink: defaultLinkBehavior.externalLink,
+      mailtoLink: defaultLinkBehavior.mailtoLink,
+      cvLink: defaultLinkBehavior.cvLink,
+      targetBlankLink: defaultLinkBehavior.targetBlankLink,
+      hashLink: defaultLinkBehavior.hashLink,
+      contextMenu: defaultLinkBehavior.contextMenu,
+      noJavaScriptNavigation,
+      mobileMenuOpened,
+      mobileMenuNavigation,
+      mobileMenuClosed: mobileMenuReset.closed,
+      mobileBodyUnlocked: mobileMenuReset.bodyUnlocked,
+      recoveryHome: recoveryLinks.home,
+      recoveryPortfolio: recoveryLinks.portfolio,
+      recoveryContact: recoveryLinks.contact
+    };
+
+    const transitionBehavior = {
+      nativeViewTransitionSupport,
+      transitionObserved: transitionCaptures.some(Boolean),
+      homeToPortfolio,
+      portfolioToCase,
+      caseToPortfolio,
+      aboutToServices,
+      servicesToContact,
+      transitionDisabledFallback,
+      rapidNavigation: rapidNavigation && rapidNavigationSettled,
+      reducedMotionImmediate: reducedArrived && reducedElapsed < 1_000,
+      reducedMotionHasNoViewAnimation: reducedTransitionAnimations === 0,
+      noOverlayMarkup: transitionResidue.overlayCount === 0,
+      contentVisible: transitionResidue.contentVisible,
+      pointerAvailable: transitionResidue.pointerAvailable
+    };
+
     const report = {
       results,
       skipLinkFocus,
-      pageFlowTest: {
-        wheelPreviousPage,
-        touchPreviousPage
+      gestureNavigationTest: {
+        wheelStayedOnEveryRoute: Object.values(wheelEdgeResults).every(Boolean),
+        touchTopStayed,
+        touchBottomStayed
       },
       menuTest,
       reducedMotion,
       homepage,
       caseStudy,
+      navigationBehavior,
+      transitionBehavior,
       consoleErrors: [...new Set(consoleErrors)],
       environmentErrors: [...new Set(environmentErrors)],
       screenshots: screenshotDirectory

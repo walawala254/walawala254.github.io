@@ -45,7 +45,7 @@ This remains a static multi-page website. Vite treats these documents as separat
 - `contact.html`
 - `404.html`
 
-There is no single-page router. Essential navigation is present in every source document and remains visible in generated HTML when JavaScript is unavailable. `script.js` is the shared module entry point; it initializes the immediately used navigation, reveal, and page-flow modules under `src/scripts/`.
+There is no single-page router. Essential navigation is present in every source document and remains visible in generated HTML when JavaScript is unavailable. `script.js` is the shared module entry point; it initializes only the immediately used navigation and reveal modules under `src/scripts/`.
 
 The repeated header, navigation, and footer are deliberately still authored in each page. A build-time partial system is deferred until its maintenance benefit outweighs the extra templating or transformation complexity.
 
@@ -53,7 +53,21 @@ Static public files such as the favicon, crawler policy, and sitemap live in `pu
 
 The Risk Intelligence Circuit visual language, tokens, component hierarchy, responsive rules, and accessibility constraints are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
 
-The homepage has one route-specific stylesheet (`src/styles/home.css`) and three route-specific motion modules under `src/scripts/home/`. Semantic HTML and a static inline SVG are the baseline; a short session-scoped introduction and scoped GSAP/ScrollTrigger choreography progressively enhance them. The homepage opts out of legacy edge-scroll page chaining, while internal pages retain the existing behavior until Phase 5.
+The homepage has one route-specific stylesheet (`src/styles/home.css`) and three route-specific motion modules under `src/scripts/home/`. Semantic HTML and a static inline SVG are the baseline; a short session-scoped introduction and scoped GSAP/ScrollTrigger choreography progressively enhance them.
+
+## Navigation and route transitions
+
+All production routes use ordinary document links and native scrolling. Wheel and touch gestures never initiate route changes, no client-side router or click interceptor is installed, and browser Back, Forward, deep links, modifier clicks, new-tab behavior, context menus, downloads, external links and hash links remain browser-controlled.
+
+Each document owns its static current-page state with `aria-current="page"`; the transaction-monitoring case study marks Portfolio as its parent destination, while `404.html` intentionally has no current primary item and exposes recovery links to Home, Portfolio and Contact. The mobile menu is the only navigation JavaScript. It manages focus and resets its open state on `pageshow`, including a page restored from the back-forward cache.
+
+Supporting browsers progressively enhance deliberate same-origin navigation with the CSS cross-document View Transitions API. The transition is a 240ms-or-shorter detection-bracket exchange shared by `main` and the persistent navigation. It does not use a JavaScript overlay, block input, replace history, or delay unsupported browsers. The feature is enabled only under `prefers-reduced-motion: no-preference`; reduced-motion users and unsupported browsers receive immediate native navigation. The isolated prototype lab explicitly opts out.
+
+Static header and footer duplication remains deliberate. A partial system would add a templating dependency and transformation layer to seven small authored documents without improving runtime behavior; revisit that decision only if the public route count or navigation complexity grows materially.
+
+Phase 5 adds no dependency, JavaScript transition module, request, image, video, animation loop, or GSAP import. Against commit `8a3f4c8`, shared internal-route JavaScript fell from 3,304 B to 2,230 B raw (about 1.58 kB to 1.10 kB gzip), shared CSS grew from 24,650 B to 26,659 B raw (about 5.50 kB to 5.86 kB gzip), and the complete 31-file build grew from 1,127,130 B to 1,129,615 B. Internal routes and the case study still request only the shared vanilla JavaScript; GSAP/ScrollTrigger remain homepage-only and Three.js remains prototype-only. Request counts are unchanged.
+
+Automated route, transition, keyboard, reduced-motion, no-JavaScript and responsive checks run in locally available Microsoft Edge. CSS cross-document transitions are progressive: unsupported browsers receive ordinary navigation and no missing functionality. Native Safari, iOS Safari, Android Chrome, physical-device thermal behavior, and screen-reader announcements still require hands-on testing in their real environments before production approval.
 
 ## Portfolio and case-study architecture
 
@@ -105,7 +119,13 @@ Three.js is installed only for the approved isolated comparison. The procedural 
 
 ## Production and rollback
 
-`npm run build` writes a disposable local artifact to `dist/`; it does not deploy. To roll back local Phase 1 work, preserve any uncommitted user work first, then create a new branch or worktree at the version-two baseline:
+`npm run build` writes a disposable local artifact to `dist/`; it does not deploy. The pre-Phase-5 state is commit `8a3f4c8f9f7ad8ca37be71fde367488935923352`. To inspect it without rewriting shared history, preserve any uncommitted user work and create a separate worktree:
+
+```powershell
+git worktree add ..\portfolio-phase4-rollback 8a3f4c8f9f7ad8ca37be71fde367488935923352
+```
+
+Portfolio version two remains recoverable in the same way from the original baseline:
 
 ```powershell
 git worktree add ..\portfolio-v2-rollback 3ff63e37b2560e5a7f1870dd047c0a3582c87c99

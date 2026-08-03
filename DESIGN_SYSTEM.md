@@ -152,8 +152,11 @@ Homepage action order is selected work, contact, CV, then GitHub. Contact-page a
 - Mobile navigation uses an opaque elevated panel, horizontal separators, and the existing focus-management behavior.
 - The closed JavaScript-enhanced menu remains hidden from the focus order.
 - With JavaScript disabled, the navigation remains present in document flow.
+- Wheel, trackpad, and touch gestures retain ordinary scroll behavior and never change routes.
+- Browser history, deep links, modifier clicks, context menus, external links, downloads, and hash links remain native.
+- Every document owns its static current-page state. Case studies mark their parent Portfolio item; the recovery page has no false current item.
 
-Page transitions are not part of this phase.
+Supporting browsers use CSS cross-document View Transitions for deliberate same-origin link navigation. The persistent navigation fades subtly while the page uses a short detection-bracket exchange. The enhancement has no JavaScript interception or overlay, is limited to 240ms, and is absent for reduced-motion users and the experimental prototype lab. Unsupported browsers retain immediate document navigation.
 
 ## Risk Intelligence motifs
 
@@ -172,7 +175,7 @@ Motifs must be static by default, clipped to their owning component, and prevent
 | `--ease-emphasized` | decelerating ease | Reveal entrance |
 | `--hover-shift` | 2px | Maximum hover translation |
 
-Phase 3 uses GSAP and ScrollTrigger as the single production motion system on the homepage. Timelines are route-specific, scoped with `gsap.context()` and `gsap.matchMedia()`, and reverted on teardown. ScrollTrigger activates the Risk Intelligence Core, story states and evidence-frame transitions without pinning or replacing native scroll.
+Phase 3 uses GSAP and ScrollTrigger as the single scripted production motion system on the homepage. Timelines are route-specific, scoped with `gsap.context()` and `gsap.matchMedia()`, and reverted on teardown. ScrollTrigger activates the Risk Intelligence Core, story states and evidence-frame transitions without pinning or replacing native scroll. Phase 5 route transitions use only the browser's CSS navigation primitive and do not add a second JavaScript animation system.
 
 No perpetual decoration, scroll pinning, scroll hijacking, custom cursor or second animation framework is part of the design system. Motion must consume the established timing principles and justify its communication purpose.
 

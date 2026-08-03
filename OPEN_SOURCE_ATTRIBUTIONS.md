@@ -37,6 +37,10 @@ The transaction-monitoring case study was independently paraphrased from the own
 
 The portfolio and case-study routes add no dependency. They reuse the existing base stylesheet and lightweight vanilla JavaScript navigation/reveal entry; GSAP, ScrollTrigger and Three.js are not requested on those routes.
 
+## Phase 5 navigation standards
+
+Phase 5 adds no dependency and copies no third-party implementation. The route transition is authored in project CSS from the cross-document View Transitions behavior defined by the [CSS View Transitions Level 2 specification](https://drafts.csswg.org/css-view-transitions-2/) and described in [Chrome's cross-document transition guidance](https://developer.chrome.com/docs/web-platform/view-transitions/cross-document). Browsers without support use ordinary navigation. GSAP is not used for route transitions, and the isolated prototype lab opts out of the feature.
+
 ## GitHub Actions
 
 | Action | Workflow reference | Release checked for Phase 1 | Use | Licence | Source |
