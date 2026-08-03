@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { constants } from "node:fs";
 import path from "node:path";
 
@@ -38,6 +38,7 @@ const pagesToValidate = [
   ...prototypeRoutes.map((file) => ({ file })),
   { file: "404.html" }
 ];
+const publicPages = [...routes, { file: "404.html" }];
 
 const localReferencePattern =
   /(?:href|src)=["'](?!https?:|mailto:|tel:|#|data:)([^"'?#]+)(?:[?#][^"']*)?["']/g;
@@ -99,6 +100,124 @@ for (const { file, canonical } of pagesToValidate) {
 
   if (/data-page-(?:flow|transition)/.test(html)) {
     throw new Error(`${file} contains obsolete page-flow or transition-overlay markup.`);
+  }
+}
+
+for (const { file } of publicPages) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1]?.trim();
+  const description = html.match(
+    /<meta name="description" content="([^"]+)"\s*\/?>/
+  )?.[1];
+  const h1Count = (html.match(/<h1\b/g) || []).length;
+
+  if (!title || !description) {
+    throw new Error(`${file} must contain a unique title and description.`);
+  }
+  if (h1Count !== 1) {
+    throw new Error(`${file} must contain exactly one h1; found ${h1Count}.`);
+  }
+  for (const landmark of [
+    'class="skip-link" href="#main"',
+    "<header",
+    'aria-label="Primary navigation"',
+    '<main id="main"',
+    "<footer"
+  ]) {
+    if (!html.includes(landmark)) {
+      throw new Error(`${file} is missing required structure: ${landmark}`);
+    }
+  }
+  if (!html.includes('<script>document.documentElement.classList.add("js");</script>')) {
+    throw new Error(`${file} must establish enhancement state before first paint.`);
+  }
+
+  if (file !== "404.html") {
+    for (const metadata of [
+      'property="og:title"',
+      'property="og:description"',
+      'property="og:url"'
+    ]) {
+      if (!html.includes(metadata)) {
+        throw new Error(`${file} is missing ${metadata}.`);
+      }
+    }
+  } else if (!html.includes('name="robots" content="noindex, follow"')) {
+    throw new Error("404.html must remain noindex while allowing recovery links.");
+  }
+
+  const externalLinks = html.match(/<a\b[^>]*href="https:\/\/[^>]+>/g) || [];
+  for (const link of externalLinks) {
+    if (
+      !/target="_blank"/.test(link) ||
+      !/rel="[^"]*noopener[^"]*noreferrer[^"]*"/.test(link)
+    ) {
+      throw new Error(`${file} contains an unsafe external new-tab link.`);
+    }
+  }
+
+  const images = html.match(/<img\b[^>]*>/g) || [];
+  for (const image of images) {
+    if (
+      !/alt="[^"]*"/.test(image) ||
+      !/width="\d+"/.test(image) ||
+      !/height="\d+"/.test(image)
+    ) {
+      throw new Error(`${file} contains an image without alt text and dimensions.`);
+    }
+  }
+
+  const accessibleSvgs = html.match(/<svg\b[^>]*role="img"[^>]*>/g) || [];
+  for (const svg of accessibleSvgs) {
+    const labelledBy = svg.match(/aria-labelledby="([^"]+)"/)?.[1];
+    if (!labelledBy) {
+      throw new Error(`${file} contains a role=img SVG without aria-labelledby.`);
+    }
+    for (const id of labelledBy.split(/\s+/)) {
+      if (!html.includes(`id="${id}"`)) {
+        throw new Error(`${file} SVG references a missing accessible label: ${id}`);
+      }
+    }
+  }
+
+  const automaticExternalResource =
+    /<(?:script|img|source|iframe)\b[^>]*\bsrc="https?:\/\/|<link\b[^>]*rel="(?:stylesheet|preconnect|dns-prefetch|modulepreload|preload)"[^>]*href="https?:\/\//i;
+  if (automaticExternalResource.test(html)) {
+    throw new Error(`${file} automatically loads an external resource.`);
+  }
+  if (/\b(?:contact|services)\.jpg\b/i.test(html)) {
+    throw new Error(`${file} references a quarantined raster asset.`);
+  }
+  if (
+    /(?:\bgtag\s*\(|googletagmanager|google-analytics|facebook\.net|doubleclick|plausible\.io|segment\.com|posthog)/i.test(
+      html
+    )
+  ) {
+    throw new Error(`${file} contains tracking or analytics code.`);
+  }
+  if (/\bon\w+\s*=/.test(html)) {
+    throw new Error(`${file} contains an inline event handler.`);
+  }
+  if (/(?:[A-Z]:\\Users\\|\/Users\/|\/home\/[^<\s]+)/.test(html)) {
+    throw new Error(`${file} exposes a local filesystem path.`);
+  }
+}
+
+const builtAssets = await readdir(path.join(outputRoot, "assets"));
+if (builtAssets.some((file) => /^(?:contact|services)-/i.test(file))) {
+  throw new Error("A quarantined contact or services raster entered dist/assets.");
+}
+
+for (const file of productionEvidencePages) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+  for (const match of html.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g
+  )) {
+    try {
+      JSON.parse(match[1]);
+    } catch {
+      throw new Error(`${file} contains invalid JSON-LD structured data.`);
+    }
   }
 }
 

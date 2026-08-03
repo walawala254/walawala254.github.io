@@ -217,6 +217,32 @@ async function inspectRoute(client, route) {
           document.documentElement.clientWidth,
         width: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
+        overflowElements: [...document.querySelectorAll('body *')]
+          .filter((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return (
+              style.display !== 'none' &&
+              style.visibility !== 'hidden' &&
+              rect.width > 0 &&
+              (rect.left < -0.5 || rect.right > document.documentElement.clientWidth + 0.5)
+            );
+          })
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            return {
+              selector: element.id
+                ? '#' + element.id
+                : element.tagName.toLowerCase() +
+                  (typeof element.className === 'string' && element.className
+                    ? '.' + element.className.trim().replace(/\s+/g, '.')
+                    : ''),
+              left: Math.round(rect.left * 10) / 10,
+              right: Math.round(rect.right * 10) / 10,
+              width: Math.round(rect.width * 10) / 10
+            };
+          })
+          .slice(0, 20),
         robots: document.querySelector('meta[name="robots"]')?.content || null,
         current:
           document.querySelector('[aria-current="page"]')?.getAttribute('href') ||

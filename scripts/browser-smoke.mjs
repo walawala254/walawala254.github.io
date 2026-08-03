@@ -374,7 +374,32 @@ async function inspectRoute(client) {
             image.loading !== 'lazy' &&
             (!image.complete || image.naturalWidth === 0)
         )
-        .map((image) => image.getAttribute('src'))
+        .map((image) => image.getAttribute('src')),
+      imagesWithoutDimensions: [...document.images]
+        .filter(
+          (image) =>
+            !image.hasAttribute('width') || !image.hasAttribute('height')
+        )
+        .map((image) => image.getAttribute('src')),
+      quarantinedImages: [...document.images]
+        .map((image) => image.getAttribute('src') || '')
+        .filter((source) => /(?:contact|services)\.jpg(?:$|[?#])/i.test(source)),
+      headingOrderValid: (() => {
+        const levels = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+          .map((heading) => Number(heading.tagName.slice(1)));
+        return (
+          levels.filter((level) => level === 1).length === 1 &&
+          levels.every((level, index) => index === 0 || level <= levels[index - 1] + 1)
+        );
+      })(),
+      landmarksValid:
+        document.querySelectorAll('body > header.site-header').length === 1 &&
+        document.querySelectorAll('main#main').length === 1 &&
+        document.querySelectorAll('body > footer.site-footer').length === 1 &&
+        document.querySelectorAll('nav[aria-label="Primary navigation"]').length === 1,
+      skipTargetValid:
+        document.querySelector('.skip-link')?.getAttribute('href') === '#main' &&
+        Boolean(document.querySelector('main#main'))
     }))()`
   );
 }
@@ -399,6 +424,18 @@ function assertResults(report) {
       }
       if (result.brokenEagerImages.length) {
         failures.push(`${viewport} ${route} has broken eager images`);
+      }
+      if (result.imagesWithoutDimensions.length) {
+        failures.push(`${viewport} ${route} has images without dimensions`);
+      }
+      if (result.quarantinedImages.length) {
+        failures.push(`${viewport} ${route} requests a quarantined image`);
+      }
+      if (!result.headingOrderValid) {
+        failures.push(`${viewport} ${route} has an invalid heading order`);
+      }
+      if (!result.landmarksValid || !result.skipTargetValid) {
+        failures.push(`${viewport} ${route} has invalid landmarks or skip target`);
       }
     }
   }
@@ -530,6 +567,12 @@ function assertResults(report) {
     if (route !== "index.html" && resources.gsap.length) {
       failures.push(`${route} requested GSAP outside the homepage`);
     }
+    if (resources.external.length || resources.fonts.length) {
+      failures.push(`${route} automatically requested an external resource or font`);
+    }
+    if (resources.quarantined.length) {
+      failures.push(`${route} requested a quarantined raster`);
+    }
   }
   if (!report.interactionAudit.hoverLayoutStable) {
     failures.push("Portfolio hover changed component geometry");
@@ -562,6 +605,34 @@ function assertResults(report) {
     ) {
       failures.push(`${route} is incomplete without JavaScript`);
     }
+  }
+  for (const [route, result] of Object.entries(
+    report.interactionAudit.textResizeByRoute
+  )) {
+    if (result.overflow || !result.mainVisible || !result.navigationPresent) {
+      failures.push(`${route} fails 200% text resizing`);
+    }
+  }
+  for (const [route, result] of Object.entries(
+    report.interactionAudit.zoom200ByRoute
+  )) {
+    if (result.overflow || !result.mainVisible) {
+      failures.push(`${route} fails the 200% zoom reflow proxy`);
+    }
+  }
+  if (
+    report.interactionAudit.externalFontFailure.externalRequests.length ||
+    !report.interactionAudit.externalFontFailure.contentVisible
+  ) {
+    failures.push("External-font failure fallback is incomplete");
+  }
+  if (
+    !report.interactionAudit.imageFailure.altAvailable ||
+    !report.interactionAudit.imageFailure.imageFailed ||
+    report.interactionAudit.imageFailure.overflow ||
+    !report.interactionAudit.imageFailure.mainVisible
+  ) {
+    failures.push("Portrait failure fallback is incomplete");
   }
   for (const [check, passed] of Object.entries(report.navigationBehavior)) {
     if (!passed) failures.push(`Navigation behavior failed: ${check}`);
@@ -691,7 +762,11 @@ async function main() {
       targetSizeByRoute: {},
       reducedMotionByRoute: {},
       noJavaScriptByRoute: {},
+      textResizeByRoute: {},
+      zoom200ByRoute: {},
       resourcesByRoute: {},
+      externalFontFailure: {},
+      imageFailure: {},
       hoverLayoutStable: false,
       activeLayoutStable: false,
       revealFailureSafe: false
@@ -1049,7 +1124,13 @@ async function main() {
       interactionAudit.resourcesByRoute[route] = {
         three: routeInteractions.resources.filter((name) => /three(?:-core|\.module|\.js)?/i.test(name)),
         prototype: routeInteractions.resources.filter((name) => /prototype/i.test(name)),
-        gsap: routeInteractions.resources.filter((name) => /ScrollTrigger|gsap/i.test(name))
+        gsap: routeInteractions.resources.filter((name) => /ScrollTrigger|gsap/i.test(name)),
+        fonts: routeInteractions.resources.filter((name) => /fonts\.(?:googleapis|gstatic)\.com|\.(?:woff2?|ttf|otf)(?:$|[?#])/i.test(name)),
+        quarantined: routeInteractions.resources.filter((name) => /(?:contact|services)\.jpg(?:$|[?#])/i.test(name)),
+        external: routeInteractions.resources.filter(
+          (name) => new URL(name).origin !== new URL(baseUrl).origin
+        ),
+        requestCount: routeInteractions.resources.length
       };
     }
 
@@ -1246,6 +1327,101 @@ async function main() {
       );
     }
     await client.send("Emulation.setScriptExecutionDisabled", { value: false });
+
+    await setViewport(client, 390, 844, true);
+    for (const route of routes) {
+      await navigate(client, `${baseUrl}/${route}`);
+      interactionAudit.textResizeByRoute[route] = await evaluate(
+        client,
+        `(() => {
+          document.documentElement.style.fontSize = '200%';
+          const main = document.querySelector('main');
+          return {
+            overflow:
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth,
+            mainVisible:
+              Boolean(main) && Number(getComputedStyle(main).opacity) > 0,
+            navigationPresent:
+              document.querySelectorAll('.nav-links a[href]').length === 5
+          };
+        })()`
+      );
+      await sleep(150);
+      await captureScreenshot(
+        client,
+        `phase7-text-200-${routeScreenshotNames[route]}-390x844.png`
+      );
+    }
+
+    await setViewport(client, 720, 500, false);
+    for (const route of routes) {
+      await navigate(client, `${baseUrl}/${route}`);
+      interactionAudit.zoom200ByRoute[route] = await evaluate(
+        client,
+        `(() => {
+          const main = document.querySelector('main');
+          return {
+            overflow:
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth,
+            mainVisible:
+              Boolean(main) && Number(getComputedStyle(main).opacity) > 0
+          };
+        })()`
+      );
+    }
+    await navigate(client, `${baseUrl}/contact.html`);
+    await sleep(800);
+    await captureScreenshot(client, "phase7-zoom-200-contact.png");
+
+    await client.send("Network.setBlockedURLs", {
+      urls: [
+        "*://fonts.googleapis.com/*",
+        "*://fonts.gstatic.com/*",
+        "*://cdnjs.cloudflare.com/*"
+      ]
+    });
+    await setViewport(client, 1440, 1000, false);
+    await navigate(client, `${baseUrl}/index.html`);
+    interactionAudit.externalFontFailure = await evaluate(
+      client,
+      `(() => ({
+        contentVisible:
+          Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+        externalRequests: performance.getEntriesByType('resource')
+          .map((entry) => entry.name)
+          .filter((name) => /fonts\.(?:googleapis|gstatic)\.com|cdnjs\.cloudflare\.com/i.test(name)),
+        fontFamily: getComputedStyle(document.body).fontFamily
+      }))()`
+    );
+    await sleep(900);
+    await captureScreenshot(client, "phase7-external-fonts-blocked-home.png");
+    await client.send("Network.setBlockedURLs", { urls: [] });
+
+    await client.send("Network.setCacheDisabled", { cacheDisabled: true });
+    await client.send("Network.setBlockedURLs", { urls: ["*about_me*"] });
+    await navigate(client, `${baseUrl}/about.html`);
+    interactionAudit.imageFailure = await evaluate(
+      client,
+      `(() => {
+        const image = document.querySelector('img[alt="Dave Bryson portrait"]');
+        const main = document.querySelector('main');
+        return {
+          altAvailable: Boolean(image?.alt),
+          imageFailed: Boolean(image?.complete && image.naturalWidth === 0),
+          overflow:
+            document.documentElement.scrollWidth >
+            document.documentElement.clientWidth,
+          mainVisible:
+            Boolean(main) && Number(getComputedStyle(main).opacity) > 0
+        };
+      })()`
+    );
+    await sleep(800);
+    await captureScreenshot(client, "phase7-image-failure-about.png");
+    await client.send("Network.setBlockedURLs", { urls: [] });
+    await client.send("Network.setCacheDisabled", { cacheDisabled: false });
 
     await setViewport(client, 390, 844, true);
     await navigate(client, `${baseUrl}/index.html`);
@@ -2029,6 +2205,13 @@ async function main() {
       client,
       `Boolean(document.querySelector('#case-title'))`
     );
+    await evaluate(client, `location.hash = '#%'; true`);
+    await sleep(150);
+    const invalidHashSafe = await evaluate(
+      client,
+      `Boolean(document.querySelector('#case-title')) &&
+       document.querySelectorAll('[aria-current="location"]').length <= 1`
+    );
 
     const recoveryLinks = {};
     for (const [name, selector, pathName] of [
@@ -2212,6 +2395,7 @@ async function main() {
       browserForwardContentVisible: browserForwardState.contentVisible,
       browserForwardPointerAvailable: browserForwardState.pointerAvailable,
       deepLinkReload: deepLinkReload && deepLinkContent,
+      invalidHashSafe,
       scrollRestoration: restorationState.scrollRestored,
       bfcacheMenuReset: restorationState.menuReset,
       bfcacheContentVisible: restorationState.contentVisible,
