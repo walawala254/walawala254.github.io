@@ -221,6 +221,9 @@
     gap: clamp(var(--space-5), 4vw, var(--space-8));
     padding-block: var(--space-7);
     border-block: var(--border-thin) solid var(--color-border);
+    transition:
+        border-color var(--duration-standard) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard);
 }
 
 .featured-case__meta {
@@ -307,6 +310,9 @@
     padding: var(--space-5);
     border: var(--border-thin) solid var(--color-border);
     background: var(--color-background-elevated);
+    transition:
+        border-color var(--duration-standard) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard);
 }
 
 .featured-case__visual svg {
@@ -317,6 +323,7 @@
 .preview-routes path {
     stroke: var(--color-border-strong);
     stroke-width: 2;
+    transition: stroke var(--duration-standard) var(--ease-standard);
 }
 
 .preview-routes path:nth-child(4),
@@ -466,6 +473,11 @@
     color: var(--color-accent-primary);
 }
 
+.breadcrumbs a:focus-visible {
+    color: var(--color-focus);
+    background: var(--color-accent-wash);
+}
+
 .case-hero__layout {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(19rem, 0.58fr);
@@ -559,17 +571,39 @@
 }
 
 .case-toc a {
+    position: relative;
     display: flex;
-    min-height: 40px;
+    min-height: 44px;
     align-items: center;
+    padding-inline: var(--space-3);
     border-bottom: var(--border-thin) solid var(--color-border);
     color: var(--color-text-muted);
     font-size: var(--type-supporting);
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-standard) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard);
 }
 
 .case-toc a:hover,
 .case-toc a:focus-visible {
     color: var(--color-accent-primary);
+}
+
+.case-toc a[aria-current="location"] {
+    border-bottom-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+    background: var(--color-accent-wash);
+}
+
+.case-toc a[aria-current="location"]::before {
+    position: absolute;
+    left: 0;
+    width: 0.4rem;
+    height: 0.4rem;
+    background: var(--color-accent-primary);
+    content: "";
+    transform: translateX(-50%);
 }
 
 .case-study-content {
@@ -583,6 +617,11 @@
     padding-block: var(--section-space);
     border-bottom: var(--border-thin) solid var(--color-border);
     scroll-margin-top: calc(var(--header-height) + var(--space-4));
+    transition: border-color var(--duration-standard) var(--ease-standard);
+}
+
+.case-section:target {
+    border-bottom-color: var(--color-border-strong);
 }
 
 .case-section__index {
@@ -888,6 +927,11 @@
         transform var(--duration-standard) var(--ease-standard);
 }
 
+.evidence-ledger a:focus-visible {
+    border-top-color: var(--color-focus);
+    background: var(--color-accent-wash);
+}
+
 .evidence-ledger span {
     color: var(--color-accent-secondary);
     font-family: var(--font-mono);
@@ -940,6 +984,20 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+    .featured-case__row:hover {
+        border-color: var(--color-border-strong);
+        background: var(--color-accent-wash);
+    }
+
+    .featured-case__row:hover .featured-case__visual {
+        border-color: var(--color-border-strong);
+        background: var(--color-background-subtle);
+    }
+
+    .featured-case__row:hover .preview-routes path {
+        stroke: var(--color-accent-secondary);
+    }
+
     .featured-case__actions a:hover,
     .portfolio-close__actions a:hover,
     .case-hero__actions a:hover,
@@ -952,6 +1010,20 @@
         border-top-color: var(--color-accent-primary);
         background: var(--color-background-subtle);
     }
+}
+
+.featured-case__row:focus-within {
+    border-color: var(--color-border-strong);
+    background: var(--color-accent-wash);
+}
+
+.featured-case__row:focus-within .featured-case__visual {
+    border-color: var(--color-border-strong);
+    background: var(--color-background-subtle);
+}
+
+.featured-case__row:focus-within .preview-routes path {
+    stroke: var(--color-accent-secondary);
 }
 
 @media (max-width: 75rem) {

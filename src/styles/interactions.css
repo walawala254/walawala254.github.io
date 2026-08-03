@@ -1,0 +1,254 @@
+/* Shared interaction language for production-facing internal routes. */
+.btn:focus-visible,
+.nav-btn:focus-visible,
+.nav-toggle:focus-visible {
+    outline: 0;
+    box-shadow:
+        0 0 0 3px var(--color-background),
+        0 0 0 5px var(--color-focus);
+}
+
+.btn:active,
+.nav-btn:active,
+.service-card__action:active,
+.contact-list a:active {
+    transform: translateY(1px);
+}
+
+.internal-close {
+    border-top: var(--border-thin) solid var(--color-border);
+    background:
+        linear-gradient(105deg, var(--color-accent-wash), transparent 52%),
+        var(--color-background-elevated);
+}
+
+.internal-close__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(var(--space-6), 6vw, var(--space-9));
+    align-items: end;
+}
+
+.internal-close__layout h2 {
+    max-width: 17ch;
+    margin-bottom: 0;
+}
+
+.internal-close__actions {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.about-page .about-grid {
+    counter-reset: about-principle;
+}
+
+.about-page .info-card {
+    counter-increment: about-principle;
+}
+
+.about-page .info-card::after {
+    position: absolute;
+    top: var(--space-5);
+    right: var(--space-5);
+    color: var(--color-text-muted);
+    content: "0" counter(about-principle);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+}
+
+.about-page .profile-panel::after {
+    position: absolute;
+    bottom: var(--space-3);
+    left: var(--space-3);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-bottom: var(--border-strong) solid var(--color-accent-primary);
+    border-left: var(--border-strong) solid var(--color-accent-primary);
+    content: "";
+    pointer-events: none;
+}
+
+.services-page .service-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+}
+
+.service-card__action {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 44px;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    border-bottom: var(--border-thin) solid var(--color-border-strong);
+    color: var(--color-text-primary);
+    font-size: var(--type-supporting);
+    font-weight: 800;
+}
+
+.service-card__action::after {
+    color: var(--color-accent-primary);
+    content: "\2192";
+    transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.service-card:focus-within {
+    border-top-color: var(--color-accent-primary);
+    background: var(--color-background-subtle);
+}
+
+.contact-page .contact-card {
+    transition:
+        border-color var(--duration-standard) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard);
+}
+
+.contact-page .contact-card:focus-within {
+    border-top-color: var(--color-accent-primary);
+    background: var(--color-background-subtle);
+}
+
+.contact-list a::after {
+    margin-left: auto;
+    color: var(--color-accent-primary);
+    content: "\2197";
+    transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.contact-list a[href^="mailto:"]::after {
+    content: "\2192";
+}
+
+.contact-list a:focus-visible,
+.footer-links a:focus-visible,
+.service-card__action:focus-visible {
+    color: var(--color-focus);
+    background: var(--color-accent-wash);
+}
+
+.error-page main {
+    display: grid;
+    min-height: calc(100svh - var(--header-height));
+}
+
+.error-route {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(18rem, 0.55fr);
+    gap: clamp(var(--space-7), 8vw, var(--space-10));
+    align-items: center;
+}
+
+.error-route__copy h1 {
+    max-width: 10ch;
+}
+
+.error-route__signal {
+    position: relative;
+    display: grid;
+    min-height: 18rem;
+    align-content: center;
+    padding: var(--space-6);
+    overflow: hidden;
+    border: var(--border-thin) solid var(--color-border);
+    background: var(--color-background-elevated);
+}
+
+.error-route__signal::before {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 3rem;
+    height: 3rem;
+    border-top: var(--border-strong) solid var(--color-critical);
+    border-right: var(--border-strong) solid var(--color-critical);
+    content: "";
+}
+
+.error-route__code {
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.08em;
+    line-height: 0.9;
+}
+
+.error-route__line {
+    width: 72%;
+    height: 1px;
+    margin-block: var(--space-6);
+    background: linear-gradient(90deg, var(--color-accent-secondary) 0 62%, transparent 62% 69%, var(--color-critical) 69%);
+}
+
+.error-route__node {
+    position: absolute;
+    top: calc(50% + 2.4rem);
+    right: 21%;
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 1px solid var(--color-critical);
+    background: var(--color-background);
+    transform: rotate(45deg);
+}
+
+.error-route__state {
+    color: var(--color-critical);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .service-card__action:hover,
+    .contact-list a:hover {
+        color: var(--color-focus);
+    }
+
+    .service-card__action:hover::after,
+    .contact-list a:hover::after {
+        transform: translateX(var(--hover-shift));
+    }
+}
+
+@media (max-width: 48rem) {
+    .internal-close__layout,
+    .error-route {
+        grid-template-columns: 1fr;
+    }
+
+    .internal-close__actions {
+        display: grid;
+        justify-content: stretch;
+    }
+
+    .internal-close__actions .btn {
+        width: 100%;
+    }
+
+    .internal-close__actions .btn.text-action {
+        justify-content: space-between;
+    }
+
+    .error-route__signal {
+        min-height: 12rem;
+    }
+}
+
+@media (min-width: 40.001rem) and (max-width: 64rem) {
+    .services-page .image-panel,
+    .contact-page .contact-card {
+        width: min(100%, 36rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .service-card__action::after,
+    .contact-list a::after {
+        transform: none !important;
+    }
+}

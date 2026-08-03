@@ -368,7 +368,7 @@
     font-size: var(--type-label);
 }
 
-.service-card span {
+.service-card > span {
     display: inline-block;
     margin-top: var(--space-4);
     color: var(--color-accent-primary);

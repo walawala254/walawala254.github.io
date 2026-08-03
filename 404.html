@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script type="module" src="/script.js?v=2.4"></script>
 </head>
-<body>
+<body class="error-page">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -47,8 +47,8 @@
 
     <main id="main">
         <section class="page-hero compact">
-            <div class="container">
-                <div>
+            <div class="container error-route">
+                <div class="error-route__copy">
                     <p class="eyebrow">404 / Route unavailable</p>
                     <h1>This page could not be found.</h1>
                     <p>The address may have changed, or the link may be incomplete.</p>
@@ -56,6 +56,12 @@
                         <a class="btn primary" href="/index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Return home</a>
                         <a class="btn secondary" href="/portfolio.html"><i class="fas fa-layer-group" aria-hidden="true"></i> View portfolio</a>
                     </div>
+                </div>
+                <div class="error-route__signal" aria-hidden="true">
+                    <span class="error-route__code">404</span>
+                    <span class="error-route__line"></span>
+                    <span class="error-route__node"></span>
+                    <span class="error-route__state">Route interrupted</span>
                 </div>
             </div>
         </section>
