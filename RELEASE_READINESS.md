@@ -217,18 +217,18 @@ Lighthouse 13.4.1 ran twice per route and profile against the local production p
 
 | Profile / route | Perf / A11y / BP / SEO | FCP / LCP | CLS / TBT | Speed Index | Requests | Transfer / resource | JS execution / main thread |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| Mobile Home | 99 / 100 / 100 / 100 | 1,358 / 1,808ms | 0 / 46ms | 1,689ms | 8 | 135,187 / 281,998 B | 384 / 1,428ms |
-| Mobile About | 100 / 100 / 100 / 100 | 906 / 1,506ms | 0 / 0ms | 906ms | 7 | 80,254 / 113,027 B | 17 / 496ms |
-| Mobile Portfolio | 100 / 100 / 100 / 100 | 910 / 1,060ms | 0 / 0ms | 910ms | 7 | 20,613 / 81,618 B | 12 / 445ms |
-| Mobile case study | 100 / 100 / 100 / 100 | 908 / 1,058ms | 0 / 0ms | 908ms | 7 | 24,885 / 99,010 B | 9 / 686ms |
-| Mobile Contact | 100 / 100 / 100 / 100 | 907 / 907ms | 0 / 0ms | 907ms | 6 | 13,601 / 46,592 B | 14 / 432ms |
-| Desktop Home | 100 / 100 / 100 / 100 | 350 / 410ms | 0 / 0ms | 588ms | 8 | 135,187 / 281,998 B | 81 / 334ms |
-| Desktop About | 100 / 100 / 100 / 100 | 247 / 407ms | 0 / 0ms | 247ms | 7 | 80,254 / 113,027 B | 1 / 112ms |
-| Desktop Portfolio | 100 / 100 / 100 / 100 | 247 / 247ms | 0 / 0ms | 247ms | 7 | 20,613 / 81,618 B | 4 / 149ms |
-| Desktop case study | 100 / 100 / 100 / 100 | 255 / 255ms | 0 / 0ms | 255ms | 7 | 24,885 / 99,010 B | 1 / 155ms |
-| Desktop Contact | 100 / 100 / 100 / 100 | 246 / 246ms | 0 / 0ms | 271ms | 6 | 13,601 / 46,592 B | 1 / 125ms |
+| Mobile Home | 99 / 100 / 100 / 100 | 1,380 / 1,735ms | 0 / 34ms | 1,741ms | 8 | 135,203 / 282,066 B | 371 / 1,435ms |
+| Mobile About | 100 / 100 / 100 / 100 | 931 / 1,508ms | 0 / 0ms | 931ms | 7 | 80,269 / 113,095 B | 17 / 463ms |
+| Mobile Portfolio | 100 / 100 / 100 / 100 | 931 / 1,006ms | 0 / 0ms | 931ms | 7 | 20,649 / 81,789 B | 17 / 675ms |
+| Mobile case study | 100 / 100 / 100 / 100 | 929 / 929ms | 0 / 60ms | 929ms | 7 | 24,920 / 99,181 B | 18 / 1,017ms |
+| Mobile Contact | 100 / 100 / 100 / 100 | 929 / 929ms | 0 / 0ms | 929ms | 6 | 13,615 / 46,660 B | 16 / 530ms |
+| Desktop Home | 100 / 100 / 100 / 100 | 349 / 405ms | 0 / 0ms | 667ms | 8 | 135,203 / 282,066 B | 100 / 432ms |
+| Desktop About | 100 / 100 / 100 / 100 | 258 / 391ms | 0 / 0ms | 272ms | 7 | 80,269 / 113,095 B | 4 / 145ms |
+| Desktop Portfolio | 100 / 100 / 100 / 100 | 248 / 248ms | 0 / 0ms | 265ms | 7 | 20,649 / 81,789 B | 5 / 162ms |
+| Desktop case study | 100 / 100 / 100 / 100 | 256 / 256ms | 0 / 0ms | 256ms | 7 | 24,920 / 99,181 B | 2 / 178ms |
+| Desktop Contact | 100 / 100 / 100 / 100 | 248 / 248ms | 0 / 0ms | 275ms | 6 | 13,615 / 46,660 B | 2 / 130ms |
 
-Compared with Phase 7, Home remains 99 mobile with a 42ms LCP variation and lower median TBT (46ms versus 60ms); internal routes remain 100 performance with CLS/TBT zero. These are normal local laboratory variations, not a material regression. The initial 20-report matrix was complete and parseable; after the Streamlit-access wording correction, four fresh case-study reports replaced that route's medians because it was the only browser artifact that changed. Lighthouse returned its known Windows `EPERM` temporary-profile cleanup warning after each report; this did not affect the reports, site, build or repository.
+Compared with Phase 7, Home remains 99 mobile with a 31ms lower LCP and lower median TBT (34ms versus 60ms); internal routes remain 100 performance and every route has CLS zero. The case study's 60ms mobile TBT is ordinary laboratory variation below the 200ms guidance, not a material regression. The final post-correction 20-report matrix was complete and parseable. Lighthouse returned its known Windows `EPERM` temporary-profile cleanup warning after each report; this did not affect the reports, site, build or repository.
 
 The browser resource map, which counts ordinary document resource entries rather than Lighthouse's audit overhead, remains: Home 6, About 5, Services 4, Portfolio 5, Contact 4, case study 5 and 404 4. It records zero automatic external, Three.js, prototype, font/CDN or quarantined-asset requests. ScrollTrigger appears once on Home and nowhere else.
 
@@ -262,7 +262,7 @@ The browser resource map, which counts ordinary document resource entries rather
 | RC-05 | LinkedIn blocks automated link verification | External link | Low | HTTP automation blocked | Open signed out and confirm | Correct only if destination is wrong | Manual check required | None needed if user test passes | Open |
 | RC-06 | Isolated Three.js prototype exceeds Vite's 500kB chunk warning | Experimental lab | Low | Build warning and isolation tests | None | Keep isolated; review only if lab scope changes | No production-route impact | SVG/CSS is the production Core | Accepted |
 | RC-07 | Hosted demo redirects through Streamlit authentication | External project evidence | Medium | HTTP 303 to Streamlit authentication on 2026-08-03 | Confirm intended signed-out access or accept authenticated access | Keep access wording accurate; update link only from owner-supplied destination | Demo access may be limited; repository evidence remains public | Retain “hosted” wording and sign-in note | Open |
-| RC-08 | Linux Chrome exceeded the case-study viewport at 200% text sizing | Case study / skip link | High accessibility defect when detected | First Phase 8 remote CI measured 413px content in a 390px viewport | None | Constrain skip/evidence links and use a zero-minimum grid track | Blocked the first release CI | CSS-only containment | Resolved; local rerun passed, remote rerun required |
-| RC-09 | Chrome reports an AbortError when rapid navigation intentionally cancels a native CSS View Transition | Browser release test | Informational browser event | Second remote CI passed navigation/fallback state but logged “Transition was skipped” | None | Record only this exact native cancellation separately; continue failing every other exception | Test false positive only | Native navigation already settled successfully | Resolved; remote rerun required |
+| RC-08 | Linux Chrome exceeded the case-study viewport at 200% text sizing | Case study / skip link | High accessibility defect when detected | First Phase 8 remote CI measured 413px content in a 390px viewport | None | Constrain skip/evidence links and use a zero-minimum grid track | Blocked the first release CI | CSS-only containment | Resolved; local and Linux CI reruns pass |
+| RC-09 | Chrome reports an AbortError when rapid navigation intentionally cancels a native CSS View Transition | Browser release test | Informational browser event | Second remote CI passed navigation/fallback state but logged “Transition was skipped” | None | Record only this exact native cancellation separately; continue failing every other exception | Test false positive only | Native navigation already settled successfully | Resolved; Linux CI rerun passes |
 
 Because unresolved High owner gates remain, Phase 8 cannot issue an unconditional GO. The accurate release recommendation is **CONDITIONAL GO — OWNER MANUAL AND CONTENT/CV GATES OUTSTANDING**. Production must remain unchanged until the owner records a disposition and separately gives the exact approval statement in `FINAL_OWNER_REVIEW.md`.
