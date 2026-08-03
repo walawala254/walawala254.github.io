@@ -33,6 +33,16 @@ const routes = [
   "404.html"
 ];
 
+const routeScreenshotNames = {
+  "index.html": "home",
+  "about.html": "about",
+  "services.html": "services",
+  "portfolio.html": "portfolio",
+  "contact.html": "contact",
+  "case-studies/transaction-monitoring/": "case-transaction-monitoring",
+  "404.html": "404"
+};
+
 const expectedCurrentPage = {
   "index.html": "index.html",
   "about.html": "about.html",
@@ -494,6 +504,65 @@ function assertResults(report) {
   if (!report.caseStudy.edgeGestureStayedOnPage) {
     failures.push("Case-study edge wheel input changed the page");
   }
+  for (const [check, passed] of Object.entries(report.caseStudy.sectionNavigation)) {
+    if (!passed) failures.push(`Case-study section navigation failed: ${check}`);
+  }
+  for (const [route, routeFailures] of Object.entries(
+    report.interactionAudit.focusByRoute
+  )) {
+    if (routeFailures.length) {
+      failures.push(`${route} has focus-indicator failures: ${routeFailures.join(", ")}`);
+    }
+  }
+  for (const [route, routeFailures] of Object.entries(
+    report.interactionAudit.targetSizeByRoute
+  )) {
+    if (routeFailures.length) {
+      failures.push(`${route} has targets below 24px: ${routeFailures.join(", ")}`);
+    }
+  }
+  for (const [route, resources] of Object.entries(
+    report.interactionAudit.resourcesByRoute
+  )) {
+    if (resources.three.length || resources.prototype.length) {
+      failures.push(`${route} requested Three.js or a prototype resource`);
+    }
+    if (route !== "index.html" && resources.gsap.length) {
+      failures.push(`${route} requested GSAP outside the homepage`);
+    }
+  }
+  if (!report.interactionAudit.hoverLayoutStable) {
+    failures.push("Portfolio hover changed component geometry");
+  }
+  if (!report.interactionAudit.activeLayoutStable) {
+    failures.push("Contact active state changed control geometry");
+  }
+  if (
+    !report.interactionAudit.revealFailureSafe.allVisible ||
+    !report.interactionAudit.revealFailureSafe.rootSafe ||
+    report.interactionAudit.revealFailureSafe.reason !== "observer-error"
+  ) {
+    failures.push("Reveal setup failure can leave content hidden");
+  }
+  for (const [route, result] of Object.entries(
+    report.interactionAudit.reducedMotionByRoute
+  )) {
+    if (!result.mediaMatches || !result.mainVisible || !result.allVisible) {
+      failures.push(`${route} is incomplete under reduced motion`);
+    }
+  }
+  for (const [route, result] of Object.entries(
+    report.interactionAudit.noJavaScriptByRoute
+  )) {
+    if (
+      !result.noRootClass ||
+      !result.mainVisible ||
+      !result.revealsVisible ||
+      !result.navigationPresent
+    ) {
+      failures.push(`${route} is incomplete without JavaScript`);
+    }
+  }
   for (const [check, passed] of Object.entries(report.navigationBehavior)) {
     if (!passed) failures.push(`Navigation behavior failed: ${check}`);
   }
@@ -613,8 +682,19 @@ async function main() {
       statusVisible: false,
       roleVisible: false,
       limitationsVisible: false,
+      sectionNavigation: {},
       hiddenImportantContent: [],
       edgeGestureStayedOnPage: false
+    };
+    const interactionAudit = {
+      focusByRoute: {},
+      targetSizeByRoute: {},
+      reducedMotionByRoute: {},
+      noJavaScriptByRoute: {},
+      resourcesByRoute: {},
+      hoverLayoutStable: false,
+      activeLayoutStable: false,
+      revealFailureSafe: false
     };
 
     await setViewport(client, 1440, 1000);
@@ -682,6 +762,11 @@ async function main() {
     for (const route of routes) {
       await navigate(client, `${baseUrl}/${route}`);
       results.desktop[route] = await inspectRoute(client);
+      await sleep(route === "index.html" ? 1_100 : 750);
+      await captureScreenshot(
+        client,
+        `phase6-${routeScreenshotNames[route]}-1440x1000.png`
+      );
 
       if (route === "index.html") {
         await sleep(500);
@@ -804,6 +889,11 @@ async function main() {
     for (const route of routes) {
       await navigate(client, `${baseUrl}/${route}`);
       results.mobile[route] = await inspectRoute(client);
+      await sleep(route === "index.html" ? 1_100 : 650);
+      await captureScreenshot(
+        client,
+        `phase6-${routeScreenshotNames[route]}-390x844.png`
+      );
 
       if (route === "portfolio.html") {
         await sleep(500);
@@ -878,6 +968,11 @@ async function main() {
       for (const route of routes) {
         await navigate(client, `${baseUrl}/${route}`);
         results[viewport.name][route] = await inspectRoute(client);
+        await sleep(route === "index.html" ? 1_100 : 650);
+        await captureScreenshot(
+          client,
+          `phase6-${routeScreenshotNames[route]}-${viewport.width}x${viewport.height}.png`
+        );
       }
 
       const viewportScreenshotNames = {
@@ -906,6 +1001,252 @@ async function main() {
       );
     }
 
+    await setViewport(client, 1440, 1000);
+    for (const route of routes) {
+      await navigate(client, `${baseUrl}/${route}`);
+      const routeInteractions = await evaluate(
+        client,
+        `(() => {
+          const elements = [...document.querySelectorAll('a[href], button:not([disabled])')]
+            .filter((element) => {
+              const style = getComputedStyle(element);
+              const rect = element.getBoundingClientRect();
+              return (
+                style.display !== 'none' &&
+                style.visibility !== 'hidden' &&
+                rect.width > 0 &&
+                rect.height > 0
+              );
+            });
+          const focusFailures = [];
+          const smallTargets = [];
+
+          for (const element of elements) {
+            element.focus({ preventScroll: true });
+            const style = getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            const hasOutline =
+              style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) >= 2;
+            const hasFocusShadow = style.boxShadow !== 'none';
+            if (document.activeElement !== element || (!hasOutline && !hasFocusShadow)) {
+              focusFailures.push(element.textContent.trim().replace(/\s+/g, ' ').slice(0, 80));
+            }
+            if (Math.min(rect.width, rect.height) < 24) {
+              smallTargets.push(element.textContent.trim().replace(/\s+/g, ' ').slice(0, 80));
+            }
+          }
+
+          return {
+            interactiveCount: elements.length,
+            focusFailures,
+            smallTargets,
+            resources: performance.getEntriesByType('resource').map((entry) => entry.name)
+          };
+        })()`
+      );
+      interactionAudit.focusByRoute[route] = routeInteractions.focusFailures;
+      interactionAudit.targetSizeByRoute[route] = routeInteractions.smallTargets;
+      interactionAudit.resourcesByRoute[route] = {
+        three: routeInteractions.resources.filter((name) => /three(?:-core|\.module|\.js)?/i.test(name)),
+        prototype: routeInteractions.resources.filter((name) => /prototype/i.test(name)),
+        gsap: routeInteractions.resources.filter((name) => /ScrollTrigger|gsap/i.test(name))
+      };
+    }
+
+    await navigate(client, `${baseUrl}/portfolio.html`);
+    await sleep(350);
+    await evaluate(
+      client,
+      `(() => {
+        document.documentElement.style.scrollBehavior = 'auto';
+        const row = document.querySelector('.featured-case__row');
+        row?.scrollIntoView({ block: 'center', behavior: 'instant' });
+        return Boolean(row);
+      })()`
+    );
+    await sleep(120);
+    const featuredBoundsBefore = await evaluate(
+      client,
+      `(() => {
+        const row = document.querySelector('.featured-case__row');
+        return row && {
+          x: row.offsetLeft,
+          y: row.offsetTop,
+          width: row.offsetWidth,
+          height: row.offsetHeight
+        };
+      })()`
+    );
+    const featuredPoint = await evaluate(
+      client,
+      `(() => {
+        const rect = document.querySelector('.featured-case__row')?.getBoundingClientRect();
+        return rect && { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      })()`
+    );
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mouseMoved",
+      x: featuredPoint.x,
+      y: featuredPoint.y
+    });
+    await sleep(320);
+    const featuredBoundsAfter = await evaluate(
+      client,
+      `(() => {
+        const row = document.querySelector('.featured-case__row');
+        return row && {
+          x: row.offsetLeft,
+          y: row.offsetTop,
+          width: row.offsetWidth,
+          height: row.offsetHeight
+        };
+      })()`
+    );
+    interactionAudit.hoverLayoutStable = ["x", "y", "width", "height"].every(
+      (key) => Math.abs(featuredBoundsBefore[key] - featuredBoundsAfter[key]) < 0.5
+    );
+    await captureScreenshot(client, "phase6-portfolio-project-hover.png");
+    await evaluate(
+      client,
+      `document.querySelector('.featured-case__actions a')?.focus({ preventScroll: true }); true`
+    );
+    await sleep(300);
+    await captureScreenshot(client, "phase6-portfolio-project-focus.png");
+
+    await navigate(client, `${baseUrl}/services.html`);
+    await sleep(350);
+    await evaluate(
+      client,
+      `(() => {
+        const target = document.querySelector('.service-card__action');
+        target?.scrollIntoView({ block: 'center', behavior: 'instant' });
+        target?.focus({ preventScroll: true });
+        return true;
+      })()`
+    );
+    await sleep(800);
+    await captureScreenshot(client, "phase6-services-action-focus.png");
+
+    await navigate(client, `${baseUrl}/contact.html`);
+    await sleep(350);
+    await evaluate(
+      client,
+      `(() => {
+        const target = document.querySelector('.contact-actions .btn.primary');
+        target?.addEventListener('click', (event) => event.preventDefault(), { once: true });
+        target?.focus({ preventScroll: true });
+        return true;
+      })()`
+    );
+    await sleep(500);
+    await captureScreenshot(client, "phase6-contact-action-focus.png");
+    const activeButton = await evaluate(
+      client,
+      `(() => {
+        const target = document.querySelector('.contact-actions .btn.primary');
+        const rect = target?.getBoundingClientRect();
+        return rect && {
+          point: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+          bounds: { x: rect.x, y: rect.y, width: rect.width, height: rect.height }
+        };
+      })()`
+    );
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mousePressed",
+      x: activeButton.point.x,
+      y: activeButton.point.y,
+      button: "left",
+      buttons: 1,
+      clickCount: 1
+    });
+    await captureScreenshot(client, "phase6-contact-action-active.png");
+    const activeBounds = await evaluate(
+      client,
+      `(() => {
+        const rect = document.querySelector('.contact-actions .btn.primary')?.getBoundingClientRect();
+        return rect && { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      })()`
+    );
+    interactionAudit.activeLayoutStable =
+      Math.abs(activeButton.bounds.width - activeBounds.width) < 0.5 &&
+      Math.abs(activeButton.bounds.height - activeBounds.height) < 0.5;
+    await client.send("Input.dispatchMouseEvent", {
+      type: "mouseReleased",
+      x: activeButton.point.x,
+      y: activeButton.point.y,
+      button: "left",
+      buttons: 0,
+      clickCount: 1
+    });
+
+    await navigate(client, `${baseUrl}/404.html`);
+    await sleep(350);
+    await evaluate(
+      client,
+      `document.querySelector('.hero-actions .btn.primary')?.focus({ preventScroll: true }); true`
+    );
+    await captureScreenshot(client, "phase6-404-recovery-focus.png");
+
+    const failureProbe = await client.send("Page.addScriptToEvaluateOnNewDocument", {
+      source: `window.IntersectionObserver = class {
+        constructor() { throw new Error('Phase 6 reveal failure probe'); }
+      };`
+    });
+    await navigate(client, `${baseUrl}/about.html`);
+    interactionAudit.revealFailureSafe = await evaluate(
+      client,
+      `(() => ({
+        allVisible: [...document.querySelectorAll('.reveal')].every((item) => {
+          const style = getComputedStyle(item);
+          return Number(style.opacity) > 0 && style.visibility === 'visible';
+        }),
+        rootSafe: !document.documentElement.classList.contains('reveal-ready'),
+        reason: window.__REVEAL_DIAGNOSTICS__?.reason
+      }))()`
+    );
+    await client.send("Page.removeScriptToEvaluateOnNewDocument", {
+      identifier: failureProbe.identifier
+    });
+
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "reduce" }]
+    });
+    for (const route of routes) {
+      await navigate(client, `${baseUrl}/${route}`);
+      interactionAudit.reducedMotionByRoute[route] = await evaluate(
+        client,
+        `(() => ({
+          allVisible: [...document.querySelectorAll('.reveal')].every((item) => {
+            const style = getComputedStyle(item);
+            return Number(style.opacity) > 0 && style.visibility === 'visible';
+          }),
+          mainVisible: Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+          mediaMatches: matchMedia('(prefers-reduced-motion: reduce)').matches
+        }))()`
+      );
+    }
+    await client.send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "no-preference" }]
+    });
+
+    await client.send("Emulation.setScriptExecutionDisabled", { value: true });
+    for (const route of routes) {
+      await client.send("Page.navigate", { url: `${baseUrl}/${route}` });
+      await sleep(350);
+      interactionAudit.noJavaScriptByRoute[route] = await evaluate(
+        client,
+        `(() => ({
+          noRootClass: !document.documentElement.classList.contains('js'),
+          mainVisible: Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+          revealsVisible: [...document.querySelectorAll('.reveal')].every((item) =>
+            Number(getComputedStyle(item).opacity) > 0
+          ),
+          navigationPresent: document.querySelectorAll('.nav-links a[href]').length === 5
+        }))()`
+      );
+    }
+    await client.send("Emulation.setScriptExecutionDisabled", { value: false });
+
     await setViewport(client, 390, 844, true);
     await navigate(client, `${baseUrl}/index.html`);
     const menuTest = await evaluate(
@@ -933,6 +1274,15 @@ async function main() {
           focusReturned: document.activeElement === toggle
         };
       })()`
+    );
+    await evaluate(
+      client,
+      `document.querySelector('.nav-toggle')?.click(); true`
+    );
+    await captureScreenshot(client, "phase6-mobile-menu-open-390x844.png");
+    await evaluate(
+      client,
+      `document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); true`
     );
     await evaluate(client, "document.activeElement?.blur(); true");
     await sleep(1200);
@@ -1262,6 +1612,7 @@ async function main() {
       client,
       `${baseUrl}/case-studies/transaction-monitoring/`
     );
+    await sleep(350);
     const caseInspection = await evaluate(
       client,
       `(() => {
@@ -1288,6 +1639,28 @@ async function main() {
     caseStudy.statusVisible = caseInspection.statusVisible;
     caseStudy.roleVisible = caseInspection.roleVisible;
     caseStudy.limitationsVisible = caseInspection.limitationsVisible;
+
+    await evaluate(
+      client,
+      `document.querySelector('[data-section-navigation] a[href="#evidence"]')?.click(); true`
+    );
+    await sleep(1_800);
+    caseStudy.sectionNavigation = await evaluate(
+      client,
+      `(() => ({
+        hashUpdated: location.hash === '#evidence',
+        currentTarget:
+          document.querySelector('[data-section-navigation] [aria-current="location"]')?.hash === '#evidence',
+        singleCurrent:
+          document.querySelectorAll('[data-section-navigation] [aria-current="location"]').length === 1,
+        observerActive: window.__CASE_NAV_DIAGNOSTICS__?.observing === true
+      }))()`
+    );
+    await evaluate(
+      client,
+      `document.querySelector('.evidence-ledger a')?.focus({ preventScroll: true }); true`
+    );
+    await captureScreenshot(client, "phase6-case-evidence-link-focus.png");
 
     caseStudy.resources.initialRequests = await evaluate(
       client,
@@ -1893,6 +2266,7 @@ async function main() {
       reducedMotion,
       homepage,
       caseStudy,
+      interactionAudit,
       navigationBehavior,
       transitionBehavior,
       consoleErrors: [...new Set(consoleErrors)],

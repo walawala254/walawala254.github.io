@@ -45,6 +45,14 @@ const productionEvidencePages = [
   "portfolio.html",
   "case-studies/transaction-monitoring/index.html"
 ];
+const internalRouteFiles = [
+  "about.html",
+  "services.html",
+  "portfolio.html",
+  "contact.html",
+  "case-studies/transaction-monitoring/index.html",
+  "404.html"
+];
 const prohibitedPlaceholderPattern =
   /\b(?:lorem ipsum|coming soon|tbd|todo|built\s*\/\s*proposed|best-in-class|world-class|enterprise-grade|revolutionary)\b/i;
 const navigationLabels = ["Home", "About", "Services", "Portfolio", "Contact"];
@@ -151,6 +159,28 @@ if (
 ) {
   throw new Error("The reduced-motion-aware native route transition is missing.");
 }
+if (
+  !motionStyles.includes(".js.reveal-ready .reveal") ||
+  !motionStyles.includes(".js.reveal-ready .reveal.is-visible")
+) {
+  throw new Error("Reveal styles must hide content only after observer setup succeeds.");
+}
+
+const revealSource = await readFile(
+  path.join(projectRoot, "src/scripts/reveal.js"),
+  "utf8"
+);
+for (const requirement of [
+  'classList.add("reveal-ready")',
+  'addEventListener("pagehide"',
+  'addEventListener("pageshow"',
+  '"bfcache-restore"',
+  '"reduced-motion"'
+]) {
+  if (!revealSource.includes(requirement)) {
+    throw new Error(`The reveal lifecycle is missing ${requirement}.`);
+  }
+}
 
 const prototypeStyles = await readFile(
   path.join(projectRoot, "src/styles/prototypes.css"),
@@ -218,6 +248,22 @@ for (const file of productionEvidencePages) {
   }
 }
 
+for (const file of internalRouteFiles) {
+  const html = await readFile(path.join(outputRoot, file), "utf8");
+  const pageAssetPattern = /(?:href|src)="(\/assets\/[^\"]+\.(?:js|css))"/g;
+  const assets = [...new Set([...html.matchAll(pageAssetPattern)].map((match) => match[1]))];
+
+  for (const asset of assets.filter((entry) => entry.endsWith(".js"))) {
+    const source = await readFile(path.join(outputRoot, asset.slice(1)), "utf8");
+    if (/three-core|from\s*["']three(?:\/|["'])/i.test(source)) {
+      throw new Error(`${file} imports Three.js through ${asset}.`);
+    }
+    if (/ScrollTrigger|gsap-core|registerPlugin/i.test(source)) {
+      throw new Error(`${file} imports GSAP or ScrollTrigger through ${asset}.`);
+    }
+  }
+}
+
 const portfolio = await readFile(path.join(outputRoot, "portfolio.html"), "utf8");
 const portfolioProjects = (portfolio.match(/data-portfolio-project/g) || []).length;
 const portfolioStatuses = (portfolio.match(/data-project-status-label/g) || []).length;
@@ -254,6 +300,23 @@ if (!transactionCase.includes("My role") || !transactionCase.includes("data-case
 }
 if (!transactionCase.includes("synthetic") || !transactionCase.includes("fully anonymised")) {
   throw new Error("Transaction-monitoring case study must state its data boundary.");
+}
+if (
+  !transactionCase.includes("data-section-navigation") ||
+  !sourceEntry.includes('import { initCaseNavigation }') ||
+  !sourceEntry.includes("initCaseNavigation();")
+) {
+  throw new Error("The case study must include its route-scoped section orientation module.");
+}
+
+const services = await readFile(path.join(outputRoot, "services.html"), "utf8");
+if ((services.match(/class="service-card__action"/g) || []).length !== 8) {
+  throw new Error("Every service area must expose one directional inquiry link.");
+}
+
+const about = await readFile(path.join(outputRoot, "about.html"), "utf8");
+if (!about.includes('class="section internal-close"')) {
+  throw new Error("The About page must retain its selected-work and contact route.");
 }
 
 const assetRegister = await readFile(path.join(projectRoot, "ASSET_REGISTER.md"), "utf8");
