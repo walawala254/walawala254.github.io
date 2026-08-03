@@ -1,16 +1,17 @@
 # Open-Source Attributions
 
-The current redesign foundation uses one direct build dependency and two isolated prototype runtime dependencies. No code or media from the Lando Norris website is used.
+The current redesign foundation uses one build dependency, one development-only accessibility audit dependency and two isolated prototype runtime dependencies. No code or media from the Lando Norris website is used.
 
 ## Development dependency
 
 | Component | Version | Use | Licence | Source |
 | --- | --- | --- | --- | --- |
 | Vite | 8.1.5 | Multi-page development server and production build pipeline | MIT | [vitejs/vite](https://github.com/vitejs/vite) |
+| axe-core | 4.12.1 | Development-only WCAG A/AA audit injected into a local preview browser; not imported or bundled by production source | MPL-2.0 | [dequelabs/axe-core](https://github.com/dequelabs/axe-core) |
 
-Vite is a development dependency and is not loaded as an application runtime library. Its transitive dependency versions and integrity hashes are fixed by `package-lock.json`; their package metadata remains available under `node_modules` after `npm ci`.
+Vite and axe-core are development dependencies and are not loaded as application runtime libraries. Exact dependency versions and integrity hashes are fixed by `package-lock.json`; package metadata remains available under `node_modules` after `npm ci`.
 
-The lockfile metadata review recorded 49 transitive/optional package entries: 33 MIT, 12 MPL-2.0, one Apache-2.0, one ISC, one BSD-3-Clause, and one 0BSD. These are build-time packages rather than browser runtime dependencies. Their complete licence texts remain in their installed packages and upstream distributions.
+The Phase 7 lockfile review recorded 52 package entries excluding the root project: 34 MIT, 13 MPL-2.0, one Apache-2.0, one GreenSock Standard no-charge licence, one ISC, one BSD-3-Clause, and one 0BSD. Their complete licence texts remain in their installed packages and upstream distributions.
 
 ## Motion and rendering prototype dependencies
 
@@ -29,7 +30,7 @@ No Codrops repository, demo, dependency, source file, scene, shader, camera path
 
 Phase 3 reuses the installed GSAP 3.15.0 package and its included ScrollTrigger plugin for the homepage introduction, hero hierarchy, Risk Intelligence Core, story states and evidence-frame choreography. The implementation uses `gsap.context()`, `gsap.matchMedia()` and explicit teardown following the pinned GSAP Skills guidance above. No dependency version changes in Phase 3.
 
-Three.js remains restricted to the isolated prototype routes and is not imported, preloaded or requested by the homepage. Font Awesome remains on existing internal pages, but Phase 3 removes it from the homepage request graph and uses a project-authored CSS navigation glyph instead.
+Three.js remains restricted to the isolated prototype routes and is not imported, preloaded or requested by the homepage. Production pages use project-authored CSS/SVG marks and no Font Awesome runtime.
 
 ## Phase 4 evidence sources
 
@@ -50,12 +51,14 @@ Phase 5 adds no dependency and copies no third-party implementation. The route t
 
 The CI workflow grants only `contents: read` and contains no deployment step or secret.
 
-## Existing externally hosted resources
+## Phase 7 transient audit tooling
 
-| Resource | Version/request | Use | Licence | Source |
+These tools were executed through the local npm cache for a controlled audit or one-off conversion and were not added to `package.json`, the lockfile or the production bundle.
+
+| Tool | Version | Use | Licence | Source |
 | --- | --- | --- | --- | --- |
-| Inter | Google Fonts request | Existing primary interface font | SIL Open Font License 1.1 | [rsms/inter](https://github.com/rsms/inter) |
-| JetBrains Mono | Google Fonts request | Existing monospace accent font | SIL Open Font License 1.1 | [JetBrains/JetBrainsMono](https://github.com/JetBrains/JetBrainsMono) |
-| Font Awesome Free | 6.5.2 from cdnjs | Existing interface icons | Icons: CC BY 4.0; fonts: SIL OFL 1.1; code: MIT | [Font Awesome Free licence](https://fontawesome.com/license/free) |
+| Lighthouse | 13.4.1 | Repeated local mobile and desktop performance/accessibility/best-practices/SEO measurements | Apache-2.0 | [GoogleChrome/lighthouse](https://github.com/GoogleChrome/lighthouse) |
+| sharp-cli | 5.2.0 | One-off approved portrait resize and WebP conversion | MIT | [vseventer/sharp-cli](https://github.com/vseventer/sharp-cli) |
+| sharp | 0.35.3 | Image processing engine used by sharp-cli | Apache-2.0 | [lovell/sharp](https://github.com/lovell/sharp) |
 
-These three resources were already linked by the version-two pages and are not newly downloaded or bundled in Phase 1. Their availability and privacy implications should be reassessed during the performance and accessibility phase.
+Phase 7 removes the former Inter, JetBrains Mono and Font Awesome CDN requests. System font stacks and project-authored marks now cover those roles, so ordinary public-route loading has no remote font or icon dependency.

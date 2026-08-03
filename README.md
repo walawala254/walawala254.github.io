@@ -30,6 +30,7 @@ Available commands:
 - `npm run dev` starts the development server.
 - `npm run build` builds every HTML route and validates the generated routes and local assets.
 - `npm run preview` serves the production build locally, normally at `http://localhost:4173/`.
+- `npm run test:a11y` runs the local axe-core WCAG A/AA audit against a separately running preview server.
 - `npm run test:browser` runs the dependency-free Edge/Chrome smoke test against a separately running preview server.
 - `npm run test:prototypes` runs the isolated SVG, Canvas 2D, and Three.js lifecycle and responsive smoke tests against a separately running preview server.
 - `npm run validate:build` validates an existing `dist` directory.
@@ -106,9 +107,22 @@ Before production approval, the owner should complete this manual checklist:
 - TalkBack: repeat the reading and activation order on Android; verify touch exploration reaches every action once and no decorative motif is announced.
 - Keyboard-only desktop: use the skip link, open/close the menu at its collapsed breakpoint, traverse every route and action, follow case-study hashes, use Back/Forward, and confirm focus remains visible.
 
-Known limits: native Safari/iOS/Android rendering, real battery or thermal behavior, VoiceOver and TalkBack announcements have not been validated by desktop emulation. The quarantined `contact.jpg` and `services.jpg` remain baseline assets pending rights clearance and replacement approval.
+Known limits: native Safari/iOS/Android rendering, real battery or thermal behavior, VoiceOver and TalkBack announcements have not been validated by desktop emulation. The quarantined `contact.jpg` and `services.jpg` remain recoverable source files but Phase 7 removes them from the generated production graph.
 
 Against the Phase 5 commit `4e9c6d9`, the final Phase 6 build remains at 31 files and grows from 1,129,615 B to 1,151,967 B (+22,352 B). Shared internal JavaScript grows from 2,230 B raw / about 1.10 kB gzip to 3,843 B raw / 1,522 B gzip; shared CSS grows from 26,659 B raw / about 5.86 kB gzip to 31,623 B raw / 6,622 B gzip. The homepage JavaScript request map is 124,954 B raw / 48,452 B gzip including the shared entry, compared with 123,215 B raw / about 48.31 kB gzip in Phase 5. Image payload remains 192,997 B, route request counts are unchanged, and there is no new production media or runtime dependency. Browser resource inspection confirms ScrollTrigger only on the homepage and zero Three.js or prototype requests on production routes.
+
+## Phase 7 release hardening
+
+Phase 7 keeps the approved visual direction while hardening delivery and release evidence:
+
+- System font stacks replace automatic Google Fonts and Font Awesome requests. Ordinary page loads therefore disclose no visitor IP address to a font or icon CDN and remain typographically complete when third-party resources fail.
+- The approved portrait is delivered as a 65,954 B WebP with the 162,377 B JPEG retained as a compatible fallback and social preview. Both formats have explicit dimensions to prevent layout shift.
+- Quarantined `contact.jpg` and `services.jpg` files remain in recoverable source history but are absent from HTML, CSS, the generated production graph and ordinary requests. Original inline SVG explanations replace their former production roles.
+- A synchronous `js` enhancement marker is set in each public document head. This prevents the mobile navigation from changing document flow when the deferred module initializes, while no-JavaScript visitors still receive complete navigation.
+- Public routes use one H1, semantic header/main/footer landmarks, an early skip link, explicit image dimensions, labelled explanatory SVGs and source-authored metadata. Text and controls reflow at 200% without horizontal document overflow.
+- Build validation rejects trackers, mixed-content assets, unsafe new-tab links, quarantined image references, automatic external assets, local filesystem paths and invalid structured data.
+
+`axe-core` is a development-only audit dependency; it is injected into a local browser session by `npm run test:a11y` and is never imported by production source. Automated results are release evidence, not a replacement for VoiceOver, TalkBack, NVDA, Safari or physical-device checks. Follow [RELEASE_TEST_CHECKLIST.md](RELEASE_TEST_CHECKLIST.md) before approving production. Detailed automated findings, request budgets and remaining manual blockers are recorded in [RELEASE_READINESS.md](RELEASE_READINESS.md).
 
 ## Motion and 3D prototype lab
 
@@ -134,9 +148,9 @@ The lab compares three isolated implementations of the same transaction-signal n
 
 ## Asset and open-source policy
 
-No current image is deleted or replaced in Phase 1. [ASSET_REGISTER.md](ASSET_REGISTER.md) records use, file size, known provenance, rights status, and replacement intent. Assets without confirmed rights remain provisional or quarantined and must not be reused outside the current controlled baseline without review.
+No baseline image is deleted. [ASSET_REGISTER.md](ASSET_REGISTER.md) records use, file size, known provenance, rights status, and replacement intent. Assets without confirmed rights remain provisional or quarantined; Phase 7 excludes all unclear non-portrait raster assets from the generated production graph.
 
-Do not add images, models, textures, fonts, audio, or copied proprietary code without documenting their source, licence, and permitted use. [OPEN_SOURCE_ATTRIBUTIONS.md](OPEN_SOURCE_ATTRIBUTIONS.md) records the direct development dependency, CI actions, and retained externally hosted front-end resources.
+Do not add images, models, textures, fonts, audio, or copied proprietary code without documenting their source, licence, and permitted use. [OPEN_SOURCE_ATTRIBUTIONS.md](OPEN_SOURCE_ATTRIBUTIONS.md) records direct dependencies, audit tooling and CI actions. Production routes no longer fetch hosted fonts or icon libraries.
 
 ## Future Three.js policy
 
@@ -145,6 +159,12 @@ Three.js is installed only for the approved isolated comparison. The procedural 
 ## Production and rollback
 
 `npm run build` writes a disposable local artifact to `dist/`; it does not deploy. Preserve any uncommitted user work and use a separate worktree to inspect a rollback point without rewriting shared history.
+
+The pre-Phase-7 state is commit `7ca0d6428199e6f747c461e0103b0e385a52efa0`. Inspect it without changing the redesign branch:
+
+```powershell
+git worktree add ..\portfolio-phase6-rollback 7ca0d6428199e6f747c461e0103b0e385a52efa0
+```
 
 The pre-Phase-6 state is commit `4e9c6d90428d31f1da7053fbed87eb75a436353d`. Inspect it without changing the redesign branch:
 

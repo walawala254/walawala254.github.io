@@ -58,7 +58,7 @@ Risk meaning must never depend on colour alone. Pair state colour with readable 
 
 ## Typography
 
-Inter remains the display and body family because it is readable across interfaces and editorial sizes, is already integrated, and uses the SIL Open Font License. JetBrains Mono remains limited to short data labels, indexes, metadata, and system states under the same licence. No new font is introduced.
+The primary stack is local-first: `Segoe UI Variable`, Aptos, `Segoe UI`, and platform system UI fallbacks. The technical-label stack uses `Cascadia Code`, `SFMono-Regular`, Consolas and platform monospace fallbacks. No font is downloaded, required for meaning or fetched from a third party during ordinary loading. Type metrics and viewport-constrained display sizes are tested against these fallbacks at 200% text size.
 
 | Level | Token or selector | Use |
 | --- | --- | --- |
@@ -211,7 +211,7 @@ The Phase 3 opening sequence is session-scoped, skippable, hidden by default in 
 ## Accessibility
 
 - Primary, secondary, muted, accent, and semantic state text must maintain WCAG AA contrast on their intended dark surfaces.
-- Token verification records a minimum text contrast of 6.35:1 (`--color-text-muted` on the elevated surface); primary focus contrast is 16.06:1 or higher on the same surface.
+- Token verification records a minimum intended text contrast of 5.98:1 (`--color-text-muted` on the subtle surface); primary focus contrast is 15.12:1 or higher on the same surface.
 - Global `:focus-visible` uses a two-pixel high-contrast ring with four-pixel offset.
 - Touch targets are at least 44px high.
 - Heading order, landmarks, skip link, screen-reader utility, alt text, and static navigation are preserved.
@@ -219,6 +219,7 @@ The Phase 3 opening sequence is session-scoped, skippable, hidden by default in 
 - Decorative motifs use existing `aria-hidden` containers or CSS pseudo-elements.
 - Status text remains visible alongside colour and marker shape.
 - Content and focus must remain usable at 200% zoom and 320px viewport width without global overflow suppression.
+- Automated axe-core WCAG A/AA scans, source validation and browser checks are release gates, with native screen-reader and device checks retained as manual gates.
 
 ## Responsive principles
 
@@ -230,6 +231,16 @@ The Phase 3 opening sequence is session-scoped, skippable, hidden by default in 
 - Large desktops retain readable line lengths rather than stretching content to the viewport.
 
 Never fix overflow by hiding it globally. Repair the component that exceeds its container.
+
+## Delivery and performance
+
+- Production routes load no automatic third-party font, icon, tracking or analytics resource.
+- Images require explicit `width` and `height`; responsive alternatives use `<picture>` while retaining meaningful fallback alt text.
+- Approved raster derivatives preserve their source governance status and are recorded in `ASSET_REGISTER.md`. Quarantined files must remain outside HTML, CSS and generated build assets.
+- Homepage GSAP and ScrollTrigger chunks remain route-specific. Three.js stays isolated to the unlinked prototype lab and must not preload on a public route.
+- Production routes use no persistent animation frame. Observers and GSAP contexts must disconnect or revert on `pagehide`; document-hidden states pause coordinated homepage motion.
+- Filters, shadows and sticky positioning stay bounded to small elements. Backdrop blur, large animated filters, layout-property animation and decorative perpetual movement are not approved patterns.
+- JavaScript enhances already-visible content. Failure of animation, observer, image, font, external evidence link or WebGL must not remove navigation, core content or recovery routes.
 
 ## Correct use
 
