@@ -697,6 +697,7 @@ async function main() {
     await client.connect();
 
     const consoleErrors = [];
+    const nativeTransitionCancellations = [];
     const environmentErrors = [];
     const expectedResourceOrigins = new Set([
       new URL(baseUrl).origin,
@@ -710,6 +711,10 @@ async function main() {
       const location = details.url
         ? ` (${details.url}:${(details.lineNumber || 0) + 1})`
         : "";
+      if (/^AbortError: Transition was skipped\b/.test(description)) {
+        nativeTransitionCancellations.push(`${description}${location}`);
+        return;
+      }
       consoleErrors.push(`exception: ${description}${location}`);
     });
     client.on("Runtime.consoleAPICalled", (event) => {
@@ -2534,6 +2539,9 @@ async function main() {
       navigationBehavior,
       transitionBehavior,
       consoleErrors: [...new Set(consoleErrors)],
+      nativeTransitionCancellations: [
+        ...new Set(nativeTransitionCancellations)
+      ],
       environmentErrors: [...new Set(environmentErrors)],
       screenshots: screenshotDirectory
     };
