@@ -1,0 +1,27 @@
+{
+  "name": "dave-bryson-portfolio",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run validate:build",
+    "preview": "vite preview",
+    "test:a11y": "node scripts/accessibility-audit.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "test:html": "node scripts/html-standard-validation.mjs",
+    "test:prototypes": "node scripts/prototype-smoke.mjs",
+    "validate:build": "node scripts/validate-build.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.12.1",
+    "vite": "8.1.5"
+  },
+  "dependencies": {
+    "gsap": "3.15.0",
+    "three": "0.185.1"
+  }
+}

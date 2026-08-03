@@ -1,0 +1,177 @@
+.btn,
+.nav-btn,
+.nav-toggle,
+.nav-links a,
+.project-card a,
+.contact-list a,
+.footer-links a,
+.service-card,
+.service-card__action {
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-standard) var(--ease-standard),
+        border-color var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn:hover,
+    .nav-btn:hover {
+        transform: translateY(calc(var(--hover-shift) * -1));
+    }
+
+    .btn.primary:hover {
+        background: var(--color-focus);
+    }
+
+    .btn.secondary:hover,
+    .nav-btn:hover {
+        border-color: var(--color-accent-primary);
+        background: var(--color-accent-wash);
+    }
+
+    .btn.tertiary:hover,
+    .btn.icon-action:hover {
+        color: var(--color-text-primary);
+        border-color: var(--color-border-strong);
+    }
+
+    .btn.text-action:hover,
+    .project-card a:hover {
+        color: var(--color-accent-primary);
+    }
+
+    .nav-links a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    .service-card:hover {
+        border-top-color: var(--color-accent-primary);
+        background: var(--color-background-subtle);
+    }
+
+    .contact-list a:hover,
+    .footer-links a:hover {
+        color: var(--color-accent-primary);
+    }
+}
+
+.btn:active,
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+.js.reveal-ready .reveal {
+    opacity: 0;
+    transform: translateY(0.875rem);
+}
+
+.js.reveal-ready .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity var(--duration-reveal) var(--ease-emphasized) var(--reveal-delay, 0ms),
+        transform var(--duration-reveal) var(--ease-emphasized) var(--reveal-delay, 0ms);
+}
+
+/*
+ * Same-origin document navigation progressively enhances to a short
+ * detection-bracket route exchange. Unsupported browsers keep ordinary navigation.
+ */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    .site-header {
+        view-transition-name: circuit-navigation;
+    }
+
+    main {
+        view-transition-name: circuit-page;
+    }
+
+    ::view-transition-group(circuit-navigation),
+    ::view-transition-group(circuit-page) {
+        animation-duration: var(--duration-standard);
+        animation-timing-function: var(--ease-standard);
+    }
+
+    ::view-transition-image-pair(circuit-page),
+    ::view-transition-new(circuit-page) {
+        background: var(--color-background);
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(circuit-navigation) {
+        animation: circuit-navigation-out var(--duration-fast) ease-out both;
+    }
+
+    ::view-transition-new(circuit-navigation) {
+        animation: circuit-navigation-in var(--duration-standard) var(--ease-standard) both;
+    }
+
+    ::view-transition-old(circuit-page) {
+        animation: circuit-page-out var(--duration-standard) var(--ease-standard) both;
+    }
+
+    ::view-transition-new(circuit-page) {
+        animation: circuit-page-in var(--duration-standard) var(--ease-emphasized) both;
+    }
+}
+
+@keyframes circuit-navigation-out {
+    to {
+        opacity: 0.72;
+    }
+}
+
+@keyframes circuit-navigation-in {
+    from {
+        opacity: 0.72;
+    }
+}
+
+@keyframes circuit-page-out {
+    to {
+        clip-path: inset(0 50%);
+    }
+}
+
+@keyframes circuit-page-in {
+    from {
+        clip-path: inset(0 50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+
+    .js .reveal,
+    .js.reveal-ready .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 48rem) {
+    .js.reveal-ready .reveal {
+        transform: translateY(0.5rem);
+    }
+}

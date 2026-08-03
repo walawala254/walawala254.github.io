@@ -1,0 +1,128 @@
+.container,
+.nav-shell {
+    width: min(
+        calc(100% - (var(--page-gutter) * 2)),
+        var(--container-standard)
+    );
+    margin-inline: auto;
+}
+
+.container-wide,
+.media-full {
+    width: min(
+        calc(100% - (var(--page-gutter) * 2)),
+        var(--container-wide)
+    );
+    margin-inline: auto;
+}
+
+.hero-section,
+.page-hero,
+.contact-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(var(--space-8), 9vw, var(--space-10));
+}
+
+.hero-section {
+    min-height: calc(100svh - var(--header-height));
+    display: grid;
+    align-items: center;
+    padding-block: clamp(var(--space-7), 6.5vw, var(--space-9));
+}
+
+.hero-grid,
+.page-hero-grid,
+.contact-grid,
+.split-grid,
+.grid-two,
+.editorial-split {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.82fr);
+    align-items: center;
+    gap: clamp(var(--space-7), 6vw, var(--space-9));
+}
+
+.hero-grid > *,
+.page-hero-grid > *,
+.contact-grid > *,
+.split-grid > *,
+.grid-two > *,
+.editorial-split > * {
+    min-width: 0;
+}
+
+.home-page .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.7fr);
+}
+
+.grid-three,
+.metrics-grid,
+.about-grid,
+.skill-matrix {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metrics-grid,
+.about-grid,
+.skill-matrix,
+.service-grid,
+.project-grid {
+    gap: var(--grid-gap);
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    counter-reset: service;
+}
+
+.project-grid,
+.project-index {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+.section {
+    position: relative;
+    padding-block: var(--section-space);
+}
+
+.section-heading {
+    max-width: 54rem;
+    margin-bottom: var(--space-7);
+}
+
+.section-heading::after {
+    display: block;
+    width: clamp(5rem, 14vw, 11rem);
+    height: var(--border-thin);
+    margin-top: var(--space-5);
+    background: linear-gradient(
+        90deg,
+        var(--color-accent-primary),
+        var(--color-border-signal),
+        transparent
+    );
+    content: "";
+}
+
+.split-section {
+    border-block: var(--border-thin) solid var(--color-border);
+    background: var(--color-background-elevated);
+}
+
+.page-hero.compact {
+    padding-bottom: clamp(var(--space-7), 5vw, var(--space-8));
+}
+
+.contact-grid {
+    min-height: calc(100svh - var(--header-height) - var(--space-8));
+}
+
+.mobile-stack {
+    min-width: 0;
+}

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("js");</script>
+    <title>Transaction Monitoring Engine Case Study | Dave Bryson</title>
+    <meta name="description" content="How Dave Bryson designed a governed, file-based transaction-monitoring prototype that turns synthetic payment data into explainable investigation alerts." />
+    <meta name="theme-color" content="#080b0d" />
+    <link rel="canonical" href="https://walawala254.github.io/case-studies/transaction-monitoring/" />
+    <meta property="og:title" content="Transaction Monitoring Engine Case Study | Dave Bryson" />
+    <meta property="og:description" content="An evidence-led case study covering monitoring logic, data quality, alert consolidation, analyst outputs, testing and honest MVP limitations." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://walawala254.github.io/case-studies/transaction-monitoring/" />
+    <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
+    <meta property="og:image:alt" content="Portrait of Dave Bryson" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/style.css?v=2.3" />
+    <link rel="stylesheet" href="/src/styles/portfolio.css?v=4.0" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            "name": "From uploaded payment signals to explainable investigation alerts",
+            "headline": "Payouts Transaction Monitoring Engine MVP case study",
+            "url": "https://walawala254.github.io/case-studies/transaction-monitoring/",
+            "author": {
+                "@type": "Person",
+                "name": "Dave Bryson",
+                "url": "https://walawala254.github.io/"
+            },
+            "isBasedOn": "https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp",
+            "about": [
+                "Transaction monitoring",
+                "Payments risk",
+                "Fraud operations",
+                "Data quality",
+                "Risk governance"
+            ]
+        }
+    </script>
+    <script type="module" src="/script.js?v=2.4"></script>
+</head>
+<body class="case-study-page">
+    <a class="skip-link" href="#main">Skip to case study</a>
+
+    <header class="site-header">
+        <nav class="nav-shell" aria-label="Primary navigation">
+            <a class="brand" href="/index.html" aria-label="Dave Bryson home">
+                <span class="brand-mark">DB</span>
+                <span class="brand-copy"><strong>Dave Bryson</strong><small>Risk + Data</small></span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="nav-toggle__glyph" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+            <div class="nav-panel" id="primary-menu">
+                <ul class="nav-links">
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/services.html">Services</a></li>
+                    <li><a href="/portfolio.html" aria-current="page">Portfolio</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="case-hero" aria-labelledby="case-title">
+            <div class="container-wide">
+                <nav class="breadcrumbs" aria-label="Breadcrumb">
+                    <ol>
+                        <li><a href="/portfolio.html">Portfolio</a></li>
+                        <li aria-current="page">Transaction monitoring</li>
+                    </ol>
+                </nav>
+
+                <div class="case-hero__layout">
+                    <div>
+                        <p class="portfolio-index">Case 01 / Transaction monitoring</p>
+                        <span class="project-status project-status--prototype" data-case-status><span aria-hidden="true"></span>Functional prototype · Hosted synthetic demo</span>
+                        <h1 id="case-title">From uploaded payment signals to explainable investigation alerts.</h1>
+                    </div>
+                    <div class="case-hero__summary">
+                        <p>A governed, file-based Streamlit workbench for demonstrating how payment activity can be validated, evaluated and organised for human investigation.</p>
+                        <p>It is an early-stage analyst-support MVP—not a real-time decision engine, autonomous fraud blocker, certified scheme product or production case-management platform.</p>
+                        <div class="case-hero__actions">
+                            <a class="btn primary" href="https://walawala254-payouts-transaction-monitoring-engine-mv-app-duyz9q.streamlit.app" target="_blank" rel="noopener noreferrer">Open the hosted demo <span class="sr-only">(opens in a new tab; Streamlit sign-in may be required)</span></a>
+                            <a class="btn secondary" href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp" target="_blank" rel="noopener noreferrer">Inspect the repository <span class="sr-only">(opens in a new tab)</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <dl class="case-facts" aria-label="Project facts">
+                    <div><dt>Status</dt><dd>Functional prototype with a hosted synthetic demo</dd></div>
+                    <div><dt>My role</dt><dd>Monitoring logic, workflow, interface, documentation and tests</dd></div>
+                    <div><dt>Primary users</dt><dd>Risk analysts, rule administrators and reviewers</dd></div>
+                    <div><dt>Data boundary</dt><dd>Synthetic or fully anonymised data only</dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <div class="container-wide case-study-shell">
+            <aside class="case-toc" aria-labelledby="case-toc-title">
+                <h2 id="case-toc-title">On this page</h2>
+                <nav aria-label="Case study sections" data-section-navigation>
+                    <ol>
+                        <li><a href="#summary">Executive summary</a></li>
+                        <li><a href="#problem">Problem and users</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#approach">Approach</a></li>
+                        <li><a href="#decisions">Decisions and trade-offs</a></li>
+                        <li><a href="#evidence">Evidence and testing</a></li>
+                        <li><a href="#limitations">Limitations</a></li>
+                        <li><a href="#next">Lessons and next iteration</a></li>
+                    </ol>
+                </nav>
+            </aside>
+
+            <div class="case-study-content">
+                <section class="case-section reveal" id="summary" aria-labelledby="summary-title">
+                    <div class="case-section__index">01 / Executive summary</div>
+                    <div class="case-section__body">
+                        <h2 id="summary-title">A monitoring workbench built around explainability.</h2>
+                        <p>The project explores a practical question: how can a small risk team turn an uploaded transaction file into a reviewable monitoring run without hiding the reasoning inside a black box?</p>
+                        <p>I designed and built the MVP across the Python processing layer, governed rule configuration, Streamlit interface, analyst outputs, documentation and regression tests. The repository is public under the MIT licence, and the hosted application is intentionally limited to synthetic or fully anonymised demonstrations.</p>
+                        <p>The demonstrated value is structural rather than a claimed business outcome: source rows are checked before evaluation, monitoring rules expose their purpose and thresholds, related hits become investigation alerts, and the analyst can trace an alert back to supporting evidence.</p>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="problem" aria-labelledby="problem-title">
+                    <div class="case-section__index">02 / Problem and users</div>
+                    <div class="case-section__body">
+                        <h2 id="problem-title">A rule hit is not yet an investigation.</h2>
+                        <p>Transaction-monitoring work becomes difficult when data arrives in inconsistent files, rule settings vary by merchant or MID, and raw matches create workload without explaining what should be reviewed. A useful analyst tool must separate data-quality problems from risk indicators and monitoring signals from preventive limits.</p>
+                        <div class="case-columns">
+                            <div>
+                                <h3>Who the prototype is for</h3>
+                                <ul class="case-list">
+                                    <li>Transaction-monitoring analysts reviewing synthetic runs</li>
+                                    <li>Risk operations teams inspecting workload and concentration</li>
+                                    <li>Rule administrators comparing current and proposed settings</li>
+                                    <li>Reviewers who need an evidence trail behind an alert</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3>What could go wrong</h3>
+                                <ul class="case-list">
+                                    <li>Incorrect column mapping can invalidate otherwise successful processing</li>
+                                    <li>Generic thresholds can overwhelm analysts with legitimate concentration</li>
+                                    <li>Missing history can prevent baseline scenarios from becoming eligible</li>
+                                    <li>Raw hits can be mistaken for confirmed fraud or AML findings</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <aside class="case-note">
+                            <strong>Monitoring, not prevention</strong>
+                            <p>The prototype records four configured acceptance-limit breaches as transaction context. Those limits do not create transaction-monitoring alerts and the application does not block payments.</p>
+                        </aside>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="architecture" aria-labelledby="architecture-title">
+                    <div class="case-section__index">03 / Solution architecture</div>
+                    <div class="case-section__body">
+                        <h2 id="architecture-title">A traceable route from file to review.</h2>
+                        <p>The architecture stays intentionally direct: one Streamlit interface orchestrates mapping and review, while the Python monitoring module handles validation, normalisation, configuration resolution, evaluation, alert consolidation, simulation and exports.</p>
+
+                        <figure class="architecture-diagram">
+                            <svg viewBox="0 0 720 900" role="img" aria-labelledby="architecture-svg-title architecture-svg-desc">
+                                <title id="architecture-svg-title">Payouts Transaction Monitoring Engine processing architecture</title>
+                                <desc id="architecture-svg-desc">A synthetic CSV or spreadsheet enters validation and normalisation. Governed settings feed a monitoring-rule engine. Results are scored and consolidated into alerts before human investigation, reporting and rule-tuning feedback.</desc>
+                                <g class="architecture-diagram__routes" fill="none">
+                                    <path d="M360 126V186" />
+                                    <path d="M360 256V316" />
+                                    <path d="M360 386V446" />
+                                    <path d="M360 516V576" />
+                                    <path d="M360 646V706" />
+                                    <path d="M600 751H654V351H618" />
+                                </g>
+                                <g class="architecture-diagram__nodes">
+                                    <rect x="80" y="56" width="560" height="70" rx="3" />
+                                    <rect x="80" y="186" width="560" height="70" rx="3" />
+                                    <rect x="80" y="316" width="560" height="70" rx="3" />
+                                    <rect x="80" y="446" width="560" height="70" rx="3" />
+                                    <rect x="80" y="576" width="560" height="70" rx="3" />
+                                    <rect x="80" y="706" width="520" height="90" rx="3" />
+                                    <rect class="architecture-diagram__feedback" x="648" y="343" width="12" height="16" />
+                                </g>
+                                <g class="architecture-diagram__labels">
+                                    <text x="112" y="87">01 · SOURCE</text>
+                                    <text x="112" y="111">CSV, XLS or XLSX · synthetic/anonymised only</text>
+                                    <text x="112" y="217">02 · VALIDATE + NORMALISE</text>
+                                    <text x="112" y="241">Mapping, row limits, dates, amounts, critical fields</text>
+                                    <text x="112" y="347">03 · GOVERNED MONITORING</text>
+                                    <text x="112" y="371">Global → plan → merchant → MID → temporary override</text>
+                                    <text x="112" y="477">04 · EVALUATE + SCORE</text>
+                                    <text x="112" y="501">Explainable scenarios, evidence and data dependencies</text>
+                                    <text x="112" y="607">05 · CONSOLIDATE ALERTS</text>
+                                    <text x="112" y="631">Related hits grouped into investigation context</text>
+                                    <text x="112" y="743">06 · HUMAN REVIEW + EXPORT</text>
+                                    <text x="112" y="771">Alert queue · merchant/MID views · reports · simulation</text>
+                                    <text class="architecture-diagram__feedback-label" x="634" y="557" transform="rotate(-90 634 557)">FEEDBACK + RULE TUNING</text>
+                                </g>
+                            </svg>
+                            <figcaption>Illustrative architecture derived from the public repository at audited commit <code>5c68875</code>. It does not imply an undisclosed gateway or production integration.</figcaption>
+                        </figure>
+
+                        <ol class="architecture-text">
+                            <li><strong>Source:</strong> load a synthetic or fully anonymised CSV, XLS or XLSX file.</li>
+                            <li><strong>Validate:</strong> confirm mappings, size, date, amount and critical-field usability.</li>
+                            <li><strong>Resolve:</strong> apply global, plan, merchant, MID and valid temporary settings.</li>
+                            <li><strong>Evaluate:</strong> run eligible monitoring scenarios and retain rule evidence.</li>
+                            <li><strong>Consolidate:</strong> organise related hits into investigation alerts.</li>
+                            <li><strong>Review:</strong> inspect alerts, merchant/MID behaviour, data quality and exports before tuning controls.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="approach" aria-labelledby="approach-title">
+                    <div class="case-section__index">04 / Approach</div>
+                    <div class="case-section__body">
+                        <h2 id="approach-title">Build the control around the analyst’s questions.</h2>
+                        <ol class="approach-steps">
+                            <li><span>01</span><div><strong>Define the boundary</strong><p>Keep the public environment synthetic, batch-oriented and explicitly separate from real-time preventive decisions.</p></div></li>
+                            <li><span>02</span><div><strong>Make data quality visible</strong><p>Validate the source before monitoring and connect missing fields to the scenarios they affect.</p></div></li>
+                            <li><span>03</span><div><strong>Govern the rule logic</strong><p>Record purpose, eligibility, threshold logic, evidence, false-positive risks and analyst action for each scenario.</p></div></li>
+                            <li><span>04</span><div><strong>Consolidate the story</strong><p>Preserve every raw hit while grouping related evidence into a smaller investigation queue.</p></div></li>
+                            <li><span>05</span><div><strong>Support review and tuning</strong><p>Expose rule performance, merchant/MID context and current-versus-proposed simulation without calling concentration a measured false-positive rate.</p></div></li>
+                        </ol>
+
+                        <section class="coverage-ledger" aria-labelledby="coverage-title">
+                            <h3 id="coverage-title">Implemented monitoring layers</h3>
+                            <ul>
+                                <li><strong>Velocity and decline:</strong> card approvals, declines and decline-to-approval sequences</li>
+                                <li><strong>Merchant and MID:</strong> static volume, deterministic baselines and observed dormancy</li>
+                                <li><strong>Identity linkage:</strong> email, phone and cross-merchant card-token relationships</li>
+                                <li><strong>Geography:</strong> payer/GeoIP mismatch and configurable country-list review</li>
+                                <li><strong>Patterns:</strong> exact repeated amount and refund/reversal-rate baseline signals</li>
+                                <li><strong>Governance:</strong> exact-match internal watchlists, rule inheritance and temporary overrides</li>
+                            </ul>
+                        </section>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="decisions" aria-labelledby="decisions-title">
+                    <div class="case-section__index">05 / Decisions and trade-offs</div>
+                    <div class="case-section__body">
+                        <h2 id="decisions-title">Important choices stay visible.</h2>
+                        <div class="decision-ledger">
+                            <article>
+                                <h3>Explainable rules before model complexity</h3>
+                                <p>Deterministic thresholds and trailing averages make the reason for a match inspectable. They are easier to govern, but they still require representative data and careful calibration.</p>
+                            </article>
+                            <article>
+                                <h3>File ingestion before API integration</h3>
+                                <p>CSV and spreadsheet input lowers the barrier to demonstration and analysis. The trade-off is batch processing, manual mapping and no direct gateway control.</p>
+                            </article>
+                            <article>
+                                <h3>Consolidated alerts without discarding hits</h3>
+                                <p>Grouping related evidence reduces the raw-hit workload while retaining the underlying transactions and scenario evidence for reproduction.</p>
+                            </article>
+                            <article>
+                                <h3>Human review over autonomous action</h3>
+                                <p>A match indicates where to look; it is not proof of fraud, money laundering or a policy breach. Decisions remain outside the prototype.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="risk" aria-labelledby="risk-title">
+                    <div class="case-section__index">06 / Risk and compliance</div>
+                    <div class="case-section__body">
+                        <h2 id="risk-title">The safe boundary is part of the design.</h2>
+                        <div class="case-columns">
+                            <div>
+                                <h3>Controls demonstrated</h3>
+                                <ul class="case-list">
+                                    <li>Public-demo mode and explicit synthetic-data warnings</li>
+                                    <li>Upload size and row-count limits</li>
+                                    <li>Masked card evidence in alerts</li>
+                                    <li>Formula-injection neutralisation in spreadsheet exports</li>
+                                    <li>Bounded caching and a session clear control</li>
+                                    <li>Security and private-deployment guidance</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3>Controls still required for operations</h3>
+                                <ul class="case-list">
+                                    <li>Authentication, authorisation and tenant isolation</li>
+                                    <li>Encrypted durable storage and retention controls</li>
+                                    <li>Persistent rule approvals and analyst dispositions</li>
+                                    <li>Secrets management, audit logs and incident response</li>
+                                    <li>Privacy review and production threshold governance</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="case-disclaimer">This case study describes a portfolio prototype and is not legal, regulatory or scheme-compliance advice.</p>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="implementation" aria-labelledby="implementation-title">
+                    <div class="case-section__index">07 / Implementation</div>
+                    <div class="case-section__body">
+                        <h2 id="implementation-title">A small stack with clear responsibilities.</h2>
+                        <dl class="implementation-ledger">
+                            <div><dt>Interface</dt><dd>Streamlit pages for run setup, alert review, merchant/MID behaviour, rule performance, simulation, reports and configuration.</dd></div>
+                            <div><dt>Processing</dt><dd>Python and pandas for ingestion, normalisation, evaluation, scoring, consolidation, simulation and report preparation.</dd></div>
+                            <div><dt>Configuration</dt><dd>PyYAML and a governed public-demo rule catalogue with synthetic entities and empty watchlists.</dd></div>
+                            <div><dt>Exports</dt><dd>CSV, YAML, JSON and Excel outputs using openpyxl with spreadsheet-safe text handling.</dd></div>
+                            <div><dt>Testing</dt><dd>pytest regression tests plus Streamlit application testing and a separate synthetic benchmark script.</dd></div>
+                            <div><dt>Deployment</dt><dd>Public GitHub source and a Streamlit Community Cloud deployment. Hosted access may require Streamlit sign-in and remains restricted by policy to synthetic or fully anonymised demonstrations.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="evidence" aria-labelledby="evidence-title">
+                    <div class="case-section__index">08 / Evidence and testing</div>
+                    <div class="case-section__body">
+                        <h2 id="evidence-title">The public record behind this case study.</h2>
+                        <p>The portfolio does not copy product screenshots or private data. The strongest evidence is the source itself, linked at the exact repository areas a reviewer may want to inspect.</p>
+                        <div class="evidence-ledger">
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/tree/5c6887525cda880259cf465e862c88497c134c64" target="_blank" rel="noopener noreferrer">
+                                <span>Public repository</span><strong>Application, engine and configuration</strong><small>Audited commit 5c68875 · opens in a new tab</small>
+                            </a>
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/blob/5c6887525cda880259cf465e862c88497c134c64/rules.yaml" target="_blank" rel="noopener noreferrer">
+                                <span>Governed rules</span><strong>18 executable monitoring scenarios</strong><small>Plus 4 preventive controls kept as context · opens in a new tab</small>
+                            </a>
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/tree/5c6887525cda880259cf465e862c88497c134c64/tests" target="_blank" rel="noopener noreferrer">
+                                <span>Regression evidence</span><strong>11 current test functions</strong><small>Engine boundaries and one synthetic Streamlit run · opens in a new tab</small>
+                            </a>
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/blob/5c6887525cda880259cf465e862c88497c134c64/USER_MANUAL.md" target="_blank" rel="noopener noreferrer">
+                                <span>Operating evidence</span><strong>User and analyst manual</strong><small>Interpretation, review procedure and limitations · opens in a new tab</small>
+                            </a>
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/blob/5c6887525cda880259cf465e862c88497c134c64/SECURITY.md" target="_blank" rel="noopener noreferrer">
+                                <span>Governance evidence</span><strong>Security and data-handling policy</strong><small>Public-demo boundaries and reporting route · opens in a new tab</small>
+                            </a>
+                            <a href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp/actions/runs/29492497816" target="_blank" rel="noopener noreferrer">
+                                <span>Build evidence</span><strong>CI passed for the audited main commit</strong><small>Compile and regression workflow · opens in a new tab</small>
+                            </a>
+                        </div>
+
+                        <h3 class="testing-title">What the tests establish</h3>
+                        <ul class="case-list case-list--two-columns">
+                            <li>Every monitoring rule carries the required governance fields</li>
+                            <li>Preventive limits do not create monitoring alerts</li>
+                            <li>The most specific valid configuration override wins</li>
+                            <li>Duplicate transaction IDs retain separate row identities</li>
+                            <li>Alert evidence excludes raw card numbers</li>
+                            <li>Trailing baselines require eligible history</li>
+                            <li>Current and proposed settings can be compared</li>
+                            <li>Exports preserve alerts, hits, rows and data-quality evidence</li>
+                            <li>The public configuration and sample remain synthetic</li>
+                            <li>Upload validation rejects missing mappings and excess rows</li>
+                            <li>Spreadsheet formula-like text is neutralised</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="case-section case-section--limitations reveal" id="limitations" aria-labelledby="limitations-title">
+                    <div class="case-section__index">09 / Limitations</div>
+                    <div class="case-section__body">
+                        <h2 id="limitations-title">What this prototype does not do.</h2>
+                        <ul class="limitations-list">
+                            <li><strong>No live transaction integration.</strong> Monitoring runs evaluate an uploaded file; they do not connect to or control a payment gateway.</li>
+                            <li><strong>No real-time blocking.</strong> Preventive acceptance controls are shown as context, not executed as payment decisions.</li>
+                            <li><strong>No production case workflow.</strong> Alert statuses and analyst dispositions are not persisted for multi-user review.</li>
+                            <li><strong>No persistent behavioural history.</strong> Linkage and baselines rely on history included in the current upload.</li>
+                            <li><strong>Important data remains absent.</strong> There is no stable customer ID, device fingerprint, source IP, chargeback linkage, authoritative MID lifecycle or original-refund link.</li>
+                            <li><strong>No currency conversion.</strong> Cross-currency amount aggregation can be misleading unless the input is already normalised.</li>
+                            <li><strong>Public demo data is synthetic.</strong> It cannot establish detection accuracy, false-positive performance or operational impact.</li>
+                            <li><strong>No certification claim.</strong> The project does not claim scheme certification or formal regulatory compliance.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="value" aria-labelledby="value-title">
+                    <div class="case-section__index">10 / Current value</div>
+                    <div class="case-section__body">
+                        <h2 id="value-title">Demonstrated structure, not invented outcomes.</h2>
+                        <p>No production fraud-reduction, accuracy, revenue, workload or false-positive result is claimed. What the public prototype demonstrates is a foundation for clearer monitoring work:</p>
+                        <ul class="case-list case-list--two-columns">
+                            <li>Monitoring and preventive controls are separated explicitly</li>
+                            <li>Rule purpose, evidence and effective scope remain inspectable</li>
+                            <li>Data-quality gaps are connected to affected monitoring areas</li>
+                            <li>Related hits can be reviewed as an investigation narrative</li>
+                            <li>Merchant, MID and rule concentration can support calibration</li>
+                            <li>Source, evidence and reports can be reproduced from one run</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="case-section reveal" id="next" aria-labelledby="next-title">
+                    <div class="case-section__index">11 / Lessons and next iteration</div>
+                    <div class="case-section__body">
+                        <h2 id="next-title">The next evidence must come from controlled use.</h2>
+                        <p>The prototype reinforced that explainability depends as much on data quality and configuration provenance as on the scenario itself. Consolidation helps only when the analyst can still inspect the raw driver, while a behavioural baseline is useful only when its history is representative.</p>
+                        <p>A credible next iteration would add persistent rule versions and dispositions, load de-duplicated prior history into evaluations, introduce stable customer/device/IP and chargeback fields, calibrate thresholds on approved representative data, and add the authentication, retention and audit controls required for private operational use.</p>
+                        <aside class="case-note">
+                            <strong>Owner confirmation before production merge</strong>
+                            <p>Confirm the first-person role wording and continued publication approval for the repository and demo links.</p>
+                        </aside>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section class="case-close section" aria-labelledby="case-close-title">
+            <div class="container-wide case-close__layout">
+                <div>
+                    <p class="portfolio-index">12 / Continue</p>
+                    <h2 id="case-close-title">Inspect the evidence or discuss the risk problem.</h2>
+                </div>
+                <div>
+                    <p>The repository and synthetic demo are public. For context on the broader portfolio—or to discuss transaction monitoring, merchant risk or operational controls—use the links below.</p>
+                    <div class="case-close__actions">
+                        <a class="btn primary" href="/portfolio.html">Back to selected work</a>
+                        <a class="btn secondary" href="/contact.html">Contact Dave</a>
+                        <a class="btn text-action" href="/portfolio.html#supporting-work">Next: supporting concepts</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <p>&copy; 2026 Dave Bryson. FinTech risk, fraud analytics, and data science.</p>
+            <div class="footer-links">
+                <a href="mailto:dbmbryson@gmail.com">Email</a>
+                <a href="https://www.linkedin.com/in/dave-bryson-07a2bb264" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

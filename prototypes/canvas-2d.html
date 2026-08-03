@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas 2D Risk Intelligence Core | Technical Prototype</title>
+    <meta name="description" content="Isolated Canvas 2D prototype for the Risk Intelligence Core." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#080b0d" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../src/styles/prototypes.css" />
+    <script type="module" src="../src/prototypes/canvas-core.js"></script>
+</head>
+<body class="prototype-page">
+    <a class="skip-link" href="#main">Skip to prototype</a>
+
+    <header class="prototype-header">
+        <div class="prototype-shell prototype-header-inner">
+            <a class="prototype-brand" href="index.html">Risk Intelligence Core lab</a>
+            <nav class="prototype-nav" aria-label="Prototype navigation">
+                <a href="index.html">Lab</a>
+                <a href="svg-css.html">SVG/CSS</a>
+                <a href="canvas-2d.html" aria-current="page">Canvas 2D</a>
+                <a href="three-js.html">Three.js</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="prototype-shell">
+        <section class="prototype-intro">
+            <div>
+                <p class="eyebrow">Prototype 02 / raster 2D</p>
+                <h1>Canvas 2D implementation.</h1>
+                <p class="prototype-intro-copy">
+                    A compact drawing loop expresses the same signal, detection, escalation, risk-node, and decision-route sequence on a responsive bitmap surface.
+                </p>
+            </div>
+            <dl class="prototype-spec">
+                <div><dt>Renderer</dt><dd>CanvasRenderingContext2D</dd></div>
+                <div><dt>Choreography</dt><dd>GSAP state timeline</dd></div>
+                <div><dt>Fallback</dt><dd>Complete static SVG</dd></div>
+                <div><dt>DPR cap</dt><dd>1.5; 1.0 narrow</dd></div>
+            </dl>
+        </section>
+
+        <section class="prototype-section">
+            <div class="prototype-stage" data-prototype="canvas" data-render-state="static" data-sequence="idle">
+                <div class="prototype-toolbar">
+                    <p class="prototype-status" data-motion-status>Static decision state available.</p>
+                    <button class="prototype-replay" type="button" data-replay>Replay sequence</button>
+                </div>
+                <div class="prototype-visual-frame">
+                    <canvas class="risk-core-canvas" width="900" height="430" aria-hidden="true"></canvas>
+                    <svg class="static-fallback" data-static-fallback viewBox="0 0 900 430" role="img" aria-labelledby="canvas-core-title canvas-core-description">
+                        <title id="canvas-core-title">Risk Intelligence Core transaction sequence fallback</title>
+                        <desc id="canvas-core-description">Transaction signals enter from the left, pass through three detection layers, one signal becomes suspicious, linked risk nodes activate, and a path leads to a review decision.</desc>
+                        <rect class="frame-rule" x="28" y="28" width="844" height="374" />
+                        <text x="62" y="82">Inbound transactions</text>
+                        <text x="350" y="82" text-anchor="middle">Detection layers</text>
+                        <text x="590" y="82" text-anchor="middle">Risk nodes</text>
+                        <text x="820" y="82" text-anchor="end">Decision path</text>
+                        <path class="route-active" d="M62 222 H272" />
+                        <circle class="signal" cx="90" cy="222" r="5" />
+                        <circle class="signal anomaly" cx="142" cy="222" r="7" />
+                        <circle class="signal" cx="194" cy="222" r="5" />
+                        <circle class="detection-ring" cx="350" cy="222" r="78" />
+                        <circle class="detection-ring emphasis" cx="350" cy="222" r="58" />
+                        <circle class="detection-ring" cx="350" cy="222" r="38" />
+                        <rect class="core-node" x="343" y="215" width="14" height="14" />
+                        <path class="risk-link" d="M428 222 L550 146 M428 222 H600 M428 222 L550 298" />
+                        <rect class="risk-node" x="544" y="140" width="12" height="12" />
+                        <rect class="risk-node warning" x="594" y="216" width="12" height="12" />
+                        <rect class="risk-node positive" x="544" y="292" width="12" height="12" />
+                        <path class="route-active" d="M600 222 H718 V142 H818" />
+                        <rect class="decision-node" x="809" y="133" width="18" height="18" />
+                        <text x="818" y="176" text-anchor="middle">Review</text>
+                        <text x="62" y="372">Signal</text>
+                        <text x="298" y="372">Detect</text>
+                        <text x="500" y="372">Investigate</text>
+                        <text x="750" y="372">Decide</text>
+                    </svg>
+                </div>
+                <p class="sr-only">The Canvas animation is decorative. The four-stage explanation below provides the same information.</p>
+                <ol class="prototype-narrative">
+                    <li><span>01</span><h2>Signal</h2><p>Transaction signals enter through a controlled inbound route.</p></li>
+                    <li><span>02</span><h2>Detect</h2><p>Detection layers inspect velocity, behaviour, and merchant context.</p></li>
+                    <li><span>03</span><h2>Investigate</h2><p>An anomalous signal changes state and activates linked risk nodes.</p></li>
+                    <li><span>04</span><h2>Decide</h2><p>A visible pathway routes the signal to a review decision.</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="prototype-notes">
+            <h2>What this test proves.</h2>
+            <div>
+                <p>GSAP animates a five-property state object and Canvas redraws only while that state changes. A ResizeObserver keeps the drawing buffer aligned with its CSS size, with a capped pixel ratio to control work on high-density screens.</p>
+                <p>The semantic narrative and SVG fallback remain available when Canvas or JavaScript is unavailable.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

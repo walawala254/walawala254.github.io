@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("js");</script>
     <title>Services | FinTech Risk, Fraud Analytics & Data</title>
     <meta name="description" content="FinTech risk, fraud analytics, AML/CFT, merchant risk, transaction monitoring, dashboards, and compliance documentation services by Dave Bryson." />
     <meta name="theme-color" content="#070b10" />
@@ -11,17 +12,13 @@
     <meta property="og:description" content="Practical services across transaction monitoring, fraud rules, AML/CFT controls, merchant risk, dashboards, and documentation." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://walawala254.github.io/services.html" />
-    <meta property="og:image" content="https://walawala254.github.io/services.jpg" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070b10'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%2378ffd6'%3EDB%3C/text%3E%3C/svg%3E" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+    <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
+    <meta property="og:image:alt" content="Portrait of Dave Bryson" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css?v=2.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script src="script.js?v=2.4" defer></script>
+    <script type="module" src="script.js?v=2.4"></script>
 </head>
-<body>
+<body class="services-page">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -32,19 +29,19 @@
             </a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
                 <span class="sr-only">Toggle navigation</span>
-                <i class="fas fa-bars" aria-hidden="true"></i>
+                <span class="nav-toggle__glyph" aria-hidden="true"><span></span><span></span><span></span></span>
             </button>
             <div class="nav-panel" id="primary-menu">
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a class="active" href="services.html">Services</a></li>
+                    <li><a href="services.html" aria-current="page">Services</a></li>
                     <li><a href="portfolio.html">Portfolio</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
-                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
+                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
                 </div>
             </div>
         </nav>
@@ -61,61 +58,109 @@
                     </p>
                 </div>
                 <div class="image-panel reveal" data-delay="150">
-                    <img src="services.jpg" alt="Abstract desk setup representing fintech risk and analytics services" width="612" height="612" decoding="async" fetchpriority="high" />
+                    <figure class="system-visual system-visual--services">
+                        <svg viewBox="0 0 612 612" width="612" height="612" role="img" aria-labelledby="services-system-title services-system-desc">
+                            <title id="services-system-title">Service architecture from risk signal to documented decision</title>
+                            <desc id="services-system-desc">Payment, merchant, fraud, and compliance signals move through monitoring and investigation layers before a documented human decision.</desc>
+                            <g aria-hidden="true">
+                                <rect class="system-visual__frame" x="34" y="34" width="544" height="544" rx="4" />
+                                <text class="system-visual__section" x="62" y="72">Signal inputs</text>
+                                <text class="system-visual__section" x="242" y="72">Control layers</text>
+                                <text class="system-visual__section" x="446" y="72">Decision trail</text>
+                                <path class="system-visual__route-muted" d="M116 144H242M116 226H242M116 308H242M116 390H242" />
+                                <path class="system-visual__route" d="M242 144H300V267H372V390H480" />
+                                <path class="system-visual__route-muted" d="M242 226H330M242 308H330M242 390H372" />
+                                <rect class="system-visual__layer" x="234" y="108" width="146" height="72" rx="3" />
+                                <rect class="system-visual__layer" x="282" y="231" width="146" height="72" rx="3" />
+                                <rect class="system-visual__layer" x="330" y="354" width="146" height="72" rx="3" />
+                                <circle class="system-visual__node" cx="116" cy="144" r="12" />
+                                <circle class="system-visual__node" cx="116" cy="226" r="12" />
+                                <circle class="system-visual__node system-visual__node--attention" cx="116" cy="308" r="12" />
+                                <circle class="system-visual__node" cx="116" cy="390" r="12" />
+                                <circle class="system-visual__node system-visual__node--decision" cx="480" cy="390" r="14" />
+                                <text class="system-visual__label" x="307" y="140">Detect</text>
+                                <text class="system-visual__detail" x="307" y="160">rules + context</text>
+                                <text class="system-visual__label" x="355" y="263">Investigate</text>
+                                <text class="system-visual__detail" x="355" y="283">evidence + review</text>
+                                <text class="system-visual__label" x="403" y="386">Decide</text>
+                                <text class="system-visual__detail" x="403" y="406">rationale + control</text>
+                                <text class="system-visual__detail" x="116" y="432">payment</text>
+                                <text class="system-visual__detail" x="116" y="450">merchant</text>
+                                <text class="system-visual__detail" x="116" y="468">fraud / AML</text>
+                                <path class="system-visual__route-muted" d="M480 404V506H188" />
+                                <text class="system-visual__section" x="188" y="530">Document, learn, improve</text>
+                            </g>
+                        </svg>
+                        <figcaption><span>Service architecture</span> Signals → controls → documented decisions</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" aria-labelledby="services-list-heading">
+            <h2 class="sr-only" id="services-list-heading">Available services</h2>
             <div class="container service-grid">
                 <article class="service-card reveal">
-                    <i class="fas fa-wave-square" aria-hidden="true"></i>
                     <h2>Transaction Monitoring & Fraud Rule Design</h2>
                     <p>Design practical rules around velocity, unusual behavior, merchant activity, BIN/card/IP signals, and rule-hit investigation queues.</p>
                     <span>Outputs: rule logic, scenarios, alert notes</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Transaction Monitoring and Fraud Rule Design</span></a>
                 </article>
                 <article class="service-card reveal" data-delay="80">
-                    <i class="fas fa-store" aria-hidden="true"></i>
                     <h2>Merchant Risk Review & KYB Support</h2>
                     <p>Review merchant profiles, websites, business models, licensing signals, prohibited activity indicators, and onboarding risk narratives.</p>
                     <span>Outputs: review framework, risk memo, checklist</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Merchant Risk Review and KYB Support</span></a>
                 </article>
                 <article class="service-card reveal" data-delay="160">
-                    <i class="fas fa-fingerprint" aria-hidden="true"></i>
                     <h2>AML/CFT Risk Controls & Typology Mapping</h2>
                     <p>Map risk scenarios across customers, merchants, geography, payment methods, velocity, sanctions exposure, and suspicious behavior.</p>
                     <span>Outputs: typology map, matrix, control notes</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: AML/CFT Risk Controls and Typology Mapping</span></a>
                 </article>
                 <article class="service-card reveal">
-                    <i class="fas fa-credit-card" aria-hidden="true"></i>
                     <h2>Chargeback, Dispute & Scheme Rule Analytics</h2>
                     <p>Track disputes, representment outcomes, pre-arbitration issues, acquirer delays, loss exposure, and operational leakage.</p>
                     <span>Outputs: tracker, dashboard, insights brief</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Chargeback, Dispute and Scheme Rule Analytics</span></a>
                 </article>
                 <article class="service-card reveal" data-delay="80">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i>
                     <h2>Data Analysis, Dashboards & Risk Reporting</h2>
                     <p>Build readable reporting for fraud, disputes, merchant performance, operational risk, monitoring results, and leadership summaries.</p>
                     <span>Tools: Python, SQL, Power BI, Tableau, Excel</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Data Analysis, Dashboards and Risk Reporting</span></a>
                 </article>
                 <article class="service-card reveal" data-delay="160">
-                    <i class="fas fa-file-signature" aria-hidden="true"></i>
                     <h2>Compliance Documentation & Technical Writing</h2>
                     <p>Write policies, SOPs, fraud prevention manuals, regulator-facing notes, process flows, and internal risk documentation.</p>
                     <span>Outputs: SOPs, manuals, process maps</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Compliance Documentation and Technical Writing</span></a>
                 </article>
                 <article class="service-card reveal">
-                    <i class="fas fa-network-wired" aria-hidden="true"></i>
                     <h2>PSP / FinTech Operational Risk Support</h2>
                     <p>Support payment operations with clearer risk workflows, escalation paths, evidence standards, and decision documentation.</p>
                     <span>Outputs: workflow design, control checklist</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: PSP and FinTech Operational Risk Support</span></a>
                 </article>
                 <article class="service-card reveal" data-delay="80">
-                    <i class="fas fa-globe" aria-hidden="true"></i>
                     <h2>Web Risk Screening & Merchant Intelligence</h2>
                     <p>Review merchant websites for trust gaps, licensing issues, business model inconsistencies, vertical risk, and suspicious signals.</p>
                     <span>Outputs: screening template, risk summary</span>
+                    <a class="service-card__action" href="contact.html">Discuss this area<span class="sr-only">: Web Risk Screening and Merchant Intelligence</span></a>
                 </article>
+            </div>
+        </section>
+
+        <section class="section internal-close" aria-labelledby="services-next-heading">
+            <div class="container internal-close__layout reveal">
+                <div>
+                    <p class="eyebrow">Evidence before promises</p>
+                    <h2 id="services-next-heading">Review the method, then discuss the context.</h2>
+                </div>
+                <div class="internal-close__actions">
+                    <a class="btn secondary" href="case-studies/transaction-monitoring/">Read the flagship case study</a>
+                    <a class="btn text-action" href="contact.html">Discuss your risk context</a>
+                </div>
             </div>
         </section>
     </main>
