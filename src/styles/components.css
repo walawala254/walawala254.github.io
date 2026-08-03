@@ -301,18 +301,6 @@
     font-size: clamp(1.4rem, 2.3vw, 2rem);
 }
 
-.info-card i,
-.service-card i {
-    display: grid;
-    place-items: center;
-    width: 2.6rem;
-    height: 2.6rem;
-    margin-bottom: var(--space-5);
-    border: var(--border-thin) solid var(--color-border-strong);
-    border-radius: var(--radius-xs);
-    color: var(--color-accent-primary);
-}
-
 .skill-matrix {
     gap: var(--grid-gap);
 }
@@ -496,12 +484,11 @@
 .profile-panel,
 .image-panel,
 .contact-card {
+    min-width: 0;
     padding: var(--space-3);
 }
 
-.profile-panel img,
-.image-panel img,
-.contact-card img {
+.profile-panel img {
     width: 100%;
     aspect-ratio: 16 / 11;
     object-fit: cover;
@@ -509,8 +496,123 @@
     filter: saturate(0.8) contrast(1.04);
 }
 
+.profile-panel picture {
+    display: block;
+}
+
 .profile-panel img {
     aspect-ratio: 4 / 3;
+}
+
+.system-visual {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+}
+
+.system-visual svg {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xs);
+    background:
+        radial-gradient(circle at 75% 24%, var(--color-accent-wash), transparent 28%),
+        var(--color-background-subtle);
+}
+
+.system-visual figcaption {
+    display: flex;
+    gap: var(--space-2) var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--space-2);
+    color: var(--color-text-secondary);
+    font-size: var(--type-supporting);
+}
+
+.system-visual figcaption span {
+    color: var(--color-accent-primary);
+    font-family: var(--font-mono);
+    font-size: var(--type-metadata);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.system-visual__frame,
+.system-visual__layer,
+.system-visual__route,
+.system-visual__route-muted,
+.system-visual__node {
+    vector-effect: non-scaling-stroke;
+}
+
+.system-visual__frame {
+    fill: none;
+    stroke: var(--color-border);
+}
+
+.system-visual__layer {
+    fill: var(--color-background-elevated);
+    stroke: var(--color-border-strong);
+}
+
+.system-visual__route,
+.system-visual__route-muted {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.system-visual__route {
+    stroke: var(--color-accent-primary);
+    stroke-width: 2;
+}
+
+.system-visual__route-muted {
+    stroke: var(--color-border-signal);
+    stroke-width: 1.5;
+}
+
+.system-visual__node {
+    fill: var(--color-background-subtle);
+    stroke: var(--color-accent-secondary);
+    stroke-width: 2;
+}
+
+.system-visual__node--attention {
+    fill: var(--color-critical);
+    stroke: var(--color-background);
+}
+
+.system-visual__node--decision {
+    fill: var(--color-accent-primary);
+    stroke: var(--color-background);
+}
+
+.system-visual__label,
+.system-visual__detail {
+    font-family: var(--font-mono);
+    text-anchor: middle;
+}
+
+.system-visual__label {
+    fill: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.system-visual__detail {
+    fill: var(--color-text-secondary);
+    font-size: 11px;
+}
+
+.system-visual__section {
+    fill: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .profile-panel p,
@@ -535,9 +637,11 @@
     min-height: 48px;
     align-items: center;
     gap: var(--space-3);
+    min-width: 0;
     border-top: var(--border-thin) solid var(--color-border);
     padding: var(--space-3) var(--space-2);
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
+    overflow-wrap: anywhere;
 }
 
 .contact-list a:last-child {

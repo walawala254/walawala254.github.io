@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("js");</script>
     <title>About Dave Bryson | Data, Risk & Compliance</title>
     <meta name="description" content="About Dave Bryson: a data science, payments risk, fraud risk, AML/CFT, merchant risk, and fintech compliance professional." />
     <meta name="theme-color" content="#070b10" />
@@ -12,13 +13,9 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://walawala254.github.io/about.html" />
     <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
+    <meta property="og:image:alt" content="Portrait of Dave Bryson" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
     <link rel="stylesheet" href="style.css?v=2.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script type="module" src="script.js?v=2.4"></script>
 </head>
 <body class="about-page">
@@ -43,8 +40,8 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
-                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer"><i class="fas fa-download" aria-hidden="true"></i> Download CV</a>
+                    <a class="nav-btn ghost" href="https://github.com/walawala254" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a class="nav-btn" href="https://drive.google.com/file/d/18iCxTSuFRkieioupPGJHrjlgucjul1Yo/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
                 </div>
             </div>
         </nav>
@@ -61,7 +58,10 @@
                     </p>
                 </div>
                 <div class="profile-panel reveal" data-delay="150">
-                    <img src="about_me.jpg" alt="Dave Bryson portrait" width="893" height="861" decoding="async" fetchpriority="high" />
+                    <picture>
+                        <source srcset="about_me.webp" type="image/webp" />
+                        <img src="about_me.jpg" alt="Dave Bryson portrait" width="893" height="861" decoding="async" fetchpriority="high" />
+                    </picture>
                     <p>
                         I am not just a data person and not just a compliance person. I work where payment behavior, merchant risk, fraud signals, regulatory expectations, and messy operational data meet.
                     </p>
@@ -73,17 +73,14 @@
             <h2 class="sr-only" id="about-approach-heading">How I work</h2>
             <div class="container about-grid">
                 <article class="info-card reveal">
-                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
                     <h2>What I Do</h2>
                     <p>I help teams design monitoring logic, review merchant risk, interpret fraud patterns, build dashboards, and document controls in a way that supports real decisions.</p>
                 </article>
                 <article class="info-card reveal" data-delay="100">
-                    <i class="fas fa-brain" aria-hidden="true"></i>
                     <h2>How I Think</h2>
                     <p>I like clear definitions, clean evidence, practical controls, and explanations that both technical and non-technical teams can trust.</p>
                 </article>
                 <article class="info-card reveal" data-delay="200">
-                    <i class="fas fa-pen-nib" aria-hidden="true"></i>
                     <h2>How I Communicate</h2>
                     <p>Risk work is only useful when people can act on it. I focus on plain-language documentation, strong review notes, and clean reporting.</p>
                 </article>
@@ -99,10 +96,10 @@
                 <article class="matrix-card reveal">
                     <h3>Tools & Technologies</h3>
                     <ul>
-                        <li><i class="fab fa-python" aria-hidden="true"></i> Python</li>
-                        <li><i class="fas fa-database" aria-hidden="true"></i> SQL</li>
-                        <li><i class="fas fa-chart-pie" aria-hidden="true"></i> Power BI / Tableau</li>
-                        <li><i class="fas fa-chart-line" aria-hidden="true"></i> Excel, R, dashboards</li>
+                        <li>Python</li>
+                        <li>SQL</li>
+                        <li>Power BI / Tableau</li>
+                        <li>Excel, R, dashboards</li>
                     </ul>
                 </article>
                 <article class="matrix-card reveal" data-delay="100">

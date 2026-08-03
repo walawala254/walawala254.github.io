@@ -4,7 +4,7 @@
 
 .prototype-page {
     --prototype-frame-height: clamp(20rem, 46vw, 32rem);
-    min-width: 20rem;
+    min-width: 0;
     background:
         linear-gradient(180deg, var(--color-accent-wash), transparent 34rem),
         var(--color-background);
@@ -77,16 +77,23 @@
     padding-block: clamp(var(--space-8), 9vw, var(--space-10)) var(--space-8);
 }
 
+.prototype-intro > *,
+.prototype-spec dd {
+    min-width: 0;
+}
+
 .prototype-intro h1 {
     max-width: 13ch;
     margin: var(--space-3) 0 var(--space-5);
     font-size: var(--type-page-title);
+    overflow-wrap: anywhere;
 }
 
 .prototype-intro-copy {
     max-width: var(--reading-width);
     color: var(--color-text-secondary);
     font-size: var(--type-body-large);
+    overflow-wrap: anywhere;
 }
 
 .prototype-spec {
@@ -117,6 +124,7 @@
 
 .prototype-spec dd {
     color: var(--color-text-primary);
+    overflow-wrap: anywhere;
 }
 
 .prototype-lab-grid {

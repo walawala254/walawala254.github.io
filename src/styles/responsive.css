@@ -88,11 +88,16 @@
     .grid-two,
     .editorial-split,
     .home-page .hero-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .hero-visual {
         min-height: auto;
+    }
+
+    .system-visual figcaption {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .portrait-card {
@@ -134,7 +139,7 @@
     .metrics-grid,
     .about-grid,
     .skill-matrix {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .metric-card,
@@ -196,6 +201,7 @@
     .hero-actions,
     .contact-actions {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .hero-actions .btn,
@@ -252,11 +258,11 @@
     h1,
     .home-page h1 {
         max-width: 100%;
-        font-size: clamp(2.35rem, 11.8vw, 2.85rem);
+        font-size: min(2.85rem, 11.8vw);
     }
 
     h2 {
-        font-size: clamp(1.85rem, 9vw, 2.45rem);
+        font-size: min(2.45rem, 9vw);
     }
 
     .eyebrow,

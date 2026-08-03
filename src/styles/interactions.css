@@ -113,6 +113,7 @@
 }
 
 .contact-list a::after {
+    flex: 0 0 auto;
     margin-left: auto;
     color: var(--color-accent-primary);
     content: "\2197";
@@ -223,6 +224,7 @@
 
     .internal-close__actions {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
         justify-content: stretch;
     }
 

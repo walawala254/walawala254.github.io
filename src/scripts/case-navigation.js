@@ -3,8 +3,17 @@ export function initCaseNavigation() {
   if (!sectionNavigation) return;
 
   const links = [...sectionNavigation.querySelectorAll('a[href^="#"]')];
+  const getHashTarget = (hash) => {
+    if (!hash?.startsWith("#")) return null;
+
+    try {
+      return document.getElementById(decodeURIComponent(hash.slice(1)));
+    } catch {
+      return null;
+    }
+  };
   const sections = links
-    .map((link) => document.querySelector(link.hash))
+    .map((link) => getHashTarget(link.hash))
     .filter(Boolean);
   let observer;
 
@@ -62,9 +71,7 @@ export function initCaseNavigation() {
     );
 
     sections.forEach((section) => observer.observe(section));
-    const hashTarget = location.hash
-      ? document.querySelector(location.hash)
-      : null;
+    const hashTarget = getHashTarget(location.hash);
     setCurrentSection(
       hashTarget?.id ||
         currentSectionFromViewport()?.id ||
@@ -76,7 +83,7 @@ export function initCaseNavigation() {
     link.addEventListener("click", () => setCurrentSection(link.hash.slice(1)));
   });
   window.addEventListener("hashchange", () => {
-    const target = location.hash ? document.querySelector(location.hash) : null;
+    const target = getHashTarget(location.hash);
     if (target) setCurrentSection(target.id);
   });
   window.addEventListener("pagehide", disconnect);

@@ -8,6 +8,7 @@
 }
 
 .portfolio-index {
+    max-width: 100%;
     margin: 0 0 var(--space-5);
     color: var(--color-accent-primary);
     font-family: var(--font-mono);
@@ -15,6 +16,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
 }
 
 .portfolio-index::before {
@@ -158,6 +160,7 @@
     display: inline-flex;
     width: fit-content;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--space-2);
     color: var(--color-text-primary);
     font-family: var(--font-mono);
@@ -165,6 +168,8 @@
     font-weight: 700;
     letter-spacing: 0.025em;
     line-height: 1.4;
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 .project-status > span:first-child {
@@ -1062,7 +1067,7 @@
     .portfolio-disciplines__layout,
     .portfolio-close__layout,
     .case-close__layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: var(--space-7);
     }
 
@@ -1262,6 +1267,11 @@
 }
 
 @media (max-width: 24.375rem) {
+    .portfolio-hero h1,
+    .case-hero h1 {
+        font-size: min(4.1rem, 13vw);
+    }
+
     .portfolio-index,
     .project-status,
     .featured-case__discipline,

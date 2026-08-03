@@ -44,6 +44,15 @@
     gap: clamp(var(--space-7), 6vw, var(--space-9));
 }
 
+.hero-grid > *,
+.page-hero-grid > *,
+.contact-grid > *,
+.split-grid > *,
+.grid-two > *,
+.editorial-split > * {
+    min-width: 0;
+}
+
 .home-page .hero-grid {
     grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.7fr);
 }

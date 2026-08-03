@@ -13,6 +13,15 @@ h3 {
     text-wrap: balance;
 }
 
+h1,
+h2,
+h3,
+p,
+li,
+dd {
+    overflow-wrap: anywhere;
+}
+
 h1 {
     max-width: 13ch;
     margin-bottom: var(--space-5);

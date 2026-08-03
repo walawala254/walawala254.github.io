@@ -154,6 +154,7 @@
 }
 
 .home-hero__lead {
+    min-width: 0;
     max-width: 70rem;
 }
 
@@ -196,6 +197,8 @@
 
 .home-hero__line > span {
     display: block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 .home-hero__lede {
@@ -283,6 +286,10 @@
     object-fit: cover;
     object-position: 50% 42%;
     filter: saturate(0.72) contrast(1.06);
+}
+
+.home-hero__portrait picture {
+    display: block;
 }
 
 .home-hero__proof > p {
@@ -1055,7 +1062,7 @@
     .home-section-heading,
     .decision-story__layout,
     .home-close__layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .home-hero__layout {
@@ -1335,7 +1342,7 @@
 
 @media (max-width: 24.375rem) {
     .home-hero .home-hero__title {
-        font-size: clamp(2.75rem, 14.6vw, 3.55rem);
+        font-size: min(3.55rem, 14.6vw);
         letter-spacing: -0.065em;
     }
 

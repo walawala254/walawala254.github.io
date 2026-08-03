@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>document.documentElement.classList.add("js");</script>
     <title>Dave Bryson | Payments Risk, Fraud & Data Science</title>
     <meta name="description" content="Dave Bryson turns payment, merchant, fraud, AML/CFT and operational signals into clearer risk decisions, controls and analysis." />
     <meta name="theme-color" content="#080b0d" />
@@ -12,10 +13,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://walawala254.github.io/" />
     <meta property="og:image" content="https://walawala254.github.io/about_me.jpg" />
+    <meta property="og:image:alt" content="Portrait of Dave Bryson" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
     <link rel="stylesheet" href="style.css?v=3.0" />
     <link rel="stylesheet" href="./src/styles/home.css?v=3.0" />
     <script type="module" src="script.js?v=3.0"></script>
@@ -98,7 +97,10 @@
                         <span>PROFILE 01</span>
                     </div>
                     <div class="home-hero__portrait">
-                        <img src="about_me.jpg" alt="Dave Bryson" width="893" height="861" decoding="async" fetchpriority="high" />
+                        <picture>
+                            <source srcset="about_me.webp" type="image/webp" />
+                            <img src="about_me.jpg" alt="Dave Bryson" width="893" height="861" decoding="async" fetchpriority="high" />
+                        </picture>
                     </div>
                     <p>Hybrid risk operator and data builder</p>
                     <ul aria-label="Core disciplines">
