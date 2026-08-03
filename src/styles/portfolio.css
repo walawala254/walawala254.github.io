@@ -920,12 +920,15 @@
 
 .evidence-ledger a {
     display: grid;
+    min-width: 0;
+    max-width: 100%;
     min-height: 11rem;
     align-content: space-between;
     padding: var(--space-5);
     border-top: var(--border-strong) solid var(--color-border-strong);
     border-bottom: var(--border-thin) solid var(--color-border);
     background: var(--color-background-elevated);
+    overflow-wrap: anywhere;
     transition:
         border-color var(--duration-standard) var(--ease-standard),
         background-color var(--duration-standard) var(--ease-standard),
@@ -1197,6 +1200,10 @@
 
     .case-section {
         gap: var(--space-4);
+    }
+
+    .evidence-ledger {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .case-section__index {

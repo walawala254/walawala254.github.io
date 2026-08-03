@@ -235,7 +235,7 @@ The browser resource map, which counts ordinary document resource entries rather
 ## Build and dependency boundaries
 
 - The release artifact remains the reproducible `dist` output described by `BUILD_MANIFEST_V3.md`; `dist` is not hand-edited or committed.
-- Final Phase 8 output is 30 files / 1,194,937 bytes: 143,273 B HTML, 160,752 B CSS, 661,674 B JavaScript and 228,331 B raster artifacts. It is 94 B (+0.008%) above Phase 7 solely from the hosted-demo access wording correction; CSS, JavaScript and image payload are unchanged.
+- Final Phase 8 output is 30 files / 1,195,244 bytes: 143,273 B HTML, 161,059 B CSS, 661,674 B JavaScript and 228,331 B raster artifacts. It is 401 B (+0.034%) above Phase 7: 94 B of accurate hosted-demo wording and 307 B of cross-platform text-reflow containment. JavaScript and image payload are unchanged.
 - No runtime or development dependency was added, removed or upgraded in Phase 8.
 - The new HTML release gate is a dependency-free client of the public W3C Nu validation service.
 - Production routes contain no Three.js/prototype request, no automatic third-party request and no persistent rendering loop. GSAP/ScrollTrigger remains Home-only.
@@ -262,5 +262,6 @@ The browser resource map, which counts ordinary document resource entries rather
 | RC-05 | LinkedIn blocks automated link verification | External link | Low | HTTP automation blocked | Open signed out and confirm | Correct only if destination is wrong | Manual check required | None needed if user test passes | Open |
 | RC-06 | Isolated Three.js prototype exceeds Vite's 500kB chunk warning | Experimental lab | Low | Build warning and isolation tests | None | Keep isolated; review only if lab scope changes | No production-route impact | SVG/CSS is the production Core | Accepted |
 | RC-07 | Hosted demo redirects through Streamlit authentication | External project evidence | Medium | HTTP 303 to Streamlit authentication on 2026-08-03 | Confirm intended signed-out access or accept authenticated access | Keep access wording accurate; update link only from owner-supplied destination | Demo access may be limited; repository evidence remains public | Retain “hosted” wording and sign-in note | Open |
+| RC-08 | Linux Chrome exceeded the case-study viewport at 200% text sizing | Case study / skip link | High accessibility defect when detected | First Phase 8 remote CI measured 413px content in a 390px viewport | None | Constrain skip/evidence links and use a zero-minimum grid track | Blocked the first release CI | CSS-only containment | Resolved; local rerun passed, remote rerun required |
 
 Because unresolved High owner gates remain, Phase 8 cannot issue an unconditional GO. The accurate release recommendation is **CONDITIONAL GO — OWNER MANUAL AND CONTENT/CV GATES OUTSTANDING**. Production must remain unchanged until the owner records a disposition and separately gives the exact approval statement in `FINAL_OWNER_REVIEW.md`.

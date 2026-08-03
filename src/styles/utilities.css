@@ -4,12 +4,14 @@
     left: var(--space-4);
     z-index: var(--z-skip-link);
     transform: translateY(-180%);
+    max-width: calc(100vw - (var(--space-4) * 2));
     min-height: 44px;
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-xs);
     color: var(--color-on-accent);
     background: var(--color-focus);
     font-weight: 800;
+    overflow-wrap: anywhere;
 }
 
 .skip-link:focus {
