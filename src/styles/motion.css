@@ -83,6 +83,81 @@
         transform var(--duration-reveal) var(--ease-emphasized);
 }
 
+/*
+ * Same-origin document navigation progressively enhances to a short
+ * detection-bracket route exchange. Unsupported browsers keep ordinary navigation.
+ */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    .site-header {
+        view-transition-name: circuit-navigation;
+    }
+
+    main {
+        view-transition-name: circuit-page;
+    }
+
+    ::view-transition-group(circuit-navigation),
+    ::view-transition-group(circuit-page) {
+        animation-duration: var(--duration-standard);
+        animation-timing-function: var(--ease-standard);
+    }
+
+    ::view-transition-image-pair(circuit-page),
+    ::view-transition-new(circuit-page) {
+        background: var(--color-background);
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(circuit-navigation) {
+        animation: circuit-navigation-out var(--duration-fast) ease-out both;
+    }
+
+    ::view-transition-new(circuit-navigation) {
+        animation: circuit-navigation-in var(--duration-standard) var(--ease-standard) both;
+    }
+
+    ::view-transition-old(circuit-page) {
+        animation: circuit-page-out var(--duration-standard) var(--ease-standard) both;
+    }
+
+    ::view-transition-new(circuit-page) {
+        animation: circuit-page-in var(--duration-standard) var(--ease-emphasized) both;
+    }
+}
+
+@keyframes circuit-navigation-out {
+    to {
+        opacity: 0.72;
+    }
+}
+
+@keyframes circuit-navigation-in {
+    from {
+        opacity: 0.72;
+    }
+}
+
+@keyframes circuit-page-out {
+    to {
+        clip-path: inset(0 50%);
+    }
+}
+
+@keyframes circuit-page-in {
+    from {
+        clip-path: inset(0 50%);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;

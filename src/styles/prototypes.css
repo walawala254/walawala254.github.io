@@ -1,3 +1,7 @@
+@view-transition {
+    navigation: none;
+}
+
 .prototype-page {
     --prototype-frame-height: clamp(20rem, 46vw, 32rem);
     min-width: 20rem;

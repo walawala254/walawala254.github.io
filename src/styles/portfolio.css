@@ -7,25 +7,6 @@
         var(--color-background);
 }
 
-.portfolio-page .nav-toggle__glyph,
-.case-study-page .nav-toggle__glyph {
-    position: relative;
-    width: 1.25rem;
-    height: 0.8rem;
-    border-block: 2px solid currentColor;
-}
-
-.portfolio-page .nav-toggle__glyph::after,
-.case-study-page .nav-toggle__glyph::after {
-    position: absolute;
-    top: calc(50% - 1px);
-    right: 0;
-    width: 70%;
-    height: 2px;
-    background: currentColor;
-    content: "";
-}
-
 .portfolio-index {
     margin: 0 0 var(--space-5);
     color: var(--color-accent-primary);

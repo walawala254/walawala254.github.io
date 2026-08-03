@@ -3,19 +3,6 @@
         linear-gradient(180deg, var(--color-background), var(--color-background-elevated) 48%, var(--color-background));
 }
 
-.home-page .nav-toggle__glyph {
-    display: grid;
-    gap: 0.28rem;
-    width: 1.2rem;
-}
-
-.home-page .nav-toggle__glyph span {
-    display: block;
-    width: 100%;
-    height: var(--border-strong);
-    background: currentColor;
-}
-
 .home-intro[hidden] {
     display: none;
 }

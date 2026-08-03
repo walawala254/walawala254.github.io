@@ -10,13 +10,13 @@ export function initNavigation() {
   const isOpen = () => navToggle.getAttribute("aria-expanded") === "true";
 
   const closeNavigation = ({ returnFocus = false } = {}) => {
-    if (!isOpen()) return;
+    const wasOpen = isOpen();
 
     navToggle.setAttribute("aria-expanded", "false");
     navPanel.classList.remove("is-open");
     document.body.classList.remove("nav-open");
 
-    if (returnFocus) {
+    if (returnFocus && wasOpen) {
       navToggle.focus({ preventScroll: true });
     }
   };
@@ -59,4 +59,7 @@ export function initNavigation() {
   desktopNavigationQuery.addEventListener("change", (event) => {
     if (event.matches) closeNavigation();
   });
+
+  // A page restored from the back/forward cache must never retain a menu lock.
+  window.addEventListener("pageshow", () => closeNavigation());
 }
