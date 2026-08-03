@@ -2,7 +2,7 @@
 
 This repository contains Dave Bryson's multi-page portfolio for fintech risk, fraud, AML/CFT, merchant risk, payments operations, and data science. The production website is [walawala254.github.io](https://walawala254.github.io/).
 
-The repository contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, a cinematic Phase 3 homepage, and an isolated Motion and 3D Technical Prototype lab. The five public routes remain separate pages and the experimental lab remains outside production navigation and indexing.
+The repository contains a Vite-based vanilla JavaScript foundation, the documented Risk Intelligence Circuit design system, a cinematic Phase 3 homepage, an evidence-led nested case study, and an isolated Motion and 3D Technical Prototype lab. Public routes remain separate documents and the experimental lab remains outside production navigation and indexing.
 
 ## Branch and deployment policy
 
@@ -43,6 +43,7 @@ This remains a static multi-page website. Vite treats these documents as separat
 - `services.html`
 - `portfolio.html`
 - `contact.html`
+- `case-studies/transaction-monitoring/index.html`
 - `404.html`
 
 There is no single-page router. Essential navigation is present in every source document and remains visible in generated HTML when JavaScript is unavailable. `script.js` is the shared module entry point; it initializes only the immediately used navigation and reveal modules under `src/scripts/`.
@@ -85,6 +86,30 @@ Vite includes the nested HTML file as an explicit multi-page input and emits `di
 
 `src/styles/portfolio.css` is shared only by the portfolio index and published case-study pages. Those routes use the existing lightweight navigation/reveal entry and do not import GSAP, ScrollTrigger, Three.js or prototype code. Future case-study pages require sufficient verified evidence before they are added to Vite or the sitemap.
 
+## Phase 6 interaction and motion policy
+
+Internal pages use CSS for hover, focus, active feedback and static Risk Intelligence Circuit motifs. One shared IntersectionObserver progressively enhances simple reveal groups, while the transaction-monitoring route adds a small route-specific observer for its `aria-current="location"` section marker. The page content and hash links do not depend on either observer. GSAP and ScrollTrigger remain limited to the homepage narrative; Three.js and prototype chunks remain limited to experimental routes.
+
+Reveal content is visible by default and becomes temporarily hidden only after observer setup succeeds. Reduced-motion users, browsers without IntersectionObserver, setup failures, page exits and Back/Forward Cache restores resolve content immediately to its final state. Mobile reveal distance is reduced and authored delays are capped at 80ms. No internal route adds a persistent animation frame, pinning, parallax, scroll interception or hover-only information.
+
+Phase 6 adds no runtime dependency, raster image, model, font, media, tracking request or external service. `src/styles/interactions.css` holds shared internal-page interaction rules. The small `src/scripts/case-navigation.js` initializer is included in the shared vanilla entry but returns before creating an observer or listener unless the flagship case-study marker exists; this avoids an extra route request.
+
+### Platform review and manual release checklist
+
+The source review covers progressive View Transition fallback, `svh`/`dvh` use, sticky table-of-contents behavior, `focus-visible`, prefixed masks, guarded session storage, IntersectionObserver cleanup, reduced-motion queries, touch target size and 100% text-size adjustment. Automated Chromium checks do not substitute for native devices or real assistive technology.
+
+Before production approval, the owner should complete this manual checklist:
+
+- iPhone Safari: rotate once, open and close the mobile menu, inspect the sticky case-study contents, follow Back/Forward, test browser-chrome resizing, and confirm no horizontal SVG overflow.
+- Android Chrome: repeat navigation and contact actions on a physical low-end device, enable data saver or CPU pressure where available, and watch for delayed taps, font fallback or heat during homepage motion.
+- VoiceOver: traverse landmarks, headings, navigation, status labels, project links, case-study sections and external-link context; confirm the menu expanded state is announced.
+- TalkBack: repeat the reading and activation order on Android; verify touch exploration reaches every action once and no decorative motif is announced.
+- Keyboard-only desktop: use the skip link, open/close the menu at its collapsed breakpoint, traverse every route and action, follow case-study hashes, use Back/Forward, and confirm focus remains visible.
+
+Known limits: native Safari/iOS/Android rendering, real battery or thermal behavior, VoiceOver and TalkBack announcements have not been validated by desktop emulation. The quarantined `contact.jpg` and `services.jpg` remain baseline assets pending rights clearance and replacement approval.
+
+Against the Phase 5 commit `4e9c6d9`, the final Phase 6 build remains at 31 files and grows from 1,129,615 B to 1,151,967 B (+22,352 B). Shared internal JavaScript grows from 2,230 B raw / about 1.10 kB gzip to 3,843 B raw / 1,522 B gzip; shared CSS grows from 26,659 B raw / about 5.86 kB gzip to 31,623 B raw / 6,622 B gzip. The homepage JavaScript request map is 124,954 B raw / 48,452 B gzip including the shared entry, compared with 123,215 B raw / about 48.31 kB gzip in Phase 5. Image payload remains 192,997 B, route request counts are unchanged, and there is no new production media or runtime dependency. Browser resource inspection confirms ScrollTrigger only on the homepage and zero Three.js or prototype requests on production routes.
+
 ## Motion and 3D prototype lab
 
 The lab compares three isolated implementations of the same transaction-signal narrative:
@@ -119,7 +144,15 @@ Three.js is installed only for the approved isolated comparison. The procedural 
 
 ## Production and rollback
 
-`npm run build` writes a disposable local artifact to `dist/`; it does not deploy. The pre-Phase-5 state is commit `8a3f4c8f9f7ad8ca37be71fde367488935923352`. To inspect it without rewriting shared history, preserve any uncommitted user work and create a separate worktree:
+`npm run build` writes a disposable local artifact to `dist/`; it does not deploy. Preserve any uncommitted user work and use a separate worktree to inspect a rollback point without rewriting shared history.
+
+The pre-Phase-6 state is commit `4e9c6d90428d31f1da7053fbed87eb75a436353d`. Inspect it without changing the redesign branch:
+
+```powershell
+git worktree add ..\portfolio-phase5-rollback 4e9c6d90428d31f1da7053fbed87eb75a436353d
+```
+
+The earlier Phase 4 state remains available at `8a3f4c8f9f7ad8ca37be71fde367488935923352`:
 
 ```powershell
 git worktree add ..\portfolio-phase4-rollback 8a3f4c8f9f7ad8ca37be71fde367488935923352

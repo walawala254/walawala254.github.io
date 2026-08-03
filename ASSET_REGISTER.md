@@ -25,10 +25,13 @@ Phase 1 preserves every existing image. File sizes are repository working-tree b
 | Homepage signal routes and intro frame | CSS in `src/styles/home.css` | Editorial structure and opening sequence | Original project-authored CSS treatment | Approved |
 | Portfolio transaction route preview | Inline SVG in `portfolio.html` | Summarises synthetic input, governed rules and human review | Original project-authored vector composition based on the verified public repository workflow | Approved |
 | Transaction-monitoring architecture | Inline SVG in `case-studies/transaction-monitoring/index.html` | Explains source, validation, governed monitoring, scoring, alert consolidation, human review and feedback | Original project-authored vector composition; no external diagram, screenshot or confidential data | Approved |
+| 404 route-interruption motif | CSS and semantic decorative spans in `404.html` and `src/styles/interactions.css` | Identifies a failed route and supports recovery orientation | Original project-authored CSS geometry; no external image, icon or copied composition | Approved |
 
 Phase 3 downloads no new image, model, texture, font file, video or audio asset. Quarantined and provisional non-portrait images are not used as homepage project proof.
 
 Phase 4 adds no binary evidence asset. The portfolio and case study use original inline SVG/CSS diagrams. No public-demo screenshot, mascot, repository image, customer data or synthetic transaction row is copied into this repository.
+
+Phase 6 adds no binary, downloaded or third-party visual asset. The 404 interruption motif is project-authored CSS, decorative to assistive technology, static under every motion preference and recorded above. Existing provisional and quarantined files are neither replaced nor reused in a new context.
 
 ## Downloadable and remote assets
 

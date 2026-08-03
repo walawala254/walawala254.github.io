@@ -27,6 +27,7 @@ It is not a dashboard skin, cybersecurity template, cryptocurrency interface, te
 | `navigation.css` | Brand, desktop navigation, active route, and menu control styling |
 | `components.css` | Buttons, signal motifs, media frames, indexed content, projects, contact, and footer |
 | `motion.css` | Token-driven interactions, reveal behavior, and reduced-motion overrides |
+| `interactions.css` | Shared internal-page action feedback, closing routes, page-specific refinements, and the static recovery motif |
 | `responsive.css` | Breakpoint-specific composition and mobile navigation presentation |
 | `home.css` | Route-specific cinematic homepage composition, Risk Intelligence Core, editorial story, evidence frames and responsive tiers |
 | `portfolio.css` | Evidence-led portfolio index, status system, case-study typography, accessible diagrams and responsive case-study layouts |
@@ -144,6 +145,26 @@ All controls provide default, hover, focus-visible, active, and disabled styling
 
 Homepage action order is selected work, contact, CV, then GitHub. Contact-page action order is email, CV, LinkedIn, then GitHub.
 
+### Interaction specification
+
+The default state always exposes the action's label, destination or status. Hover may reinforce an affordance but never reveals required information. Focus uses the global two-pixel outline, or the stronger double-ring treatment on buttons and menu controls. Active feedback is limited to one pixel; visited links retain the normal readable palette. Disabled styling exists only for genuinely disabled buttons and is never added to working links. Touch receives the complete static state, reduced motion removes directional transformation, and JavaScript-disabled behavior stays native.
+
+| Type | Default and semantics | Hover | Focus-visible and active | Touch, reduced motion and no JavaScript |
+| --- | --- | --- | --- | --- |
+| Navigation | Native anchors in labelled navigation; current documents use `aria-current="page"` | Route rule and text emphasis | Persistent outline; current rule remains; one-pixel press only where button-like | Links remain static and native; the no-JS mobile list stays in flow |
+| Primary action | Descriptive anchor or real button, solid mint, minimum 44px target | Up to two-pixel lift and brighter fill | Double focus ring; one-pixel press; real disabled controls dim | Full label and destination remain visible; movement collapses under reduced motion |
+| Secondary action | Outlined anchor or button with explicit label | Border and restrained surface response | Double focus ring; one-pixel press | Same static affordance and native action without JavaScript |
+| Directional action | Text link with visible arrow and destination language | Arrow advances no more than two pixels | Global outline plus surface/text emphasis; one-pixel press | Arrow is present but static; ordinary link navigation remains |
+| External evidence link | Anchor names the evidence; new-tab context is exposed where needed | Stronger evidence frame and top rule | Visible outline and evidence surface | Evidence type and link remain visible; no pointer-only disclosure |
+| Social link | Named external anchor; icon is decorative | Accent text response | Visible outline; native activation | Full text label remains; native link works without script |
+| Download action | Anchor is explicitly labelled Download CV | Standard button response | Double focus ring and press state | Native remote link remains available; no scripted download |
+| Project preview | Project facts and status are always visible; only explicit actions are links | Flagship route frame and diagram state respond | `:focus-within` mirrors the project boundary; link keeps its own outline | Supporting concepts remain fully static; no hover is required |
+| Status indicator | Visible text plus square marker and semantic colour; not a control | No hover response | Not focusable and no active state | Static in every mode; meaning never depends on animation or colour alone |
+| Disclosure / informational control | No disclosure control is currently needed; information stays expanded | Not applicable | Not applicable; do not invent disabled states | All information remains in the document |
+| Mobile-menu action | Real button with `aria-expanded` and `aria-controls` | Restrained control response | Double ring; Escape/close returns focus | Touch target is 46px; reduced motion is immediate; no-JS navigation stays visible |
+
+Breadcrumbs remain native directional links with a non-link `aria-current="page"` endpoint. Case-study section links progressively add `aria-current="location"`; the list and hash navigation remain complete without that enhancement. Contact email, CV, LinkedIn and GitHub actions never depend on clipboard, tracking, form or runtime state.
+
 ## Navigation
 
 - Essential navigation remains static HTML.
@@ -176,6 +197,10 @@ Motifs must be static by default, clipped to their owning component, and prevent
 | `--hover-shift` | 2px | Maximum hover translation |
 
 Phase 3 uses GSAP and ScrollTrigger as the single scripted production motion system on the homepage. Timelines are route-specific, scoped with `gsap.context()` and `gsap.matchMedia()`, and reverted on teardown. ScrollTrigger activates the Risk Intelligence Core, story states and evidence-frame transitions without pinning or replacing native scroll. Phase 5 route transitions use only the browser's CSS navigation primitive and do not add a second JavaScript animation system.
+
+Phase 6 follows this decision hierarchy: CSS for hover, focus, press and static motifs; one shared IntersectionObserver for simple internal-page reveals; and GSAP only where coordinated homepage narrative sequencing materially helps comprehension. Internal pages do not import GSAP. The case-study section indicator uses one route-scoped IntersectionObserver and changes orientation state only; it does not animate content or browser scroll.
+
+Reveal content is visible by default. JavaScript adds `reveal-ready` only after a working observer exists, reveals each item once, limits mobile delay to 80ms, disconnects on `pagehide`, and resolves every item to its final state for Back/Forward Cache restoration. An unsupported observer, reduced-motion preference, setup exception or absent JavaScript therefore cannot leave content hidden.
 
 No perpetual decoration, scroll pinning, scroll hijacking, custom cursor or second animation framework is part of the design system. Motion must consume the established timing principles and justify its communication purpose.
 
