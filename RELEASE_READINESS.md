@@ -1,8 +1,8 @@
 # Phase 7 Release Readiness Record
 
-Date: 2026-08-03  
-Branch: `redesign/risk-intelligence-v3`  
-Phase 6 baseline: `7ca0d6428199e6f747c461e0103b0e385a52efa0`  
+Date: 2026-08-03
+Branch: `redesign/risk-intelligence-v3`
+Phase 6 baseline: `7ca0d6428199e6f747c461e0103b0e385a52efa0`
 Production v2 rollback baseline: `3ff63e37b2560e5a7f1870dd047c0a3582c87c99`
 
 This document records the Phase 7 accessibility, performance, asset, privacy and device-hardening evidence. It is not a production deployment approval and does not claim field Core Web Vitals or full WCAG conformance.
