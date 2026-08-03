@@ -620,6 +620,13 @@ function assertResults(report) {
       failures.push(`${route} fails the 200% zoom reflow proxy`);
     }
   }
+  for (const [route, result] of Object.entries(
+    report.interactionAudit.landscapeByRoute
+  )) {
+    if (result.overflow || !result.mainVisible || !result.navigationPresent) {
+      failures.push(`${route} fails the emulated mobile-landscape check`);
+    }
+  }
   if (
     report.interactionAudit.externalFontFailure.externalRequests.length ||
     !report.interactionAudit.externalFontFailure.contentVisible
@@ -633,6 +640,14 @@ function assertResults(report) {
     !report.interactionAudit.imageFailure.mainVisible
   ) {
     failures.push("Portrait failure fallback is incomplete");
+  }
+  if (
+    !report.interactionAudit.externalEvidenceFailure.contentVisible ||
+    !report.interactionAudit.externalEvidenceFailure.homeActionsAvailable ||
+    !report.interactionAudit.externalEvidenceFailure.caseActionsAvailable ||
+    report.interactionAudit.externalEvidenceFailure.externalRequests.length
+  ) {
+    failures.push("External-evidence failure fallback is incomplete");
   }
   for (const [check, passed] of Object.entries(report.navigationBehavior)) {
     if (!passed) failures.push(`Navigation behavior failed: ${check}`);
@@ -764,8 +779,10 @@ async function main() {
       noJavaScriptByRoute: {},
       textResizeByRoute: {},
       zoom200ByRoute: {},
+      landscapeByRoute: {},
       resourcesByRoute: {},
       externalFontFailure: {},
+      externalEvidenceFailure: {},
       imageFailure: {},
       hoverLayoutStable: false,
       activeLayoutStable: false,
@@ -1375,6 +1392,30 @@ async function main() {
     await sleep(800);
     await captureScreenshot(client, "phase7-zoom-200-contact.png");
 
+    await setViewport(client, 844, 390, true);
+    for (const route of routes) {
+      await navigate(client, `${baseUrl}/${route}`);
+      interactionAudit.landscapeByRoute[route] = await evaluate(
+        client,
+        `(() => {
+          const main = document.querySelector('main');
+          return {
+            overflow:
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth,
+            mainVisible:
+              Boolean(main) && Number(getComputedStyle(main).opacity) > 0,
+            navigationPresent:
+              document.querySelectorAll('.nav-links a[href]').length === 5
+          };
+        })()`
+      );
+      await captureScreenshot(
+        client,
+        `phase8-landscape-${routeScreenshotNames[route]}-844x390.png`
+      );
+    }
+
     await client.send("Network.setBlockedURLs", {
       urls: [
         "*://fonts.googleapis.com/*",
@@ -1397,6 +1438,45 @@ async function main() {
     );
     await sleep(900);
     await captureScreenshot(client, "phase7-external-fonts-blocked-home.png");
+    await client.send("Network.setBlockedURLs", { urls: [] });
+
+    await client.send("Network.setBlockedURLs", {
+      urls: [
+        "*://drive.google.com/*",
+        "*://github.com/*",
+        "*://www.linkedin.com/*",
+        "*://*.streamlit.app/*"
+      ]
+    });
+    await navigate(client, `${baseUrl}/index.html`);
+    const homeActionsAvailable = await evaluate(
+      client,
+      `['drive.google.com', 'github.com', 'linkedin.com'].every((host) =>
+        Boolean(document.querySelector('a[href*="' + host + '"]'))
+      ) && Boolean(document.querySelector('a[href^="mailto:"]'))`
+    );
+    await navigate(
+      client,
+      `${baseUrl}/case-studies/transaction-monitoring/`
+    );
+    interactionAudit.externalEvidenceFailure = await evaluate(
+      client,
+      `(() => ({
+        contentVisible:
+          Number(getComputedStyle(document.querySelector('main')).opacity) > 0,
+        homeActionsAvailable: ${homeActionsAvailable},
+        caseActionsAvailable:
+          Boolean(document.querySelector('a[href*="github.com"]')) &&
+          Boolean(document.querySelector('a[href*="streamlit.app"]')),
+        externalRequests: performance.getEntriesByType('resource')
+          .map((entry) => entry.name)
+          .filter((name) => new URL(name).origin !== location.origin)
+      }))()`
+    );
+    await captureScreenshot(
+      client,
+      "phase8-external-evidence-unavailable-case.png"
+    );
     await client.send("Network.setBlockedURLs", { urls: [] });
 
     await client.send("Network.setCacheDisabled", { cacheDisabled: true });

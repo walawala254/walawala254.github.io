@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "test:a11y": "node scripts/accessibility-audit.mjs",
     "test:browser": "node scripts/browser-smoke.mjs",
+    "test:html": "node scripts/html-standard-validation.mjs",
     "test:prototypes": "node scripts/prototype-smoke.mjs",
     "validate:build": "node scripts/validate-build.mjs"
   },

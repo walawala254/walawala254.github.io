@@ -1,6 +1,12 @@
 node_modules/
 dist/
 .vite/
+.env
+.env.*
+!.env.example
 *.log
+test-results/
+lighthouse-report*.json
+lighthouse-report*.html
 .DS_Store
 Thumbs.db
