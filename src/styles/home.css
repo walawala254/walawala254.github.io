@@ -1369,3 +1369,21 @@
         transform: scaleX(1);
     }
 }
+/* Keep the homepage story in a deliberate evaluation order. */
+.home-page main {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-hero { order: 1; }
+.risk-core { order: 2; }
+.selected-work { order: 3; }
+.decision-story { order: 4; }
+.working-method { order: 5; }
+.home-credibility { order: 6; }
+.home-close { order: 7; }
+
+.home-credibility {
+    border-top: var(--border-thin) solid var(--color-border);
+    background: var(--color-background-elevated);
+}

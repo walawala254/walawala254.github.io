@@ -56,14 +56,14 @@ const internalRouteFiles = [
 ];
 const prohibitedPlaceholderPattern =
   /\b(?:lorem ipsum|coming soon|tbd|todo|built\s*\/\s*proposed|best-in-class|world-class|enterprise-grade|revolutionary)\b/i;
-const navigationLabels = ["Home", "About", "Services", "Portfolio", "Contact"];
+const navigationLabels = ["Home", "About", "Work", "Expertise", "Contact"];
 const currentNavigation = new Map([
   ["index.html", "Home"],
   ["about.html", "About"],
-  ["services.html", "Services"],
-  ["portfolio.html", "Portfolio"],
+  ["services.html", "Expertise"],
+  ["portfolio.html", "Work"],
   ["contact.html", "Contact"],
-  ["case-studies/transaction-monitoring/index.html", "Portfolio"],
+  ["case-studies/transaction-monitoring/index.html", "Work"],
   ["404.html", null]
 ]);
 
