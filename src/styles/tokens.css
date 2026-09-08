@@ -1,31 +1,33 @@
 :root {
-    color-scheme: dark;
+    color-scheme: light;
 
     /* Semantic colour system */
-    --color-background: #080b0d;
-    --color-background-elevated: #0e1316;
-    --color-background-subtle: #131a1d;
-    --color-text-primary: #f3f1e9;
-    --color-text-secondary: #c0c8c5;
-    --color-text-muted: #8d9996;
-    --color-accent-primary: #79e3b7;
+    --color-background: #F5F6F7;
+    --color-background-elevated: #FFFFFF;
+    --color-background-subtle: #EEF0F3;
+    --color-text-primary: #111318;
+    --color-text-secondary: #4B5563;
+    --color-text-muted: #6B7280;
+    --color-accent-primary: #14213D;
     --color-accent-secondary: var(--color-accent-primary);
-    --color-positive: #79d6aa;
-    --color-warning: #dfb35f;
-    --color-critical: #e47b73;
+    --color-positive: #276749;
+    --color-warning: #926315;
+    --color-critical: #B4433C;
     --color-information: var(--color-accent-primary);
-    --color-focus: #a8ffe0;
-    --color-on-accent: #07110d;
-    --color-border: rgba(224, 236, 231, 0.13);
-    --color-border-strong: rgba(121, 227, 183, 0.46);
-    --color-border-signal: rgba(121, 227, 183, 0.3);
-    --color-overlay: rgba(8, 11, 13, 0.9);
-    --color-header-opaque: rgba(8, 11, 13, 0.97);
-    --color-accent-wash: rgba(121, 227, 183, 0.06);
+    --color-focus: #3B82F6;
+    --color-on-accent: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-border-strong: #CBD0D8;
+    --color-border-signal: #CBD0D8;
+    --color-overlay: rgba(255, 255, 255, 0.95);
+    --color-header-opaque: rgba(245, 246, 247, 0.97);
+    --color-accent-wash: rgba(59, 130, 246, 0.05);
 
-    /* Type families */
+    --color-accent-blue: #3B82F6;
+
+    /* Type families: one consistent UI family, including legacy metadata. */
     --font-sans: "Segoe UI Variable", Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    --font-mono: var(--font-sans);
 
     /* Type scale */
     --type-display: clamp(3.15rem, 6.2vw, 5.85rem);
@@ -36,8 +38,8 @@
     --type-body-large: clamp(1.05rem, 1.4vw, 1.22rem);
     --type-body: 1rem;
     --type-supporting: 0.9rem;
-    --type-label: 0.76rem;
-    --type-metadata: 0.72rem;
+    --type-label: 0.8125rem;
+    --type-metadata: 0.75rem;
 
     /* Spacing scale */
     --space-1: 0.25rem;
@@ -65,13 +67,13 @@
     --header-height: 5.25rem;
 
     /* Shape and depth */
-    --radius-xs: 2px;
-    --radius-sm: 5px;
-    --radius-md: 10px;
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
     --border-thin: 1px;
     --border-strong: 2px;
-    --shadow-low: 0 12px 32px rgba(0, 0, 0, 0.18);
-    --shadow-elevated: 0 24px 64px rgba(0, 0, 0, 0.25);
+    --shadow-low: 0 4px 16px rgba(20, 33, 61, 0.04);
+    --shadow-elevated: 0 12px 32px rgba(20, 33, 61, 0.08);
 
     /* Motion foundation */
     --duration-fast: 140ms;

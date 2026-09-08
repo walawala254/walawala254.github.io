@@ -8,3 +8,56 @@
 @import url("./src/styles/motion.css");
 @import url("./src/styles/interactions.css");
 @import url("./src/styles/responsive.css");
+
+/* Option B: shared visual treatment; existing layouts and behavior are retained. */
+h1, h2, h3 { font-weight: 700; }
+h1 { line-height: 1.05; letter-spacing: -0.045em; }
+h2 { line-height: 1.12; letter-spacing: -0.035em; }
+.brand-mark { clip-path: none; border-radius: var(--radius-sm); }
+.brand-copy small, .technical-label { letter-spacing: 0.04em; }
+.eyebrow { border: 0; padding: 0; letter-spacing: 0.06em; }
+.ambient-grid, .eyebrow::before, .section-heading::after,
+.portrait-card::before, .profile-panel::before, .image-panel::before,
+.contact-card::before, .about-page .profile-panel::after,
+.signal-row span::before, .capability-cloud span::before,
+.card-topline strong::before, .error-route__signal::before,
+.error-route__line, .error-route__node { display: none; }
+.btn, .nav-btn { font-weight: 600; padding-inline: var(--space-5); }
+.nav-links a::after { background: var(--color-accent-blue); }
+.btn.primary:hover { background: var(--color-text-primary); }
+.btn.secondary { background: var(--color-background-elevated); }
+.btn.text-action { border-radius: 0; }
+.signal-row, .capability-cloud, .project-card ul { gap: var(--space-3) var(--space-5); }
+.signal-row span, .capability-cloud span, .project-card li,
+.card-topline span, .card-topline strong {
+    border: 0; padding: 0; background: transparent;
+    color: var(--color-text-secondary); font-weight: 500;
+}
+.portrait-card, .profile-panel, .image-panel, .contact-card {
+    border-color: var(--color-border); border-radius: var(--radius-md);
+}
+.matrix-card, .service-card {
+    border: var(--border-thin) solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+.internal-close, .system-visual svg { background: var(--color-background-elevated); }
+.contact-list a:hover, .service-card__action:hover,
+.contact-list a:focus-visible, .footer-links a:focus-visible,
+.service-card__action:focus-visible { color: var(--color-accent-primary); text-decoration: underline; }
+a:focus-visible { text-decoration: underline; text-underline-offset: 0.2em; }
+
+/* Shared finishing pass: stable controls and consistent keyboard affordances. */
+.btn, .nav-btn { min-height: 44px; }
+.btn.text-action { border-radius: 0; }
+a { text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
+.btn:focus-visible, .nav-btn:focus-visible, .nav-toggle:focus-visible {
+    outline: 2px solid var(--color-accent-blue); outline-offset: 4px; box-shadow: none;
+}
+.btn:focus-visible, .nav-btn:focus-visible { text-decoration: none; }
+.skip-link { background: var(--color-accent-primary); }
+::selection { color: var(--color-on-accent); background: var(--color-accent-primary); }
+@media (hover: hover) and (pointer: fine) {
+    .btn:hover, .nav-btn:hover { transform: none; }
+    .btn.secondary:hover, .nav-btn:hover { border-color: var(--color-accent-primary); }
+    .btn.text-action:hover { text-decoration: underline; }
+}

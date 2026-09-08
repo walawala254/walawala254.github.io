@@ -1,7 +1,7 @@
 .portfolio-page,
 .case-study-page {
-    --portfolio-rule: rgba(121, 227, 183, 0.22);
-    --portfolio-signal: rgba(79, 196, 223, 0.46);
+    --portfolio-rule: var(--color-border);
+    --portfolio-signal: var(--color-border-strong);
     background:
         linear-gradient(90deg, transparent 0, transparent calc(50% - 1px), rgba(224, 236, 231, 0.018) 50%, transparent calc(50% + 1px)),
         var(--color-background);
@@ -343,7 +343,7 @@
 }
 
 .preview-nodes rect:nth-child(4) {
-    fill: rgba(121, 227, 183, 0.04);
+    fill: var(--color-accent-wash);
     stroke: var(--color-border-strong);
 }
 
@@ -424,7 +424,7 @@
 .case-close {
     border-top: var(--border-thin) solid var(--color-border);
     background:
-        linear-gradient(105deg, rgba(121, 227, 183, 0.05), transparent 48%),
+        linear-gradient(105deg, var(--color-accent-wash), transparent 48%),
         var(--color-background-elevated);
 }
 
@@ -741,7 +741,7 @@
 }
 
 .architecture-diagram__nodes rect:nth-child(3) {
-    fill: rgba(121, 227, 183, 0.055);
+    fill: var(--color-accent-wash);
     stroke: var(--color-accent-primary);
 }
 
@@ -1405,3 +1405,11 @@
         width: 100%;
     }
 }
+
+/* Option B: quiet metadata and surfaces across work and case studies. */
+.portfolio-page, .case-study-page { background: var(--color-background); }
+.portfolio-hero::before, .portfolio-index::before,
+.portfolio-hero__ledger li::before { display: none; }
+.portfolio-hero__context { border-top: var(--border-thin) solid var(--color-border); }
+.project-status { color: var(--color-text-secondary); letter-spacing: 0; text-transform: none; }
+.project-status > span:first-child { display: none; }

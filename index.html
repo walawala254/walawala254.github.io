@@ -71,10 +71,9 @@
                         <span>Payments / Fraud / Data</span>
                     </p>
                     <h1 id="home-title" class="home-hero__title" aria-label="I turn payment signals into sharper risk decisions.">
-                        <span class="home-hero__line"><span data-hero-line>I turn</span></span>
-                        <span class="home-hero__line"><span class="text-accent" data-hero-line>payment signals</span></span>
-                        <span class="home-hero__line"><span data-hero-line>into sharper</span></span>
-                        <span class="home-hero__line"><span data-hero-line>risk decisions.</span></span>
+                        <span class="home-hero__line"><span data-hero-line>I turn payment</span></span>
+                        <span class="home-hero__line"><span class="text-accent" data-hero-line>signals into</span></span>
+                        <span class="home-hero__line"><span data-hero-line>sharper risk decisions.</span></span>
                     </h1>
                     <p class="home-hero__lede" data-hero-reveal>
                         I work where payments risk, fraud operations, AML/CFT, merchant review and data science meet—turning complex behaviour into controls, analysis and decision trails people can use.
@@ -118,11 +117,139 @@
             </div>
         </section>
 
+        <section class="selected-work section" id="selected-work" aria-labelledby="selected-work-title">
+            <div class="container-wide">
+                <div class="home-section-heading">
+                    <div>
+                        <p class="home-index">Selected work</p>
+                        <h2 id="selected-work-title">Systems, controls and concepts for practical risk work.</h2>
+                    </div>
+                    <p>Presented without invented outcomes. Each preview states what exists, what it is for and where its limits are.</p>
+                </div>
+
+                <div class="selected-work__list">
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>01</span>
+                            <strong class="status--positive">Functional prototype · Public synthetic demo</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Transaction monitoring</p>
+                            <h3>Lightweight Transaction Monitoring Engine</h3>
+                            <p>Evaluates synthetic transaction files with governed, explainable monitoring logic and consolidates related hits into investigation alerts.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Upload, rules and hit breakdowns</dd></div>
+                                <div><dt>Tools</dt><dd>Python · Streamlit · Pandas · PyYAML</dd></div>
+                                <div><dt>Evidence</dt><dd>Public repository, synthetic demo, tests and documentation</dd></div>
+                            </dl>
+                            <a href="case-studies/transaction-monitoring/">Read the case study</a>
+                            <a class="work-row__source" href="https://github.com/walawala254/payouts-transaction-monitoring-engine-mvp" target="_blank" rel="noopener noreferrer">Inspect the public repository <span class="sr-only">(opens in a new tab)</span></a>
+                        </div>
+                    <figure class="work-row__visual work-row__proof">
+                        <svg viewBox="0 0 640 480" role="img" aria-labelledby="home-project-signal-title home-project-signal-desc">
+                            <title id="home-project-signal-title">Transaction monitoring processing route</title>
+                            <desc id="home-project-signal-desc">Uploaded synthetic payment signals pass through validation and governed monitoring rules before related hits become a human investigation queue.</desc>
+                            <g class="preview-routes" fill="none">
+                                <path d="M42 92H166V170H294" />
+                                <path d="M42 216H214V170H294" />
+                                <path d="M42 340H166V270H294" />
+                                <path d="M350 170H452V240H590" />
+                                <path d="M350 270H452V240" />
+                            </g>
+                            <g class="preview-nodes">
+                                <rect x="32" y="82" width="20" height="20" />
+                                <rect x="32" y="206" width="20" height="20" />
+                                <rect x="32" y="330" width="20" height="20" />
+                                <rect x="294" y="144" width="56" height="152" rx="2" />
+                                <rect x="580" y="230" width="20" height="20" />
+                            </g>
+                            <g class="preview-labels">
+                                <text x="32" y="64">SIGNALS</text>
+                                <text x="322" y="128" text-anchor="middle">GOVERNED RULES</text>
+                                <text x="590" y="214" text-anchor="middle">REVIEW</text>
+                                <text x="32" y="394">SYNTHETIC INPUT ONLY</text>
+                            </g>
+                        </svg>
+                        <figcaption>Illustrative architecture derived from the public processing flow.</figcaption>
+                    </figure>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>02</span>
+                            <strong class="status--information">Concept</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Chargebacks and reporting</p>
+                            <h3>Chargebacks &amp; Risk Dashboard</h3>
+                            <p>Structures dispute outcomes, scheme-rule pressure, operational leakage and risk-reporting views so review priorities are easier to inspect.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Disputes, exposure and reporting</dd></div>
+                                <div><dt>Tools</dt><dd>Power BI · Python · Scheme logic</dd></div>
+                                <div><dt>Evidence</dt><dd>Reporting concept; not a live dashboard</dd></div>
+                            </dl>
+                            <a href="portfolio.html">View portfolio context</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--dashboard" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                            <i></i><i></i><i></i><i></i><i></i>
+                        </div>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>03</span>
+                            <strong class="status--information">Concept</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">PSP risk operations</p>
+                            <h3>PSP Risk Desk Assistant</h3>
+                            <p>Frames a guided workspace for review steps, evidence requirements, escalation paths and decision documentation across a payment-risk desk.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Consistent operational decisions</dd></div>
+                                <div><dt>Format</dt><dd>Guided workflow concept</dd></div>
+                                <div><dt>Evidence</dt><dd>Early concept; no public demo</dd></div>
+                            </dl>
+                            <a href="contact.html">Discuss the concept</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--assistant" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                            <i></i><i></i><i></i>
+                        </div>
+                    </article>
+
+                    <article class="work-row" data-work-row>
+                        <div class="work-row__meta">
+                            <span>04</span>
+                            <strong class="status--information">Concept</strong>
+                        </div>
+                        <div class="work-row__body">
+                            <p class="work-row__discipline">Merchant risk</p>
+                            <h3>Merchant Risk &amp; Onboarding Controls</h3>
+                            <p>Organises website, licensing, trust, business-model, vertical-risk and prohibited-activity indicators into a consistent review structure.</p>
+                            <dl>
+                                <div><dt>Focus</dt><dd>Structured merchant review</dd></div>
+                                <div><dt>Methods</dt><dd>KYB · Merchant risk · EDD notes</dd></div>
+                                <div><dt>Evidence</dt><dd>Portfolio concept; implementation evidence is not public</dd></div>
+                            </dl>
+                            <a href="portfolio.html">View portfolio context</a>
+                        </div>
+                        <div class="work-row__visual work-row__visual--merchant" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                            <i></i><i></i>
+                        </div>
+                    </article>
+                </div>
+
+                <a class="selected-work__all" href="portfolio.html">Explore all portfolio work <span aria-hidden="true">→</span></a>
+            </div>
+        </section>
+
         <section class="risk-core section" id="risk-core" aria-labelledby="risk-core-title">
             <div class="container-wide">
                 <div class="home-section-heading">
                     <div>
-                        <p class="home-index">01 / Risk Intelligence Core</p>
+                        <p class="home-index">Risk Intelligence Core</p>
                         <h2 id="risk-core-title">A signal becomes useful when its decision trail is clear.</h2>
                     </div>
                     <p>
@@ -131,7 +258,7 @@
                 </div>
 
                 <figure class="risk-core__figure" data-risk-core>
-                    <div class="risk-core__canvas">
+                    <div class="risk-core__canvas" tabindex="0" role="region" aria-label="Payment signal to risk decision diagram">
                         <svg viewBox="0 0 1200 650" role="img" aria-labelledby="risk-core-svg-title risk-core-svg-desc">
                             <title id="risk-core-svg-title">Payment signal to risk decision process</title>
                             <desc id="risk-core-svg-desc">Transaction and merchant signals enter detection layers. An unusual signal activates risk indicators, branches into investigation, reaches a documented review decision and feeds improvements back into monitoring controls.</desc>
@@ -215,7 +342,7 @@
         <section class="decision-story section" id="decision-story" aria-labelledby="decision-story-title">
             <div class="container-wide decision-story__layout">
                 <header class="decision-story__header">
-                    <p class="home-index">02 / Signal to decision</p>
+                    <p class="home-index">Signal to decision</p>
                     <h2 id="decision-story-title">Five stages. One explainable risk process.</h2>
                     <p>The tooling changes. The reasoning path should stay legible.</p>
                     <div class="decision-story__progress" aria-hidden="true">
@@ -297,115 +424,11 @@
             </div>
         </section>
 
-        <section class="selected-work section" id="selected-work" aria-labelledby="selected-work-title">
-            <div class="container-wide">
-                <div class="home-section-heading">
-                    <div>
-                        <p class="home-index">03 / Selected work</p>
-                        <h2 id="selected-work-title">Systems, controls and concepts for practical risk work.</h2>
-                    </div>
-                    <p>Presented without invented outcomes. Each preview states what exists, what it is for and where its limits are.</p>
-                </div>
-
-                <div class="selected-work__list">
-                    <article class="work-row" data-work-row>
-                        <div class="work-row__meta">
-                            <span>01</span>
-                            <strong class="status--positive">Functional prototype · Public synthetic demo</strong>
-                        </div>
-                        <div class="work-row__body">
-                            <p class="work-row__discipline">Transaction monitoring</p>
-                            <h3>Lightweight Transaction Monitoring Engine</h3>
-                            <p>Evaluates synthetic transaction files with governed, explainable monitoring logic and consolidates related hits into investigation alerts.</p>
-                            <dl>
-                                <div><dt>Focus</dt><dd>Upload, rules and hit breakdowns</dd></div>
-                                <div><dt>Tools</dt><dd>Python · Streamlit · Pandas · PyYAML</dd></div>
-                                <div><dt>Evidence</dt><dd>Public repository, synthetic demo, tests and documentation</dd></div>
-                            </dl>
-                            <a href="case-studies/transaction-monitoring/">Read the case study</a>
-                        </div>
-                        <div class="work-row__visual work-row__visual--monitoring" aria-hidden="true">
-                            <span></span><span></span><span></span><span></span>
-                            <i></i><i></i><i></i>
-                        </div>
-                    </article>
-
-                    <article class="work-row" data-work-row>
-                        <div class="work-row__meta">
-                            <span>02</span>
-                            <strong class="status--information">Concept</strong>
-                        </div>
-                        <div class="work-row__body">
-                            <p class="work-row__discipline">Chargebacks and reporting</p>
-                            <h3>Chargebacks &amp; Risk Dashboard</h3>
-                            <p>Structures dispute outcomes, scheme-rule pressure, operational leakage and risk-reporting views so review priorities are easier to inspect.</p>
-                            <dl>
-                                <div><dt>Focus</dt><dd>Disputes, exposure and reporting</dd></div>
-                                <div><dt>Tools</dt><dd>Power BI · Python · Scheme logic</dd></div>
-                                <div><dt>Evidence</dt><dd>Reporting concept; not a live dashboard</dd></div>
-                            </dl>
-                            <a href="portfolio.html">View portfolio context</a>
-                        </div>
-                        <div class="work-row__visual work-row__visual--dashboard" aria-hidden="true">
-                            <span></span><span></span><span></span>
-                            <i></i><i></i><i></i><i></i><i></i>
-                        </div>
-                    </article>
-
-                    <article class="work-row" data-work-row>
-                        <div class="work-row__meta">
-                            <span>03</span>
-                            <strong class="status--information">Concept</strong>
-                        </div>
-                        <div class="work-row__body">
-                            <p class="work-row__discipline">PSP risk operations</p>
-                            <h3>PSP Risk Desk Assistant</h3>
-                            <p>Frames a guided workspace for review steps, evidence requirements, escalation paths and decision documentation across a payment-risk desk.</p>
-                            <dl>
-                                <div><dt>Focus</dt><dd>Consistent operational decisions</dd></div>
-                                <div><dt>Format</dt><dd>Guided workflow concept</dd></div>
-                                <div><dt>Evidence</dt><dd>Early concept; no public demo</dd></div>
-                            </dl>
-                            <a href="contact.html">Discuss the concept</a>
-                        </div>
-                        <div class="work-row__visual work-row__visual--assistant" aria-hidden="true">
-                            <span></span><span></span><span></span>
-                            <i></i><i></i><i></i>
-                        </div>
-                    </article>
-
-                    <article class="work-row" data-work-row>
-                        <div class="work-row__meta">
-                            <span>04</span>
-                            <strong class="status--information">Concept</strong>
-                        </div>
-                        <div class="work-row__body">
-                            <p class="work-row__discipline">Merchant risk</p>
-                            <h3>Merchant Risk &amp; Onboarding Controls</h3>
-                            <p>Organises website, licensing, trust, business-model, vertical-risk and prohibited-activity indicators into a consistent review structure.</p>
-                            <dl>
-                                <div><dt>Focus</dt><dd>Structured merchant review</dd></div>
-                                <div><dt>Methods</dt><dd>KYB · Merchant risk · EDD notes</dd></div>
-                                <div><dt>Evidence</dt><dd>Portfolio concept; implementation evidence is not public</dd></div>
-                            </dl>
-                            <a href="portfolio.html">View portfolio context</a>
-                        </div>
-                        <div class="work-row__visual work-row__visual--merchant" aria-hidden="true">
-                            <span></span><span></span><span></span><span></span>
-                            <i></i><i></i>
-                        </div>
-                    </article>
-                </div>
-
-                <a class="selected-work__all" href="portfolio.html">Explore all portfolio work <span aria-hidden="true">→</span></a>
-            </div>
-        </section>
-
         <section class="working-method section" aria-labelledby="working-method-title">
             <div class="container-wide">
                 <div class="home-section-heading">
                     <div>
-                        <p class="home-index">04 / Working method</p>
+                        <p class="home-index">Working method</p>
                         <h2 id="working-method-title">Technical enough to build. Clear enough to operate.</h2>
                     </div>
                     <p>My approach connects analysis with the people, controls and documentation that make a risk system usable.</p>
@@ -454,7 +477,7 @@
         <section class="home-credibility section" aria-labelledby="home-credibility-title">
             <div class="container-wide home-section-heading">
                 <div>
-                    <p class="home-index">05 / Credibility</p>
+                    <p class="home-index">Credibility</p>
                     <h2 id="home-credibility-title">Risk context supported by practical data skills.</h2>
                 </div>
                 <p>Payments risk, fraud operations, AML/CFT, merchant review and chargebacks—supported by Python, SQL, dashboards and clear control documentation.</p>
@@ -468,7 +491,7 @@
             <div class="home-close__route" aria-hidden="true"></div>
             <div class="container-wide home-close__layout">
                 <div>
-                    <p class="home-index">06 / Start a conversation</p>
+                    <p class="home-index">Start a conversation</p>
                     <h2 id="home-close-title">Need a clearer view of payment risk?</h2>
                 </div>
                 <div class="home-close__copy">
