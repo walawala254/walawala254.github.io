@@ -72,6 +72,18 @@
     border-top: var(--border-strong) solid var(--color-accent-primary);
 }
 
+.portfolio-hero__portrait {
+    display: block;
+    width: min(100%, 19rem);
+    margin: 0 0 var(--space-6);
+    border: var(--border-thin) solid var(--color-border);
+    background: var(--color-background-elevated);
+    aspect-ratio: 4 / 4.6;
+    object-fit: cover;
+    object-position: center 18%;
+    filter: saturate(0.9) contrast(1.06);
+}
+
 .portfolio-hero__context p {
     margin-bottom: var(--space-6);
     font-size: var(--type-body-large);
