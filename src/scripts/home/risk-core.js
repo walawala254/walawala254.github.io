@@ -45,6 +45,7 @@ export function mountRiskCoreMotion({
       clearProps:
         "opacity,visibility,transform,transformOrigin,strokeDasharray,strokeDashoffset"
     });
+    root.classList.remove("is-signature-active");
     root.dataset.coreState = "complete";
   };
 
@@ -58,9 +59,11 @@ export function mountRiskCoreMotion({
       },
       onStart: () => {
         root.dataset.coreState = "running";
+        root.classList.add("is-signature-active");
       },
       onComplete: () => {
         diagnostics.completed = true;
+        root.classList.remove("is-signature-active");
         restoreStaticState();
       }
     });
