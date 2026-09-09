@@ -39,3 +39,7 @@ Phase 6 adds no binary, downloaded or third-party visual asset. Phase 7 adds onl
 ## Downloadable and remote assets
 
 No downloadable CV is stored in this repository. The existing Download CV links point to a Google Drive document that returned HTTP 200 during Phase 7 validation; ownership, current content and sharing permissions still require owner confirmation before production release. Production pages fetch no remote font or icon asset.
+
+## Portrait replacement ? 2026-09-09
+
+The owner supplied and approved `portrait-new.png.png` as the replacement portrait. `about_me.jpg` and `about_me.webp` are optimized derivatives of this image, retaining its full composition. These replace the earlier portrait on Home and About; the existing social-preview references remain intact.
